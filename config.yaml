@@ -6,7 +6,7 @@ system:
   history_file: "history.json"
   
   # ⚠️ 重要：配置你的 GCS 存储桶名称
-  history_bucket: "35c29e7e-66-bb2-asia-south1"  # 修改为你的实际存储桶名称
+  history_bucket: "report_general"  # 修改为你的实际存储桶名称
   
   enable_screenshot: true
   lagging_threshold: 0.95
