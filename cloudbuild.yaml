@@ -1,48 +1,28 @@
 steps:
-  # ====================================================
-  # 步骤 1: 构建镜像 (Build)
-  # 同时打上两个标签：latest 和 commit_sha
-  # ====================================================
+  # 1. 构建 Docker 镜像
   - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'build'
-      - '-t'
-      - 'gcr.io/$PROJECT_ID/auto-report-service:latest'
-      - '-t'
-      - 'gcr.io/$PROJECT_ID/auto-report-service:$SHORT_SHA'
-      - '.'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/auto-report-service:$SHORT_SHA', '.']
 
-  # ====================================================
-  # 步骤 2: 推送镜像 (Push)
-  # 必须把刚才打的两个标签都推送到仓库
-  # ====================================================
+  # 2. 推送镜像到 Google Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
-      - 'gcr.io/$PROJECT_ID/auto-report-service:latest'
-  
-  - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
-      - 'gcr.io/$PROJECT_ID/auto-report-service:$SHORT_SHA'
+    args: ['push', 'gcr.io/$PROJECT_ID/auto-report-service:$SHORT_SHA']
 
-  # ====================================================
-  # 步骤 3: 部署到 Cloud Run (Deploy)
-  # 使用 $SHORT_SHA 对应的版本进行部署，确保版本一致
-  # ====================================================
+  # 3. 部署到 Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
       - 'run'
       - 'deploy'
-      - 'auto-report-service'
+      - 'reportgeneral'  # 服务名称 (对齐控制台显示的名称)
       - '--image'
       - 'gcr.io/$PROJECT_ID/auto-report-service:$SHORT_SHA'
       - '--region'
-      - 'asia-south1'   # 注意：如果你的服务在其他区域（如 asia-southeast1），请修改这里
+      - 'asia-south1'          # 你的区域
       - '--platform'
       - 'managed'
-      - '--allow-unauthenticated' # 允许公开访问，如果是内部服务请删掉这一行
+      - '--allow-unauthenticated' # 允许公开访问(由Scheduler触发)
+      - '--memory'
+      - '2Gi'                  # 设置内存，Playwright跑浏览器比较吃内存，建议 1G 或 2G
 
 options:
   logging: CLOUD_LOGGING_ONLY
