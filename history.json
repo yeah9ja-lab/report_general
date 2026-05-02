@@ -1,0 +1,4194 @@
+[
+  {
+    "timestamp": 1766541734.9191208,
+    "data": {
+      "A_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_First loan_a-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_First loan_a-d0-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_First loan_a-d0-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_First loan_a-d0-09": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_Reloan_a-d0-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_Reloan_a-d0-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_GROUP": {
+        "rate": 0.5813953488372093,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-d0-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-08": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-09": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-10": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-11": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-12": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-13": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-14": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-15": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-16": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-17": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-18": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-19": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-20": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-21": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-22": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-23": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-24": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-25": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-26": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-27": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-28": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-29": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-30": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-31": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-61": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_Reloan_a-rm1-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_Reloan_a-rm1-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_Reloan_a-rm1-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_Reloan_a-rm1-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM0_First loan_b-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_b-rm1-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_b-rm1-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_b-rm1-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_b-rm1-08": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_b-rm1-14": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_Reloan_b-rm1-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_Reloan_b-rm1-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM0_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM0_Reloan_c-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-08": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_Reloan_GROUP": {
+        "rate": 0.8456935647966812,
+        "repay": 3433.0
+      },
+      "C_RM1_Reloan_c-rm1-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_Reloan_c-rm1-04": {
+        "rate": 5.691879165699506,
+        "repay": 3433.0
+      },
+      "C_RM1_Reloan_c-rm1-09": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_Reloan_c-rm1-10": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_Reloan_c-rm1-11": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_Reloan_c-rm1-12": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_Reloan_c-rm1-13": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM0_First loan_GROUP": {
+        "rate": 3.571428571428571,
+        "repay": 3513.0
+      },
+      "D_RM0_First loan_D-AROOSA KHATTAK": {
+        "rate": 7.142857142857142,
+        "repay": 3513.0
+      },
+      "D_RM0_First loan_D-Ayesha abbasi": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM0_Reloan_GROUP": {
+        "rate": 4.739384453469701,
+        "repay": 7025.0
+      },
+      "D_RM0_Reloan_D-Malik Ahsen": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM0_Reloan_D-Muhammad Ali": {
+        "rate": 9.79039496055969,
+        "repay": 7025.0
+      },
+      "D_RM1_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM1_First loan_D-Abdul hadi": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM1_First loan_D-Kiran Rafique": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM1_First loan_D-MALIK FAISAL": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_Reloan_e-d0-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-10": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-11": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-13": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-14": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_Reloan_e-rm1-08": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_Reloan_e-rm1-09": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_Reloan_f-d0-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_f-rm1-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_f-rm1-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_f-rm1-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_f-rm1-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_f-rm1-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_Reloan_f-d0-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_Reloan_f-rm1-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_Reloan_f-rm1-11": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_Reloan_f-rm1-12": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "G_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "G_RM0_First loan_g-d0-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "G_RM1_First loan_GROUP": {
+        "rate": 4.761904761904762,
+        "repay": 3513.0
+      },
+      "G_RM1_First loan_g-rm1-03": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "G_RM1_First loan_g-rm1-11": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "G_RM1_First loan_g-rm1-13": {
+        "rate": 0.0,
+        "repay": 0.0
+      }
+    }
+  },
+  {
+    "timestamp": 1766544155.180244,
+    "data": {
+      "A_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_First loan_a-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_First loan_a-d0-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_First loan_a-d0-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_First loan_a-d0-09": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_Reloan_a-d0-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_Reloan_a-d0-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_GROUP": {
+        "rate": 3.1279169066391277,
+        "repay": 18900.0
+      },
+      "A_RM1_First loan_a-d0-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-03": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-08": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-09": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-10": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-11": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-12": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-13": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-14": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-15": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-16": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-17": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-18": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-19": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-20": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-21": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-22": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-23": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-24": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-25": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-26": {
+        "rate": 6.333617990321662,
+        "repay": 1335.0
+      },
+      "A_RM1_First loan_a-rm1-27": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-28": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-29": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-30": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-31": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-61": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_Reloan_GROUP": {
+        "rate": 4.558631625894051,
+        "repay": 11039.0
+      },
+      "A_RM1_Reloan_a-rm1-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_Reloan_a-rm1-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_Reloan_a-rm1-06": {
+        "rate": 18.242059688667087,
+        "repay": 11039.0
+      },
+      "A_RM1_Reloan_a-rm1-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM0_First loan_b-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_b-rm1-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_b-rm1-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_b-rm1-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_b-rm1-08": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_b-rm1-14": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_Reloan_GROUP": {
+        "rate": 3.8694458935335345,
+        "repay": 5118.0
+      },
+      "B_RM1_Reloan_b-rm1-01": {
+        "rate": 7.3485914481808,
+        "repay": 5118.0
+      },
+      "B_RM1_Reloan_b-rm1-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM0_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM0_Reloan_c-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-08": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_Reloan_GROUP": {
+        "rate": 3.07065839941469,
+        "repay": 12465.0
+      },
+      "C_RM1_Reloan_c-rm1-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_Reloan_c-rm1-04": {
+        "rate": 5.691879165699506,
+        "repay": 3433.0
+      },
+      "C_RM1_Reloan_c-rm1-09": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_Reloan_c-rm1-10": {
+        "rate": 16.57460591268603,
+        "repay": 9032.0
+      },
+      "C_RM1_Reloan_c-rm1-11": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_Reloan_c-rm1-12": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_Reloan_c-rm1-13": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM0_First loan_GROUP": {
+        "rate": 3.571428571428571,
+        "repay": 3513.0
+      },
+      "D_RM0_First loan_D-AROOSA KHATTAK": {
+        "rate": 7.142857142857142,
+        "repay": 3513.0
+      },
+      "D_RM0_First loan_D-Ayesha abbasi": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM0_Reloan_GROUP": {
+        "rate": 4.739384453469701,
+        "repay": 7025.0
+      },
+      "D_RM0_Reloan_D-Malik Ahsen": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM0_Reloan_D-Muhammad Ali": {
+        "rate": 9.79039496055969,
+        "repay": 7025.0
+      },
+      "D_RM1_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM1_First loan_D-Abdul hadi": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM1_First loan_D-Kiran Rafique": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM1_First loan_D-MALIK FAISAL": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_Reloan_e-d0-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-10": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-11": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-13": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-14": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_Reloan_e-rm1-08": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_Reloan_e-rm1-09": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_Reloan_f-d0-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_GROUP": {
+        "rate": 2.857142857142857,
+        "repay": 3513.0
+      },
+      "F_RM1_First loan_f-rm1-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_f-rm1-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_f-rm1-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_f-rm1-05": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "F_RM1_First loan_f-rm1-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_Reloan_GROUP": {
+        "rate": 3.1512605042016806,
+        "repay": 7125.0
+      },
+      "F_RM1_Reloan_f-d0-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_Reloan_f-rm1-02": {
+        "rate": 12.588339222614842,
+        "repay": 7125.0
+      },
+      "F_RM1_Reloan_f-rm1-11": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_Reloan_f-rm1-12": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "G_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "G_RM0_First loan_g-d0-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "G_RM1_First loan_GROUP": {
+        "rate": 4.761904761904762,
+        "repay": 3513.0
+      },
+      "G_RM1_First loan_g-rm1-03": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "G_RM1_First loan_g-rm1-11": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "G_RM1_First loan_g-rm1-13": {
+        "rate": 0.0,
+        "repay": 0.0
+      }
+    }
+  },
+  {
+    "timestamp": 1766546729.188946,
+    "data": {
+      "A_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_First loan_a-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_First loan_a-d0-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_First loan_a-d0-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_First loan_a-d0-09": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_Reloan_a-d0-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_Reloan_a-d0-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_GROUP": {
+        "rate": 6.481948288456987,
+        "repay": 37800.0
+      },
+      "A_RM1_First loan_a-d0-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-01": {
+        "rate": 20.0,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-03": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-08": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-09": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-10": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-11": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-12": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-13": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-14": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-15": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-16": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-17": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-18": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-19": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-20": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-21": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-22": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-23": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-24": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-25": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-26": {
+        "rate": 6.333617990321662,
+        "repay": 1335.0
+      },
+      "A_RM1_First loan_a-rm1-27": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-28": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-29": {
+        "rate": 7.600341588385994,
+        "repay": 1335.0
+      },
+      "A_RM1_First loan_a-rm1-30": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-31": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-61": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_Reloan_GROUP": {
+        "rate": 6.630849535010489,
+        "repay": 16057.0
+      },
+      "A_RM1_Reloan_a-rm1-04": {
+        "rate": 8.292295997620386,
+        "repay": 5018.0
+      },
+      "A_RM1_Reloan_a-rm1-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_Reloan_a-rm1-06": {
+        "rate": 18.242059688667087,
+        "repay": 11039.0
+      },
+      "A_RM1_Reloan_a-rm1-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM0_First loan_b-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_b-rm1-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_b-rm1-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_b-rm1-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_b-rm1-08": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_b-rm1-09": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_b-rm1-14": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_Reloan_GROUP": {
+        "rate": 7.663287138893299,
+        "repay": 10136.0
+      },
+      "B_RM1_Reloan_b-rm1-01": {
+        "rate": 7.3485914481808,
+        "repay": 5118.0
+      },
+      "B_RM1_Reloan_b-rm1-06": {
+        "rate": 8.013286277766245,
+        "repay": 5018.0
+      },
+      "C_RM0_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM0_Reloan_c-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_GROUP": {
+        "rate": 2.3255813953488373,
+        "repay": 3513.0
+      },
+      "C_RM1_First loan_c-rm1-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-03": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "C_RM1_First loan_c-rm1-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-08": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_Reloan_GROUP": {
+        "rate": 8.751314852724178,
+        "repay": 35525.0
+      },
+      "C_RM1_Reloan_c-rm1-02": {
+        "rate": 6.992008733013309,
+        "repay": 4996.0
+      },
+      "C_RM1_Reloan_c-rm1-04": {
+        "rate": 5.691879165699506,
+        "repay": 3433.0
+      },
+      "C_RM1_Reloan_c-rm1-09": {
+        "rate": 23.940689629860714,
+        "repay": 13046.0
+      },
+      "C_RM1_Reloan_c-rm1-10": {
+        "rate": 16.57460591268603,
+        "repay": 9032.0
+      },
+      "C_RM1_Reloan_c-rm1-11": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_Reloan_c-rm1-12": {
+        "rate": 9.225451804460134,
+        "repay": 5018.0
+      },
+      "C_RM1_Reloan_c-rm1-13": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM0_First loan_GROUP": {
+        "rate": 3.571428571428571,
+        "repay": 3513.0
+      },
+      "D_RM0_First loan_D-AROOSA KHATTAK": {
+        "rate": 7.142857142857142,
+        "repay": 3513.0
+      },
+      "D_RM0_First loan_D-Ayesha abbasi": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM0_Reloan_GROUP": {
+        "rate": 8.124755441015747,
+        "repay": 12043.0
+      },
+      "D_RM0_Reloan_D-Malik Ahsen": {
+        "rate": 6.56187885762109,
+        "repay": 5018.0
+      },
+      "D_RM0_Reloan_D-Muhammad Ali": {
+        "rate": 9.79039496055969,
+        "repay": 7025.0
+      },
+      "D_RM1_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM1_First loan_D-Abdul hadi": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM1_First loan_D-Kiran Rafique": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM1_First loan_D-MALIK FAISAL": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_Reloan_e-d0-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-10": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-11": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-13": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-14": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_Reloan_e-rm1-08": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_Reloan_e-rm1-09": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_Reloan_f-d0-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_GROUP": {
+        "rate": 2.857142857142857,
+        "repay": 3513.0
+      },
+      "F_RM1_First loan_f-rm1-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_f-rm1-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_f-rm1-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_f-rm1-05": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "F_RM1_First loan_f-rm1-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_Reloan_GROUP": {
+        "rate": 5.0234409553295,
+        "repay": 11358.0
+      },
+      "F_RM1_Reloan_f-d0-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_Reloan_f-rm1-02": {
+        "rate": 12.588339222614842,
+        "repay": 7125.0
+      },
+      "F_RM1_Reloan_f-rm1-11": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_Reloan_f-rm1-12": {
+        "rate": 7.4920353982300885,
+        "repay": 4233.0
+      },
+      "G_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "G_RM0_First loan_g-d0-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "G_RM1_First loan_GROUP": {
+        "rate": 4.761904761904762,
+        "repay": 3513.0
+      },
+      "G_RM1_First loan_g-rm1-03": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "G_RM1_First loan_g-rm1-11": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "G_RM1_First loan_g-rm1-13": {
+        "rate": 0.0,
+        "repay": 0.0
+      }
+    }
+  },
+  {
+    "timestamp": 1766549834.5499141,
+    "data": {
+      "A_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_First loan_a-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_First loan_a-d0-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_First loan_a-d0-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_First loan_a-d0-09": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_Reloan_GROUP": {
+        "rate": 4.450202080350695,
+        "repay": 7025.0
+      },
+      "A_RM0_Reloan_a-d0-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_Reloan_a-d0-06": {
+        "rate": 8.928684909569263,
+        "repay": 7025.0
+      },
+      "A_RM1_First loan_GROUP": {
+        "rate": 9.95184838414289,
+        "repay": 58035.0
+      },
+      "A_RM1_First loan_a-d0-01": {
+        "rate": 6.333617990321662,
+        "repay": 1335.0
+      },
+      "A_RM1_First loan_a-rm1-01": {
+        "rate": 20.0,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-03": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-08": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-09": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-10": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-11": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-12": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-13": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-14": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-15": {
+        "rate": 50.0,
+        "repay": 10539.0
+      },
+      "A_RM1_First loan_a-rm1-16": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-17": {
+        "rate": 6.333617990321662,
+        "repay": 1335.0
+      },
+      "A_RM1_First loan_a-rm1-18": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-19": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-20": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-21": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-22": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-23": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-24": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-25": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-26": {
+        "rate": 6.333617990321662,
+        "repay": 1335.0
+      },
+      "A_RM1_First loan_a-rm1-27": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-28": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-29": {
+        "rate": 7.600341588385994,
+        "repay": 1335.0
+      },
+      "A_RM1_First loan_a-rm1-30": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-31": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-61": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_Reloan_GROUP": {
+        "rate": 18.649135268174234,
+        "repay": 45160.0
+      },
+      "A_RM1_Reloan_a-rm1-04": {
+        "rate": 8.292295997620386,
+        "repay": 5018.0
+      },
+      "A_RM1_Reloan_a-rm1-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_Reloan_a-rm1-06": {
+        "rate": 41.45982747793899,
+        "repay": 25089.0
+      },
+      "A_RM1_Reloan_a-rm1-07": {
+        "rate": 24.87523548269822,
+        "repay": 15053.0
+      },
+      "B_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM0_First loan_b-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_GROUP": {
+        "rate": 8.333333333333332,
+        "repay": 10539.0
+      },
+      "B_RM1_First loan_b-rm1-02": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "B_RM1_First loan_b-rm1-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_b-rm1-07": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "B_RM1_First loan_b-rm1-08": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_b-rm1-09": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "B_RM1_First loan_b-rm1-14": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_Reloan_GROUP": {
+        "rate": 18.361344855481715,
+        "repay": 24286.0
+      },
+      "B_RM1_Reloan_b-rm1-01": {
+        "rate": 20.460615110702697,
+        "repay": 14250.0
+      },
+      "B_RM1_Reloan_b-rm1-06": {
+        "rate": 16.02657255553249,
+        "repay": 10036.0
+      },
+      "C_RM0_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM0_Reloan_c-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_GROUP": {
+        "rate": 3.2093420451611623,
+        "repay": 4848.0
+      },
+      "C_RM1_First loan_c-rm1-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-03": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "C_RM1_First loan_c-rm1-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-06": {
+        "rate": 5.42881542027571,
+        "repay": 1335.0
+      },
+      "C_RM1_First loan_c-rm1-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-08": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_Reloan_GROUP": {
+        "rate": 15.698171400136474,
+        "repay": 63725.0
+      },
+      "C_RM1_Reloan_c-rm1-02": {
+        "rate": 14.01480693602788,
+        "repay": 10014.0
+      },
+      "C_RM1_Reloan_c-rm1-04": {
+        "rate": 5.691879165699506,
+        "repay": 3433.0
+      },
+      "C_RM1_Reloan_c-rm1-09": {
+        "rate": 23.940689629860714,
+        "repay": 13046.0
+      },
+      "C_RM1_Reloan_c-rm1-10": {
+        "rate": 16.57460591268603,
+        "repay": 9032.0
+      },
+      "C_RM1_Reloan_c-rm1-11": {
+        "rate": 12.915264831871747,
+        "repay": 7025.0
+      },
+      "C_RM1_Reloan_c-rm1-12": {
+        "rate": 9.225451804460134,
+        "repay": 5018.0
+      },
+      "C_RM1_Reloan_c-rm1-13": {
+        "rate": 28.647163120567377,
+        "repay": 16157.0
+      },
+      "D_RM0_First loan_GROUP": {
+        "rate": 3.571428571428571,
+        "repay": 3513.0
+      },
+      "D_RM0_First loan_D-AROOSA KHATTAK": {
+        "rate": 7.142857142857142,
+        "repay": 3513.0
+      },
+      "D_RM0_First loan_D-Ayesha abbasi": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM0_Reloan_GROUP": {
+        "rate": 9.474046388622778,
+        "repay": 14043.0
+      },
+      "D_RM0_Reloan_D-Malik Ahsen": {
+        "rate": 6.56187885762109,
+        "repay": 5018.0
+      },
+      "D_RM0_Reloan_D-Muhammad Ali": {
+        "rate": 12.57769601694679,
+        "repay": 9025.0
+      },
+      "D_RM1_First loan_GROUP": {
+        "rate": 4.545454545454546,
+        "repay": 3513.0
+      },
+      "D_RM1_First loan_D-Abdul hadi": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM1_First loan_D-Kiran Rafique": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "D_RM1_First loan_D-MALIK FAISAL": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_GROUP": {
+        "rate": 2.996344610091743,
+        "repay": 8361.0
+      },
+      "E_RM0_First loan_e-d0-01": {
+        "rate": 2.714407710137855,
+        "repay": 1335.0
+      },
+      "E_RM0_First loan_e-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-05": {
+        "rate": 7.6923076923076925,
+        "repay": 3513.0
+      },
+      "E_RM0_First loan_e-d0-07": {
+        "rate": 7.6923076923076925,
+        "repay": 3513.0
+      },
+      "E_RM0_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_Reloan_e-d0-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-10": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-11": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-13": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-14": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_Reloan_e-rm1-08": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_Reloan_e-rm1-09": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_GROUP": {
+        "rate": 2.8943715061360185,
+        "repay": 7026.0
+      },
+      "F_RM0_First loan_f-d0-01": {
+        "rate": 7.142857142857142,
+        "repay": 3513.0
+      },
+      "F_RM0_First loan_f-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-07": {
+        "rate": 7.6923076923076925,
+        "repay": 3513.0
+      },
+      "F_RM0_Reloan_GROUP": {
+        "rate": 4.8044896017017935,
+        "repay": 3433.0
+      },
+      "F_RM0_Reloan_f-d0-06": {
+        "rate": 4.8044896017017935,
+        "repay": 3433.0
+      },
+      "F_RM1_First loan_GROUP": {
+        "rate": 5.714285714285714,
+        "repay": 7026.0
+      },
+      "F_RM1_First loan_f-rm1-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_f-rm1-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_f-rm1-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_f-rm1-05": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "F_RM1_First loan_f-rm1-06": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "F_RM1_Reloan_GROUP": {
+        "rate": 13.101282618310481,
+        "repay": 29622.0
+      },
+      "F_RM1_Reloan_f-d0-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_Reloan_f-rm1-02": {
+        "rate": 21.630742049469966,
+        "repay": 12243.0
+      },
+      "F_RM1_Reloan_f-rm1-11": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_Reloan_f-rm1-12": {
+        "rate": 30.75929203539823,
+        "repay": 17379.0
+      },
+      "G_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "G_RM0_First loan_g-d0-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "G_RM1_First loan_GROUP": {
+        "rate": 4.761904761904762,
+        "repay": 3513.0
+      },
+      "G_RM1_First loan_g-rm1-03": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "G_RM1_First loan_g-rm1-11": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "G_RM1_First loan_g-rm1-13": {
+        "rate": 0.0,
+        "repay": 0.0
+      }
+    }
+  },
+  {
+    "timestamp": 1766551658.606404,
+    "data": {
+      "A_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_First loan_a-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_First loan_a-d0-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_First loan_a-d0-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_First loan_a-d0-09": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_Reloan_GROUP": {
+        "rate": 4.450202080350695,
+        "repay": 7025.0
+      },
+      "A_RM0_Reloan_a-d0-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_Reloan_a-d0-06": {
+        "rate": 8.928684909569263,
+        "repay": 7025.0
+      },
+      "A_RM1_First loan_GROUP": {
+        "rate": 13.566306215468193,
+        "repay": 79113.0
+      },
+      "A_RM1_First loan_a-d0-01": {
+        "rate": 6.333617990321662,
+        "repay": 1335.0
+      },
+      "A_RM1_First loan_a-rm1-01": {
+        "rate": 20.0,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-03": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-08": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-09": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-10": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-11": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-12": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-13": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-14": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-15": {
+        "rate": 50.0,
+        "repay": 10539.0
+      },
+      "A_RM1_First loan_a-rm1-16": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-17": {
+        "rate": 6.333617990321662,
+        "repay": 1335.0
+      },
+      "A_RM1_First loan_a-rm1-18": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-19": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-20": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-21": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-22": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-23": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-24": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-25": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-26": {
+        "rate": 6.333617990321662,
+        "repay": 1335.0
+      },
+      "A_RM1_First loan_a-rm1-27": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-28": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-29": {
+        "rate": 47.600341588385994,
+        "repay": 8361.0
+      },
+      "A_RM1_First loan_a-rm1-30": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-31": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-61": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_Reloan_GROUP": {
+        "rate": 19.4523365103487,
+        "repay": 47105.0
+      },
+      "A_RM1_Reloan_a-rm1-04": {
+        "rate": 8.292295997620386,
+        "repay": 5018.0
+      },
+      "A_RM1_Reloan_a-rm1-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_Reloan_a-rm1-06": {
+        "rate": 44.67395974485243,
+        "repay": 27034.0
+      },
+      "A_RM1_Reloan_a-rm1-07": {
+        "rate": 24.87523548269822,
+        "repay": 15053.0
+      },
+      "B_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM0_First loan_b-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_GROUP": {
+        "rate": 18.64345130784072,
+        "repay": 23578.0
+      },
+      "B_RM1_First loan_b-rm1-02": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "B_RM1_First loan_b-rm1-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_b-rm1-07": {
+        "rate": 50.0,
+        "repay": 10539.0
+      },
+      "B_RM1_First loan_b-rm1-08": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "B_RM1_First loan_b-rm1-09": {
+        "rate": 28.527374513710978,
+        "repay": 6013.0
+      },
+      "B_RM1_First loan_b-rm1-14": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_Reloan_GROUP": {
+        "rate": 18.361344855481715,
+        "repay": 24286.0
+      },
+      "B_RM1_Reloan_b-rm1-01": {
+        "rate": 20.460615110702697,
+        "repay": 14250.0
+      },
+      "B_RM1_Reloan_b-rm1-06": {
+        "rate": 16.02657255553249,
+        "repay": 10036.0
+      },
+      "C_RM0_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM0_Reloan_c-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_GROUP": {
+        "rate": 3.2093420451611623,
+        "repay": 4848.0
+      },
+      "C_RM1_First loan_c-rm1-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-03": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "C_RM1_First loan_c-rm1-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-06": {
+        "rate": 5.42881542027571,
+        "repay": 1335.0
+      },
+      "C_RM1_First loan_c-rm1-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-08": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_Reloan_GROUP": {
+        "rate": 19.406610352786995,
+        "repay": 78779.0
+      },
+      "C_RM1_Reloan_c-rm1-02": {
+        "rate": 21.037605139042448,
+        "repay": 15032.0
+      },
+      "C_RM1_Reloan_c-rm1-04": {
+        "rate": 14.01167224856584,
+        "repay": 8451.0
+      },
+      "C_RM1_Reloan_c-rm1-09": {
+        "rate": 23.940689629860714,
+        "repay": 13046.0
+      },
+      "C_RM1_Reloan_c-rm1-10": {
+        "rate": 16.57460591268603,
+        "repay": 9032.0
+      },
+      "C_RM1_Reloan_c-rm1-11": {
+        "rate": 12.915264831871747,
+        "repay": 7025.0
+      },
+      "C_RM1_Reloan_c-rm1-12": {
+        "rate": 9.225451804460134,
+        "repay": 5018.0
+      },
+      "C_RM1_Reloan_c-rm1-13": {
+        "rate": 37.544326241134755,
+        "repay": 21175.0
+      },
+      "D_RM0_First loan_GROUP": {
+        "rate": 3.571428571428571,
+        "repay": 3513.0
+      },
+      "D_RM0_First loan_D-AROOSA KHATTAK": {
+        "rate": 7.142857142857142,
+        "repay": 3513.0
+      },
+      "D_RM0_First loan_D-Ayesha abbasi": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM0_Reloan_GROUP": {
+        "rate": 14.895497416107837,
+        "repay": 22079.0
+      },
+      "D_RM0_Reloan_D-Malik Ahsen": {
+        "rate": 13.12375771524218,
+        "repay": 10036.0
+      },
+      "D_RM0_Reloan_D-Muhammad Ali": {
+        "rate": 16.783733311034922,
+        "repay": 12043.0
+      },
+      "D_RM1_First loan_GROUP": {
+        "rate": 9.090909090909092,
+        "repay": 7026.0
+      },
+      "D_RM1_First loan_D-Abdul hadi": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM1_First loan_D-Kiran Rafique": {
+        "rate": 28.57142857142857,
+        "repay": 7026.0
+      },
+      "D_RM1_First loan_D-MALIK FAISAL": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_GROUP": {
+        "rate": 2.996344610091743,
+        "repay": 8361.0
+      },
+      "E_RM0_First loan_e-d0-01": {
+        "rate": 2.714407710137855,
+        "repay": 1335.0
+      },
+      "E_RM0_First loan_e-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-05": {
+        "rate": 7.6923076923076925,
+        "repay": 3513.0
+      },
+      "E_RM0_First loan_e-d0-07": {
+        "rate": 7.6923076923076925,
+        "repay": 3513.0
+      },
+      "E_RM0_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_Reloan_e-d0-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-10": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-11": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-13": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-14": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_Reloan_GROUP": {
+        "rate": 6.1136397260393185,
+        "repay": 7025.0
+      },
+      "E_RM1_Reloan_e-rm1-08": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_Reloan_e-rm1-09": {
+        "rate": 12.477797513321493,
+        "repay": 7025.0
+      },
+      "F_RM0_First loan_GROUP": {
+        "rate": 4.341557259204027,
+        "repay": 10539.0
+      },
+      "F_RM0_First loan_f-d0-01": {
+        "rate": 7.142857142857142,
+        "repay": 3513.0
+      },
+      "F_RM0_First loan_f-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-07": {
+        "rate": 15.384615384615385,
+        "repay": 7026.0
+      },
+      "F_RM0_Reloan_GROUP": {
+        "rate": 4.8044896017017935,
+        "repay": 3433.0
+      },
+      "F_RM0_Reloan_f-d0-06": {
+        "rate": 4.8044896017017935,
+        "repay": 3433.0
+      },
+      "F_RM1_First loan_GROUP": {
+        "rate": 5.714285714285714,
+        "repay": 7026.0
+      },
+      "F_RM1_First loan_f-rm1-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_f-rm1-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_f-rm1-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_f-rm1-05": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "F_RM1_First loan_f-rm1-06": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "F_RM1_Reloan_GROUP": {
+        "rate": 15.320654577620521,
+        "repay": 34640.0
+      },
+      "F_RM1_Reloan_f-d0-04": {
+        "rate": 8.865724381625443,
+        "repay": 5018.0
+      },
+      "F_RM1_Reloan_f-rm1-02": {
+        "rate": 21.630742049469966,
+        "repay": 12243.0
+      },
+      "F_RM1_Reloan_f-rm1-11": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_Reloan_f-rm1-12": {
+        "rate": 30.75929203539823,
+        "repay": 17379.0
+      },
+      "G_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "G_RM0_First loan_g-d0-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "G_RM1_First loan_GROUP": {
+        "rate": 9.523809523809524,
+        "repay": 7026.0
+      },
+      "G_RM1_First loan_g-rm1-03": {
+        "rate": 28.57142857142857,
+        "repay": 7026.0
+      },
+      "G_RM1_First loan_g-rm1-11": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "G_RM1_First loan_g-rm1-13": {
+        "rate": 0.0,
+        "repay": 0.0
+      }
+    }
+  },
+  {
+    "timestamp": 1766555529.093261,
+    "data": {
+      "A_RM0_First loan_GROUP": {
+        "rate": 1.782524862999797,
+        "repay": 3513.0
+      },
+      "A_RM0_First loan_a-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_First loan_a-d0-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_First loan_a-d0-04": {
+        "rate": 7.142857142857142,
+        "repay": 3513.0
+      },
+      "A_RM0_First loan_a-d0-09": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_Reloan_GROUP": {
+        "rate": 4.450202080350695,
+        "repay": 7025.0
+      },
+      "A_RM0_Reloan_a-d0-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_Reloan_a-d0-06": {
+        "rate": 8.928684909569263,
+        "repay": 7025.0
+      },
+      "A_RM1_First loan_GROUP": {
+        "rate": 22.831376745238856,
+        "repay": 133143.0
+      },
+      "A_RM1_First loan_a-d0-01": {
+        "rate": 6.333617990321662,
+        "repay": 1335.0
+      },
+      "A_RM1_First loan_a-rm1-01": {
+        "rate": 27.600341588385994,
+        "repay": 4848.0
+      },
+      "A_RM1_First loan_a-rm1-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-03": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-08": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-09": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-10": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-11": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-12": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-13": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-14": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-15": {
+        "rate": 50.0,
+        "repay": 10539.0
+      },
+      "A_RM1_First loan_a-rm1-16": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-17": {
+        "rate": 39.666951323655,
+        "repay": 8361.0
+      },
+      "A_RM1_First loan_a-rm1-18": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-19": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-20": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-21": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-22": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-23": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-24": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-25": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-26": {
+        "rate": 6.333617990321662,
+        "repay": 1335.0
+      },
+      "A_RM1_First loan_a-rm1-27": {
+        "rate": 50.0,
+        "repay": 10539.0
+      },
+      "A_RM1_First loan_a-rm1-28": {
+        "rate": 20.0,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-29": {
+        "rate": 47.600341588385994,
+        "repay": 8361.0
+      },
+      "A_RM1_First loan_a-rm1-30": {
+        "rate": 20.0,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-31": {
+        "rate": 40.0,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-61": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_Reloan_GROUP": {
+        "rate": 24.641140421876806,
+        "repay": 59670.0
+      },
+      "A_RM1_Reloan_a-rm1-04": {
+        "rate": 8.292295997620386,
+        "repay": 5018.0
+      },
+      "A_RM1_Reloan_a-rm1-05": {
+        "rate": 15.065826376744646,
+        "repay": 9132.0
+      },
+      "A_RM1_Reloan_a-rm1-06": {
+        "rate": 44.67395974485243,
+        "repay": 27034.0
+      },
+      "A_RM1_Reloan_a-rm1-07": {
+        "rate": 30.548302872062667,
+        "repay": 18486.0
+      },
+      "B_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM0_First loan_b-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_GROUP": {
+        "rate": 31.335990131891073,
+        "repay": 39630.0
+      },
+      "B_RM1_First loan_b-rm1-02": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "B_RM1_First loan_b-rm1-04": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "B_RM1_First loan_b-rm1-07": {
+        "rate": 50.0,
+        "repay": 10539.0
+      },
+      "B_RM1_First loan_b-rm1-08": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "B_RM1_First loan_b-rm1-09": {
+        "rate": 45.194041180377646,
+        "repay": 9526.0
+      },
+      "B_RM1_First loan_b-rm1-14": {
+        "rate": 26.155232944302114,
+        "repay": 5513.0
+      },
+      "B_RM1_Reloan_GROUP": {
+        "rate": 26.024631994375014,
+        "repay": 34422.0
+      },
+      "B_RM1_Reloan_b-rm1-01": {
+        "rate": 27.665623294948745,
+        "repay": 19268.0
+      },
+      "B_RM1_Reloan_b-rm1-06": {
+        "rate": 24.199549671835328,
+        "repay": 15154.0
+      },
+      "C_RM0_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM0_Reloan_c-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_GROUP": {
+        "rate": 8.74426548567116,
+        "repay": 13209.0
+      },
+      "C_RM1_First loan_c-rm1-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-03": {
+        "rate": 34.00024399170428,
+        "repay": 8361.0
+      },
+      "C_RM1_First loan_c-rm1-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-06": {
+        "rate": 5.42881542027571,
+        "repay": 1335.0
+      },
+      "C_RM1_First loan_c-rm1-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-08": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "C_RM1_Reloan_GROUP": {
+        "rate": 31.09999285606951,
+        "repay": 126247.0
+      },
+      "C_RM1_Reloan_c-rm1-02": {
+        "rate": 21.037605139042448,
+        "repay": 15032.0
+      },
+      "C_RM1_Reloan_c-rm1-04": {
+        "rate": 32.314222236959914,
+        "repay": 19490.0
+      },
+      "C_RM1_Reloan_c-rm1-09": {
+        "rate": 51.93327583359331,
+        "repay": 28300.0
+      },
+      "C_RM1_Reloan_c-rm1-10": {
+        "rate": 29.649679775383998,
+        "repay": 16157.0
+      },
+      "C_RM1_Reloan_c-rm1-11": {
+        "rate": 29.52034269115511,
+        "repay": 16057.0
+      },
+      "C_RM1_Reloan_c-rm1-12": {
+        "rate": 18.450903608920267,
+        "repay": 10036.0
+      },
+      "C_RM1_Reloan_c-rm1-13": {
+        "rate": 37.544326241134755,
+        "repay": 21175.0
+      },
+      "D_RM0_First loan_GROUP": {
+        "rate": 3.571428571428571,
+        "repay": 3513.0
+      },
+      "D_RM0_First loan_D-AROOSA KHATTAK": {
+        "rate": 7.142857142857142,
+        "repay": 3513.0
+      },
+      "D_RM0_First loan_D-Ayesha abbasi": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM0_Reloan_GROUP": {
+        "rate": 18.28086840365388,
+        "repay": 27097.0
+      },
+      "D_RM0_Reloan_D-Malik Ahsen": {
+        "rate": 19.68563657286327,
+        "repay": 15054.0
+      },
+      "D_RM0_Reloan_D-Muhammad Ali": {
+        "rate": 16.783733311034922,
+        "repay": 12043.0
+      },
+      "D_RM1_First loan_GROUP": {
+        "rate": 15.363713997360454,
+        "repay": 11874.0
+      },
+      "D_RM1_First loan_D-Abdul hadi": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM1_First loan_D-Kiran Rafique": {
+        "rate": 42.857142857142854,
+        "repay": 10539.0
+      },
+      "D_RM1_First loan_D-MALIK FAISAL": {
+        "rate": 4.7502134927412465,
+        "repay": 1335.0
+      },
+      "E_RM0_First loan_GROUP": {
+        "rate": 2.996344610091743,
+        "repay": 8361.0
+      },
+      "E_RM0_First loan_e-d0-01": {
+        "rate": 2.714407710137855,
+        "repay": 1335.0
+      },
+      "E_RM0_First loan_e-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-05": {
+        "rate": 7.6923076923076925,
+        "repay": 3513.0
+      },
+      "E_RM0_First loan_e-d0-07": {
+        "rate": 7.6923076923076925,
+        "repay": 3513.0
+      },
+      "E_RM0_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_Reloan_e-d0-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_GROUP": {
+        "rate": 2.857142857142857,
+        "repay": 7026.0
+      },
+      "E_RM1_First loan_e-rm1-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-10": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-11": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-13": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "E_RM1_First loan_e-rm1-14": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "E_RM1_Reloan_GROUP": {
+        "rate": 7.806312931327073,
+        "repay": 8970.0
+      },
+      "E_RM1_Reloan_e-rm1-08": {
+        "rate": 3.3187161943112593,
+        "repay": 1945.0
+      },
+      "E_RM1_Reloan_e-rm1-09": {
+        "rate": 12.477797513321493,
+        "repay": 7025.0
+      },
+      "F_RM0_First loan_GROUP": {
+        "rate": 4.341557259204027,
+        "repay": 10539.0
+      },
+      "F_RM0_First loan_f-d0-01": {
+        "rate": 7.142857142857142,
+        "repay": 3513.0
+      },
+      "F_RM0_First loan_f-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-07": {
+        "rate": 15.384615384615385,
+        "repay": 7026.0
+      },
+      "F_RM0_Reloan_GROUP": {
+        "rate": 7.473339491141154,
+        "repay": 5340.0
+      },
+      "F_RM0_Reloan_f-d0-06": {
+        "rate": 7.473339491141154,
+        "repay": 5340.0
+      },
+      "F_RM1_First loan_GROUP": {
+        "rate": 5.714285714285714,
+        "repay": 7026.0
+      },
+      "F_RM1_First loan_f-rm1-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_f-rm1-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_f-rm1-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_f-rm1-05": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "F_RM1_First loan_f-rm1-06": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "F_RM1_Reloan_GROUP": {
+        "rate": 25.546218487394956,
+        "repay": 57760.0
+      },
+      "F_RM1_Reloan_f-d0-04": {
+        "rate": 12.302120141342757,
+        "repay": 6963.0
+      },
+      "F_RM1_Reloan_f-rm1-02": {
+        "rate": 50.17667844522968,
+        "repay": 28400.0
+      },
+      "F_RM1_Reloan_f-rm1-11": {
+        "rate": 8.897163120567377,
+        "repay": 5018.0
+      },
+      "F_RM1_Reloan_f-rm1-12": {
+        "rate": 30.75929203539823,
+        "repay": 17379.0
+      },
+      "G_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "G_RM0_First loan_g-d0-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "G_RM1_First loan_GROUP": {
+        "rate": 11.333414663901427,
+        "repay": 8361.0
+      },
+      "G_RM1_First loan_g-rm1-03": {
+        "rate": 28.57142857142857,
+        "repay": 7026.0
+      },
+      "G_RM1_First loan_g-rm1-11": {
+        "rate": 5.42881542027571,
+        "repay": 1335.0
+      },
+      "G_RM1_First loan_g-rm1-13": {
+        "rate": 0.0,
+        "repay": 0.0
+      }
+    }
+  },
+  {
+    "timestamp": 1766558396.616498,
+    "data": {
+      "A_RM0_First loan_GROUP": {
+        "rate": 7.130099451999188,
+        "repay": 14052.0
+      },
+      "A_RM0_First loan_a-d0-02": {
+        "rate": 14.184196713368596,
+        "repay": 7026.0
+      },
+      "A_RM0_First loan_a-d0-03": {
+        "rate": 7.142857142857142,
+        "repay": 3513.0
+      },
+      "A_RM0_First loan_a-d0-04": {
+        "rate": 7.142857142857142,
+        "repay": 3513.0
+      },
+      "A_RM0_First loan_a-d0-09": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_Reloan_GROUP": {
+        "rate": 4.450202080350695,
+        "repay": 7025.0
+      },
+      "A_RM0_Reloan_a-d0-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_Reloan_a-d0-06": {
+        "rate": 8.928684909569263,
+        "repay": 7025.0
+      },
+      "A_RM1_First loan_GROUP": {
+        "rate": 27.277170166575782,
+        "repay": 159069.0
+      },
+      "A_RM1_First loan_a-d0-01": {
+        "rate": 6.333617990321662,
+        "repay": 1335.0
+      },
+      "A_RM1_First loan_a-rm1-01": {
+        "rate": 47.600341588385994,
+        "repay": 8361.0
+      },
+      "A_RM1_First loan_a-rm1-02": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-03": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-08": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-09": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-10": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-11": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-12": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-13": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-14": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-15": {
+        "rate": 50.0,
+        "repay": 10539.0
+      },
+      "A_RM1_First loan_a-rm1-16": {
+        "rate": 50.0,
+        "repay": 10539.0
+      },
+      "A_RM1_First loan_a-rm1-17": {
+        "rate": 39.666951323655,
+        "repay": 8361.0
+      },
+      "A_RM1_First loan_a-rm1-18": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-19": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-20": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM1_First loan_a-rm1-21": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-22": {
+        "rate": 50.0,
+        "repay": 10539.0
+      },
+      "A_RM1_First loan_a-rm1-23": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-24": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-25": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-26": {
+        "rate": 12.667235980643325,
+        "repay": 2670.0
+      },
+      "A_RM1_First loan_a-rm1-27": {
+        "rate": 66.66666666666666,
+        "repay": 14052.0
+      },
+      "A_RM1_First loan_a-rm1-28": {
+        "rate": 20.0,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-29": {
+        "rate": 47.600341588385994,
+        "repay": 8361.0
+      },
+      "A_RM1_First loan_a-rm1-30": {
+        "rate": 20.0,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-31": {
+        "rate": 40.0,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-61": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_Reloan_GROUP": {
+        "rate": 33.38550355968879,
+        "repay": 80845.0
+      },
+      "A_RM1_Reloan_a-rm1-04": {
+        "rate": 16.58459199524077,
+        "repay": 10036.0
+      },
+      "A_RM1_Reloan_a-rm1-05": {
+        "rate": 23.344441878113965,
+        "repay": 14150.0
+      },
+      "A_RM1_Reloan_a-rm1-06": {
+        "rate": 44.67395974485243,
+        "repay": 27034.0
+      },
+      "A_RM1_Reloan_a-rm1-07": {
+        "rate": 48.9556135770235,
+        "repay": 29625.0
+      },
+      "B_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM0_First loan_b-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_GROUP": {
+        "rate": 32.5220609165955,
+        "repay": 41130.0
+      },
+      "B_RM1_First loan_b-rm1-02": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "B_RM1_First loan_b-rm1-04": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "B_RM1_First loan_b-rm1-07": {
+        "rate": 50.0,
+        "repay": 10539.0
+      },
+      "B_RM1_First loan_b-rm1-08": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "B_RM1_First loan_b-rm1-09": {
+        "rate": 45.194041180377646,
+        "repay": 9526.0
+      },
+      "B_RM1_First loan_b-rm1-14": {
+        "rate": 33.2716576525287,
+        "repay": 7013.0
+      },
+      "B_RM1_Reloan_GROUP": {
+        "rate": 26.024631994375014,
+        "repay": 34422.0
+      },
+      "B_RM1_Reloan_b-rm1-01": {
+        "rate": 27.665623294948745,
+        "repay": 19268.0
+      },
+      "B_RM1_Reloan_b-rm1-06": {
+        "rate": 24.199549671835328,
+        "repay": 15154.0
+      },
+      "C_RM0_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM0_Reloan_c-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_GROUP": {
+        "rate": 8.74426548567116,
+        "repay": 13209.0
+      },
+      "C_RM1_First loan_c-rm1-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-03": {
+        "rate": 34.00024399170428,
+        "repay": 8361.0
+      },
+      "C_RM1_First loan_c-rm1-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-06": {
+        "rate": 5.42881542027571,
+        "repay": 1335.0
+      },
+      "C_RM1_First loan_c-rm1-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-08": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "C_RM1_Reloan_GROUP": {
+        "rate": 32.993873463747015,
+        "repay": 133935.0
+      },
+      "C_RM1_Reloan_c-rm1-02": {
+        "rate": 21.037605139042448,
+        "repay": 15032.0
+      },
+      "C_RM1_Reloan_c-rm1-04": {
+        "rate": 32.314222236959914,
+        "repay": 19490.0
+      },
+      "C_RM1_Reloan_c-rm1-09": {
+        "rate": 51.93327583359331,
+        "repay": 28300.0
+      },
+      "C_RM1_Reloan_c-rm1-10": {
+        "rate": 38.858201970895344,
+        "repay": 21175.0
+      },
+      "C_RM1_Reloan_c-rm1-11": {
+        "rate": 29.52034269115511,
+        "repay": 16057.0
+      },
+      "C_RM1_Reloan_c-rm1-12": {
+        "rate": 18.450903608920267,
+        "repay": 10036.0
+      },
+      "C_RM1_Reloan_c-rm1-13": {
+        "rate": 42.27836879432624,
+        "repay": 23845.0
+      },
+      "D_RM0_First loan_GROUP": {
+        "rate": 3.571428571428571,
+        "repay": 3513.0
+      },
+      "D_RM0_First loan_D-AROOSA KHATTAK": {
+        "rate": 7.142857142857142,
+        "repay": 3513.0
+      },
+      "D_RM0_First loan_D-Ayesha abbasi": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM0_Reloan_GROUP": {
+        "rate": 18.28086840365388,
+        "repay": 27097.0
+      },
+      "D_RM0_Reloan_D-Malik Ahsen": {
+        "rate": 19.68563657286327,
+        "repay": 15054.0
+      },
+      "D_RM0_Reloan_D-Muhammad Ali": {
+        "rate": 16.783733311034922,
+        "repay": 12043.0
+      },
+      "D_RM1_First loan_GROUP": {
+        "rate": 15.363713997360454,
+        "repay": 11874.0
+      },
+      "D_RM1_First loan_D-Abdul hadi": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM1_First loan_D-Kiran Rafique": {
+        "rate": 42.857142857142854,
+        "repay": 10539.0
+      },
+      "D_RM1_First loan_D-MALIK FAISAL": {
+        "rate": 4.7502134927412465,
+        "repay": 1335.0
+      },
+      "E_RM0_First loan_GROUP": {
+        "rate": 2.996344610091743,
+        "repay": 8361.0
+      },
+      "E_RM0_First loan_e-d0-01": {
+        "rate": 2.714407710137855,
+        "repay": 1335.0
+      },
+      "E_RM0_First loan_e-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-05": {
+        "rate": 7.6923076923076925,
+        "repay": 3513.0
+      },
+      "E_RM0_First loan_e-d0-07": {
+        "rate": 7.6923076923076925,
+        "repay": 3513.0
+      },
+      "E_RM0_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_Reloan_e-d0-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_GROUP": {
+        "rate": 2.857142857142857,
+        "repay": 7026.0
+      },
+      "E_RM1_First loan_e-rm1-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-07": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-10": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-11": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-13": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "E_RM1_First loan_e-rm1-14": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "E_RM1_Reloan_GROUP": {
+        "rate": 13.832925757351596,
+        "repay": 15895.0
+      },
+      "E_RM1_Reloan_e-rm1-08": {
+        "rate": 11.88083334755234,
+        "repay": 6963.0
+      },
+      "E_RM1_Reloan_e-rm1-09": {
+        "rate": 15.865008880994672,
+        "repay": 8932.0
+      },
+      "F_RM0_First loan_GROUP": {
+        "rate": 4.341557259204027,
+        "repay": 10539.0
+      },
+      "F_RM0_First loan_f-d0-01": {
+        "rate": 7.142857142857142,
+        "repay": 3513.0
+      },
+      "F_RM0_First loan_f-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-07": {
+        "rate": 15.384615384615385,
+        "repay": 7026.0
+      },
+      "F_RM0_Reloan_GROUP": {
+        "rate": 7.473339491141154,
+        "repay": 5340.0
+      },
+      "F_RM0_Reloan_f-d0-06": {
+        "rate": 7.473339491141154,
+        "repay": 5340.0
+      },
+      "F_RM1_First loan_GROUP": {
+        "rate": 6.800048798340856,
+        "repay": 8361.0
+      },
+      "F_RM1_First loan_f-rm1-01": {
+        "rate": 5.42881542027571,
+        "repay": 1335.0
+      },
+      "F_RM1_First loan_f-rm1-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_f-rm1-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_f-rm1-05": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "F_RM1_First loan_f-rm1-06": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "F_RM1_Reloan_GROUP": {
+        "rate": 25.546218487394956,
+        "repay": 57760.0
+      },
+      "F_RM1_Reloan_f-d0-04": {
+        "rate": 12.302120141342757,
+        "repay": 6963.0
+      },
+      "F_RM1_Reloan_f-rm1-02": {
+        "rate": 50.17667844522968,
+        "repay": 28400.0
+      },
+      "F_RM1_Reloan_f-rm1-11": {
+        "rate": 8.897163120567377,
+        "repay": 5018.0
+      },
+      "F_RM1_Reloan_f-rm1-12": {
+        "rate": 30.75929203539823,
+        "repay": 17379.0
+      },
+      "G_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "G_RM0_First loan_g-d0-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "G_RM1_First loan_GROUP": {
+        "rate": 16.09531942580619,
+        "repay": 11874.0
+      },
+      "G_RM1_First loan_g-rm1-03": {
+        "rate": 42.857142857142854,
+        "repay": 10539.0
+      },
+      "G_RM1_First loan_g-rm1-11": {
+        "rate": 5.42881542027571,
+        "repay": 1335.0
+      },
+      "G_RM1_First loan_g-rm1-13": {
+        "rate": 0.0,
+        "repay": 0.0
+      }
+    }
+  },
+  {
+    "timestamp": 1766561184.1925702,
+    "data": {
+      "A_RM0_First loan_GROUP": {
+        "rate": 8.235234422569516,
+        "repay": 16230.0
+      },
+      "A_RM0_First loan_a-d0-02": {
+        "rate": 7.092098356684298,
+        "repay": 3513.0
+      },
+      "A_RM0_First loan_a-d0-03": {
+        "rate": 7.142857142857142,
+        "repay": 3513.0
+      },
+      "A_RM0_First loan_a-d0-04": {
+        "rate": 11.57130657557643,
+        "repay": 5691.0
+      },
+      "A_RM0_First loan_a-d0-09": {
+        "rate": 7.142857142857142,
+        "repay": 3513.0
+      },
+      "A_RM0_Reloan_GROUP": {
+        "rate": 4.450202080350695,
+        "repay": 7025.0
+      },
+      "A_RM0_Reloan_a-d0-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "A_RM0_Reloan_a-d0-06": {
+        "rate": 8.928684909569263,
+        "repay": 7025.0
+      },
+      "A_RM1_First loan_GROUP": {
+        "rate": 33.156708816478556,
+        "repay": 193356.0
+      },
+      "A_RM1_First loan_a-d0-01": {
+        "rate": 12.667235980643325,
+        "repay": 2670.0
+      },
+      "A_RM1_First loan_a-rm1-01": {
+        "rate": 47.600341588385994,
+        "repay": 8361.0
+      },
+      "A_RM1_First loan_a-rm1-02": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-03": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-08": {
+        "rate": 50.0,
+        "repay": 10539.0
+      },
+      "A_RM1_First loan_a-rm1-09": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-10": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-11": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-12": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-13": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-14": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-15": {
+        "rate": 50.0,
+        "repay": 10539.0
+      },
+      "A_RM1_First loan_a-rm1-16": {
+        "rate": 50.0,
+        "repay": 10539.0
+      },
+      "A_RM1_First loan_a-rm1-17": {
+        "rate": 39.666951323655,
+        "repay": 8361.0
+      },
+      "A_RM1_First loan_a-rm1-18": {
+        "rate": 20.0,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-19": {
+        "rate": 7.600341588385994,
+        "repay": 1335.0
+      },
+      "A_RM1_First loan_a-rm1-20": {
+        "rate": 20.0,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-21": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-22": {
+        "rate": 50.0,
+        "repay": 10539.0
+      },
+      "A_RM1_First loan_a-rm1-23": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-24": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-25": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_First loan_a-rm1-26": {
+        "rate": 29.33390264730999,
+        "repay": 6183.0
+      },
+      "A_RM1_First loan_a-rm1-27": {
+        "rate": 66.66666666666666,
+        "repay": 14052.0
+      },
+      "A_RM1_First loan_a-rm1-28": {
+        "rate": 20.0,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-29": {
+        "rate": 47.600341588385994,
+        "repay": 8361.0
+      },
+      "A_RM1_First loan_a-rm1-30": {
+        "rate": 20.0,
+        "repay": 3513.0
+      },
+      "A_RM1_First loan_a-rm1-31": {
+        "rate": 60.0,
+        "repay": 10539.0
+      },
+      "A_RM1_First loan_a-rm1-61": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "A_RM1_Reloan_GROUP": {
+        "rate": 42.0059796164456,
+        "repay": 101720.0
+      },
+      "A_RM1_Reloan_a-rm1-04": {
+        "rate": 24.876887992861157,
+        "repay": 15054.0
+      },
+      "A_RM1_Reloan_a-rm1-05": {
+        "rate": 23.344441878113965,
+        "repay": 14150.0
+      },
+      "A_RM1_Reloan_a-rm1-06": {
+        "rate": 54.127970387017875,
+        "repay": 32755.0
+      },
+      "A_RM1_Reloan_a-rm1-07": {
+        "rate": 65.70545658855802,
+        "repay": 39761.0
+      },
+      "B_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM0_First loan_b-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "B_RM1_First loan_GROUP": {
+        "rate": 32.5220609165955,
+        "repay": 41130.0
+      },
+      "B_RM1_First loan_b-rm1-02": {
+        "rate": 33.33333333333333,
+        "repay": 7026.0
+      },
+      "B_RM1_First loan_b-rm1-04": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "B_RM1_First loan_b-rm1-07": {
+        "rate": 50.0,
+        "repay": 10539.0
+      },
+      "B_RM1_First loan_b-rm1-08": {
+        "rate": 16.666666666666664,
+        "repay": 3513.0
+      },
+      "B_RM1_First loan_b-rm1-09": {
+        "rate": 45.194041180377646,
+        "repay": 9526.0
+      },
+      "B_RM1_First loan_b-rm1-14": {
+        "rate": 33.2716576525287,
+        "repay": 7013.0
+      },
+      "B_RM1_Reloan_GROUP": {
+        "rate": 29.894077887908548,
+        "repay": 39540.0
+      },
+      "B_RM1_Reloan_b-rm1-01": {
+        "rate": 27.665623294948745,
+        "repay": 19268.0
+      },
+      "B_RM1_Reloan_b-rm1-06": {
+        "rate": 32.37252678813816,
+        "repay": 20272.0
+      },
+      "C_RM0_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM0_Reloan_c-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_GROUP": {
+        "rate": 9.628026135483486,
+        "repay": 14544.0
+      },
+      "C_RM1_First loan_c-rm1-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-03": {
+        "rate": 34.00024399170428,
+        "repay": 8361.0
+      },
+      "C_RM1_First loan_c-rm1-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "C_RM1_First loan_c-rm1-06": {
+        "rate": 5.42881542027571,
+        "repay": 1335.0
+      },
+      "C_RM1_First loan_c-rm1-07": {
+        "rate": 5.42881542027571,
+        "repay": 1335.0
+      },
+      "C_RM1_First loan_c-rm1-08": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "C_RM1_Reloan_GROUP": {
+        "rate": 36.61830964750862,
+        "repay": 148648.0
+      },
+      "C_RM1_Reloan_c-rm1-02": {
+        "rate": 24.774327180104404,
+        "repay": 17702.0
+      },
+      "C_RM1_Reloan_c-rm1-04": {
+        "rate": 40.63401531982625,
+        "repay": 24508.0
+      },
+      "C_RM1_Reloan_c-rm1-09": {
+        "rate": 51.93327583359331,
+        "repay": 28300.0
+      },
+      "C_RM1_Reloan_c-rm1-10": {
+        "rate": 38.858201970895344,
+        "repay": 21175.0
+      },
+      "C_RM1_Reloan_c-rm1-11": {
+        "rate": 29.52034269115511,
+        "repay": 16057.0
+      },
+      "C_RM1_Reloan_c-rm1-12": {
+        "rate": 31.366168440792013,
+        "repay": 17061.0
+      },
+      "C_RM1_Reloan_c-rm1-13": {
+        "rate": 42.27836879432624,
+        "repay": 23845.0
+      },
+      "D_RM0_First loan_GROUP": {
+        "rate": 3.571428571428571,
+        "repay": 3513.0
+      },
+      "D_RM0_First loan_D-AROOSA KHATTAK": {
+        "rate": 7.142857142857142,
+        "repay": 3513.0
+      },
+      "D_RM0_First loan_D-Ayesha abbasi": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM0_Reloan_GROUP": {
+        "rate": 18.28086840365388,
+        "repay": 27097.0
+      },
+      "D_RM0_Reloan_D-Malik Ahsen": {
+        "rate": 19.68563657286327,
+        "repay": 15054.0
+      },
+      "D_RM0_Reloan_D-Muhammad Ali": {
+        "rate": 16.783733311034922,
+        "repay": 12043.0
+      },
+      "D_RM1_First loan_GROUP": {
+        "rate": 15.363713997360454,
+        "repay": 11874.0
+      },
+      "D_RM1_First loan_D-Abdul hadi": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "D_RM1_First loan_D-Kiran Rafique": {
+        "rate": 42.857142857142854,
+        "repay": 10539.0
+      },
+      "D_RM1_First loan_D-MALIK FAISAL": {
+        "rate": 4.7502134927412465,
+        "repay": 1335.0
+      },
+      "E_RM0_First loan_GROUP": {
+        "rate": 4.733729931192661,
+        "repay": 13209.0
+      },
+      "E_RM0_First loan_e-d0-01": {
+        "rate": 2.714407710137855,
+        "repay": 1335.0
+      },
+      "E_RM0_First loan_e-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-03": {
+        "rate": 2.923208303225383,
+        "repay": 1335.0
+      },
+      "E_RM0_First loan_e-d0-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_First loan_e-d0-05": {
+        "rate": 7.6923076923076925,
+        "repay": 3513.0
+      },
+      "E_RM0_First loan_e-d0-07": {
+        "rate": 15.384615384615385,
+        "repay": 7026.0
+      },
+      "E_RM0_Reloan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM0_Reloan_e-d0-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_GROUP": {
+        "rate": 6.257167256313285,
+        "repay": 15387.0
+      },
+      "E_RM1_First loan_e-rm1-01": {
+        "rate": 5.42881542027571,
+        "repay": 1335.0
+      },
+      "E_RM1_First loan_e-rm1-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-03": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "E_RM1_First loan_e-rm1-05": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-06": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-07": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "E_RM1_First loan_e-rm1-10": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-11": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "E_RM1_First loan_e-rm1-13": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "E_RM1_First loan_e-rm1-14": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "E_RM1_Reloan_GROUP": {
+        "rate": 17.483704212972228,
+        "repay": 20090.0
+      },
+      "E_RM1_Reloan_e-rm1-08": {
+        "rate": 11.88083334755234,
+        "repay": 6963.0
+      },
+      "E_RM1_Reloan_e-rm1-09": {
+        "rate": 23.316163410301954,
+        "repay": 13127.0
+      },
+      "F_RM0_First loan_GROUP": {
+        "rate": 5.788743012272037,
+        "repay": 14052.0
+      },
+      "F_RM0_First loan_f-d0-01": {
+        "rate": 7.142857142857142,
+        "repay": 3513.0
+      },
+      "F_RM0_First loan_f-d0-02": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-03": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM0_First loan_f-d0-05": {
+        "rate": 7.092384720988452,
+        "repay": 3513.0
+      },
+      "F_RM0_First loan_f-d0-07": {
+        "rate": 15.384615384615385,
+        "repay": 7026.0
+      },
+      "F_RM0_Reloan_GROUP": {
+        "rate": 7.473339491141154,
+        "repay": 5340.0
+      },
+      "F_RM0_Reloan_f-d0-06": {
+        "rate": 7.473339491141154,
+        "repay": 5340.0
+      },
+      "F_RM1_First loan_GROUP": {
+        "rate": 10.742954739538856,
+        "repay": 13209.0
+      },
+      "F_RM1_First loan_f-rm1-01": {
+        "rate": 10.85763084055142,
+        "repay": 2670.0
+      },
+      "F_RM1_First loan_f-rm1-03": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "F_RM1_First loan_f-rm1-04": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "F_RM1_First loan_f-rm1-05": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "F_RM1_First loan_f-rm1-06": {
+        "rate": 14.285714285714285,
+        "repay": 3513.0
+      },
+      "F_RM1_Reloan_GROUP": {
+        "rate": 36.0827067669173,
+        "repay": 81583.0
+      },
+      "F_RM1_Reloan_f-d0-04": {
+        "rate": 19.107773851590107,
+        "repay": 10815.0
+      },
+      "F_RM1_Reloan_f-rm1-02": {
+        "rate": 73.226148409894,
+        "repay": 41446.0
+      },
+      "F_RM1_Reloan_f-rm1-11": {
+        "rate": 8.897163120567377,
+        "repay": 5018.0
+      },
+      "F_RM1_Reloan_f-rm1-12": {
+        "rate": 43.01592920353982,
+        "repay": 24304.0
+      },
+      "G_RM0_First loan_GROUP": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "G_RM0_First loan_g-d0-01": {
+        "rate": 0.0,
+        "repay": 0.0
+      },
+      "G_RM1_First loan_GROUP": {
+        "rate": 16.09531942580619,
+        "repay": 11874.0
+      },
+      "G_RM1_First loan_g-rm1-03": {
+        "rate": 42.857142857142854,
+        "repay": 10539.0
+      },
+      "G_RM1_First loan_g-rm1-11": {
+        "rate": 5.42881542027571,
+        "repay": 1335.0
+      },
+      "G_RM1_First loan_g-rm1-13": {
+        "rate": 0.0,
+        "repay": 0.0
+      }
+    }
+  }
+]
