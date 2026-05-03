@@ -1,11 +1,11 @@
 steps:
   # 1. 构建 Docker 镜像
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/auto-report-service:$BUILD_ID', '.']
+    args: ['build', '-t', 'asia-south1-docker.pkg.dev/$PROJECT_ID/repo/auto-report-service:$BUILD_ID', '.']
 
-  # 2. 推送镜像到 Google Container Registry
+  # 2. 推送镜像到 Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/auto-report-service:$BUILD_ID']
+    args: ['push', 'asia-south1-docker.pkg.dev/$PROJECT_ID/repo/auto-report-service:$BUILD_ID']
 
   # 3. 部署到 Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -15,11 +15,9 @@ steps:
       - 'deploy'
       - 'reportgeneral'  # 服务名称 (对齐控制台显示的名称)
       - '--image'
-      - 'gcr.io/$PROJECT_ID/auto-report-service:$BUILD_ID'
+      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/repo/auto-report-service:$BUILD_ID'
       - '--region'
       - 'asia-south1'          # 你的区域
-      - '--platform'
-      - 'managed'
       - '--allow-unauthenticated' # 允许公开访问(由Scheduler触发)
       - '--memory'
       - '2Gi'                  # 设置内存，Playwright跑浏览器比较吃内存，建议 1G 或 2G
