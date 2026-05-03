@@ -10,9 +10,5 @@ numpy
 openpyxl
 lxml
 xlsxwriter
-matplotlib
-jinja2
 playwright
-httpx
-openai
-google-generativeai
+matplotlib>=3.7.0

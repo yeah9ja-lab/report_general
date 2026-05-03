@@ -6,17 +6,14 @@ import yaml
 import requests
 import asyncio
 import urllib3
-import html
 import pandas as pd
-import numpy as np
 import dataframe_image as dfi
-from io import StringIO, BytesIO
+from io import BytesIO
 from datetime import datetime, timedelta, timezone
 from logging.handlers import RotatingFileHandler
 from telegram import Bot
 from telegram.request import HTTPXRequest
 from google.cloud import storage
-import google.generativeai as genai
 
 # 禁用 SSL 警告
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -31,649 +28,828 @@ def get_path(filename):
 def load_config():
     config_path = get_path("config.yaml")
     if not os.path.exists(config_path):
+        config_path = "config.yaml"
+    
+    if not os.path.exists(config_path):
+        print(f"❌ [DEBUG] 找不到配置文件: {config_path}", flush=True)
         raise FileNotFoundError(f"未找到配置文件: {config_path}")
+        
     with open(config_path, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
+print("✅ [DEBUG] 正在加载配置文件...", flush=True)
 CONFIG = load_config()
+print("✅ [DEBUG] 配置文件加载成功", flush=True)
 
-# 日志配置 (Cloud Run 会自动收集 stdout 日志)
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[logging.StreamHandler()]
-)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("AutoReport")
 
 IST_TZ = timezone(timedelta(hours=CONFIG['system']['timezone_offset']))
 
-# 标准目标率配置
-TARGET_VALS = {
-    ('RM1(CashDaily)', 'First loan'): 0.50,
-    ('RM1(CashDaily)', 'Reloan'): 0.60,
-    ('RM1(QuickRupee)', 'First loan'): 0.50,
-    ('RM1(QuickRupee)', 'Reloan'): 0.60,
-    ('RM1(Other Apps)', 'First loan'): 0.50,
-    ('RM1(Other Apps)', 'Reloan'): 0.60,
-    ('RM0', 'First loan'): 0.15,
-    ('RM0', 'Reloan'): 0.20,
-    ('M1-1', 'First loan'): 0.02,
-    ('M1-1', 'Reloan'): 0.02
+# ==================== 1. 标准催回率参考表 ====================
+TARGET_RATES = {
+    ('RM1', 'First loan'): {7: 0.002, 8: 0.010, 9: 0.047, 10: 0.106, 11: 0.189, 12: 0.271, 13: 0.356, 14: 0.380, 15: 0.401, 16: 0.414, 17: 0.425, 18: 0.434, 19: 0.446, 20: 0.453, 21: 0.455, 22: 0.457, 23: 0.459},
+    ('RM1', 'Reloan'): {7: 0.001, 8: 0.026, 9: 0.060, 10: 0.116, 11: 0.236, 12: 0.332, 13: 0.440, 14: 0.474, 15: 0.532, 16: 0.555, 17: 0.578, 18: 0.603, 19: 0.608, 20: 0.615, 21: 0.615, 22: 0.615, 23: 0.620},
+    ('RM0', 'First loan'): {7: 0.000, 8: 0.003, 9: 0.009, 10: 0.026, 11: 0.043, 12: 0.058, 13: 0.072, 14: 0.083, 15: 0.102, 16: 0.107, 17: 0.124, 18: 0.124, 19: 0.124, 20: 0.127, 21: 0.130, 22: 0.133, 23: 0.133},
+    ('RM0', 'Reloan'): {7: 0.005, 8: 0.035, 9: 0.035, 10: 0.041, 11: 0.055, 12: 0.078, 13: 0.093, 14: 0.107, 15: 0.113, 16: 0.113, 17: 0.122, 18: 0.137, 19: 0.144, 20: 0.151, 21: 0.156, 22: 0.156, 23: 0.156}
 }
 
-# ==================== 1. API 数据解析工具 ====================
-
-def clean_and_parse_data(content_bytes):
-    if not content_bytes: return pd.DataFrame()
-    df_raw = None
-    try:
-        df_raw = pd.read_excel(BytesIO(content_bytes), engine='openpyxl')
-    except:
-        try:
-            text_data = content_bytes.decode('utf-8', errors='ignore').split('{"info":')[0]
-            for sep in ['\t', ',']:
-                temp_df = pd.read_csv(StringIO(text_data), sep=sep, on_bad_lines='skip')
-                if temp_df.shape[1] >= 10: 
-                    df_raw = temp_df
-                    break
-        except: pass
-
-    if df_raw is None or df_raw.empty: return pd.DataFrame()
-
-    # --- 智能识别新旧两种格式 ---
-    
-    # 检查是否为新版历史数据格式 (包含特定的列名)
-    if 'Ticket Category' in df_raw.columns and 'Date' in df_raw.columns:
-        # 定义新列名到标准内部列名的映射
-        col_map = {
-            'Date': 'TimePoint',
-            'Ticket Category': 'Stage',
-            'Is Reloan': 'LoanType',
-            'Assign To': 'AssignTo',
-            'Total Left Unpaid Principal': 'TotalLeft',
-            'Total Repay Amount': 'TotalRepayAmount',
-            'Repay Rate': 'RepayRate',
-            'Load Num': 'LoadNum',
-            'role': 'role',
-            'App': 'APP',
-            'APP': 'APP'
+class APIClient:
+    def __init__(self, api_conf):
+        self.conf = api_conf
+        self.headers = {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Cookie': self.conf['cookie'],
+            'Referer': 'https://dc.tidbi-it.cc/'
         }
-        df = df_raw.rename(columns=col_map).copy()
-        
-        # 兜底：处理可能的各种App大小写
-        for c in df.columns:
-            if c.lower() == 'app' and c != 'APP':
-                df.rename(columns={c: 'APP'}, inplace=True)
-                
-        # 确保关键列存在，防止报错
-        for col in ['TotalLeft', 'TotalRepayAmount', 'TimePoint', 'Stage', 'LoanType', 'AssignTo', 'APP']:
-            if col not in df.columns:
-                # 数值列补0，字符串列补空
-                if 'Total' in col: df[col] = 0
-                else: df[col] = ''
-    else:
-        # 旧版逻辑: 按索引截取前20列
-        df = df_raw.iloc[:, 0:20].copy()
-        df.columns = [
-            'id','EmployeeID','TimePoint','Stage','LoanType','role','Ranking','AssignTo',
-            'TotalLeft','RepayPrincipal','RepayInterest','RepayServiceFee',
-            'TotalRepayAmount','RepayRate','TargetRepayRate','NewAssignNum',
-            'HandleNum','CompleteNum','LoadNum','APP'
-        ]
-    
-    # 清理 APP 名称中的 (在架) 等多余字符
-    if 'APP' in df.columns:
-        df['APP'] = df['APP'].astype(str).str.replace(r'\(在架\)', '', regex=True).str.strip()
 
-    # 统一处理 Team 字段
-    def extract_team(assign_to):
-        name = str(assign_to).strip()
-        if not name or name.lower() == 'nan':
-            return 'Unknown'
-        first_char = name[0].upper()
-        if first_char == 'K':
-            return name[:3].upper()
+    def process_team_assignment(self, df):
+        # 依据 AssignTo(数据源H列) 首字母分配 Team，如果 K 开头则取前 3 个字符
+        if 'AssignTo' in df.columns:
+            def get_team(n):
+                n = str(n).strip().upper()
+                if not n: return 'Unknown'
+                if n.startswith('K') and len(n) >= 3:
+                    return n[:3]
+                return n[0]
+            df['team'] = df['AssignTo'].apply(get_team)
+            df['team'] = df['team'].replace('', 'Unknown').fillna('Unknown')
         else:
-            return first_char
+            df['team'] = 'Unknown'
+        return df
 
-    if 'AssignTo' in df.columns:
-        df['team'] = df['AssignTo'].apply(extract_team)
-    else:
-        df['team'] = 'Unknown'
-        
-    # --- 新增: 根据 APP 重塑 Stage (RM1拆分为CashDaily、QuickRupee和Other Apps) ---
-    def remap_stage(row):
-        stage = str(row.get('Stage', '')).strip().upper()
-        # 标准化异常的 stage 命名
-        norm_map = {'M1': 'RM1', 'M0': 'RM0', 'M1-1': 'M1-1', 'D0': 'RM0'}
-        stage = norm_map.get(stage, stage)
-        
-        if 'RM1' in stage:
-            app = str(row.get('APP', '')).strip().lower()
-            if 'cashdaily' in app:
-                return 'RM1(CashDaily)'
-            elif 'quickrupee' in app:
-                return 'RM1(QuickRupee)'
-            else:
-                return 'RM1(Other Apps)'
-        else:
-            return stage
-
-    if 'Stage' in df.columns:
-        df['Stage'] = df.apply(remap_stage, axis=1)
-
-    return df
-
-def fetch_raw_api_data(api_conf, time_range, limit="100000", custom_url=None, time_param_name="ctime_range"):
-    # 允许覆盖 URL 和时间参数名
-    url = custom_url if custom_url else api_conf['base_url']
-    params = {time_param_name: time_range, "key": api_conf['key'], "export_type": "excel", "p": "1", "limit": limit}
-    headers = {'User-Agent': 'Mozilla/5.0', 'Cookie': api_conf['cookie']}
-    try:
-        resp = requests.get(url, params=params, headers=headers, timeout=180, verify=False)
-        return clean_and_parse_data(resp.content)
-    except Exception as e:
-        logger.error(f"API 获取失败: {e}")
-        return None
-
-# ==================== 2. 历史分析模块 ====================
-
-class HistoricalAnalyzer:
-    def __init__(self, api_conf): 
-        self.api_conf = api_conf
-
-    def load_and_calculate(self):
+    def get_data(self):
         now_ist = datetime.now(IST_TZ)
-        # 计算 T-3 到 T-1 的日期 (格式 YYYY-MM-DD)
-        start_date = (now_ist - timedelta(days=3)).strftime('%Y-%m-%d')
-        end_date = (now_ist - timedelta(days=1)).strftime('%Y-%m-%d')
-        range_str = f"{start_date} - {end_date}"
-        
-        # 指定历史数据 URL
-        history_url = "https://dc.tidbi-it.cc/api/performance/worker/daily_export"
-        
-        logger.info(f"正在获取历史数据 (T-3 至 T-1): {range_str} [URL: {history_url}]")
-        
-        # 使用新的 URL 和参数名 date_range
-        df_raw = fetch_raw_api_data(
-            self.api_conf, 
-            range_str, 
-            limit="300000", 
-            custom_url=history_url, 
-            time_param_name="date_range"
-        )
-        
-        if df_raw is None or df_raw.empty:
-            logger.warning("历史数据为空")
-            return {}
-        
-        # 数据清洗与类型转换
-        # TimePoint 在新接口中是 Date (YYYYMMDD)
-        df_raw['TP_val'] = pd.to_numeric(df_raw['TimePoint'], errors='coerce').fillna(0).astype(np.int64)
-        
-        # 确保只使用有效数据 (非0日期)
-        df_finals = df_raw[df_raw['TP_val'] > 0].copy()
-        
-        result_map = {}
-        for (stage, ltype), group in df_finals.groupby(['Stage', 'LoanType']):
-            for c in ['TotalLeft', 'TotalRepayAmount']: 
-                group[c] = pd.to_numeric(group[c], errors='coerce').fillna(0)
-            
-            cat_total_repay = group['TotalRepayAmount'].sum()
-            cat_total_left = group['TotalLeft'].sum()
-            # 计算该 Category 过去几天的整体平均回款率
-            cat_3d_avg = (cat_total_repay / cat_total_left * 100) if cat_total_left > 0 else 0
-            
-            p_stats = group.groupby('AssignTo')[['TotalLeft', 'TotalRepayAmount']].sum().reset_index()
-            p_stats['r'] = (p_stats['TotalRepayAmount'] / p_stats['TotalLeft'] * 100).fillna(0)
-            p_stats['pct'] = p_stats['r'].rank(pct=True, method='min', ascending=True)
-            
-            for _, row in p_stats.iterrows():
-                result_map[(str(stage).strip(), str(ltype).strip(), str(row['AssignTo']).strip())] = {
-                    'is_lower_avg': row['r'] < cat_3d_avg, 
-                    'is_bottom_20': row['pct'] <= 0.20
-                }
-        
-        logger.info(f"历史数据分析完成，生成 {len(result_map)} 条人员画像")
-        return result_map
-
-# ==================== 3. 实时分析模块 (含 GCS 读写) ====================
-
-class DataAnalyzer:
-    def __init__(self, history_filename, historical_stats=None):
-        self.history_file = history_filename
-        self.bucket_name = CONFIG['system'].get('history_bucket')
-        self.historical_stats = historical_stats or {}
-        self.lagging_threshold = CONFIG['system'].get('lagging_threshold', 0.9)
-        self.stagnation_hours = CONFIG['system'].get('stagnation_hours', 2)
-        self.current_snapshot = {}
-        self.history_list = self._load_history()
-
-    def _load_history(self):
-        """从 GCS 加载历史记录"""
-        if not self.bucket_name:
-            logger.warning("未配置 history_bucket，无法持久化记录")
-            return []
+        time_range = f"{now_ist.strftime('%Y-%m-%d 06:00:00')} - {now_ist.strftime('%Y-%m-%d 23:59:59')}"
+        params = {
+            "ctime_range": time_range,
+            "key": self.conf['key'],
+            "export_type": "excel",
+            "p": "1",
+            "limit": "10000"
+        }
+        print(f"📡 [DEBUG] 正在请求 API 数据: {time_range}", flush=True)
         try:
-            client = storage.Client()
-            bucket = client.bucket(self.bucket_name)
-            blob = bucket.blob(self.history_file)
-            if blob.exists():
-                data = json.loads(blob.download_as_text())
-                today = datetime.now(IST_TZ).strftime('%Y-%m-%d')
-                return [h for h in data if datetime.fromtimestamp(h["timestamp"], IST_TZ).strftime('%Y-%m-%d') == today]
-        except Exception as e:
-            logger.error(f"从 GCS 加载历史失败: {e}")
-        return []
-
-    def save_history(self):
-        """保存历史记录到 GCS"""
-        if not self.current_snapshot or not self.bucket_name: return
-        
-        self.history_list.append({"timestamp": time.time(), "data": self.current_snapshot})
-        today = datetime.now(IST_TZ).strftime('%Y-%m-%d')
-        # 仅保留当天数据
-        self.history_list = [h for h in self.history_list if datetime.fromtimestamp(h["timestamp"], IST_TZ).strftime('%Y-%m-%d') == today]
-        
-        try:
-            client = storage.Client()
-            bucket = client.bucket(self.bucket_name)
-            blob = bucket.blob(self.history_file)
-            blob.upload_from_string(json.dumps(self.history_list, ensure_ascii=False, indent=2), content_type='application/json')
-            logger.info("历史记录已保存至 GCS")
-        except Exception as e:
-            logger.error(f"保存历史到 GCS 失败: {e}", exc_info=True)
-
-    def get_last_run_data(self, key):
-        return self.history_list[-1]["data"].get(key) if self.history_list else None
-
-    def get_2h_ago(self, key):
-        if not self.history_list: return None
-        target = time.time() - (self.stagnation_hours * 3600)
-        best, min_diff = None, 5400 # 1.5小时误差内
-        for r in self.history_list:
-            diff = abs(r["timestamp"] - target)
-            if diff < min_diff: min_diff = diff; best = r
-        return best["data"].get(key) if best else None
-
-    def process_team_data(self, df, team_id, team_name, admin_contact='@admin'):
-        target_id = str(team_id).strip().upper()
-        df_team = df[df['team'].astype(str).str.strip().str.upper() == target_id].copy()
-        if df_team.empty: return None
-
-        for c in ['TotalLeft', 'TotalRepayAmount', 'LoadNum']:
-            df[c] = pd.to_numeric(df[c], errors='coerce').fillna(0)
-            df_team[c] = pd.to_numeric(df_team[c], errors='coerce').fillna(0)
-
-        max_tp = pd.to_numeric(df['TimePoint'], errors='coerce').max()
-        df_curr_all = df[pd.to_numeric(df['TimePoint'], errors='coerce') == max_tp].copy()
-        
-        g_avgs, g_p_ranks, g_team_ranks = {}, {}, {}
-        for (st, lt), g in df_curr_all.groupby(['Stage', 'LoanType']):
-            g_avgs[(st, lt)] = (g['TotalRepayAmount'].sum() / g['TotalLeft'].sum() * 100) if g['TotalLeft'].sum() > 0 else 0
-            ps = g.groupby('AssignTo')[['TotalLeft', 'TotalRepayAmount']].sum().reset_index()
-            ps['R'] = (ps['TotalRepayAmount'] / ps['TotalLeft'] * 100).fillna(0)
-            ps = ps.sort_values('R', ascending=False).reset_index(drop=True)
-            for i, r in ps.iterrows(): g_p_ranks[(st, lt, str(r['AssignTo']))] = f"{i+1}/{len(ps)}"
-            ts = g.groupby('team')[['TotalLeft', 'TotalRepayAmount']].sum().reset_index()
-            ts['R'] = (ts['TotalRepayAmount'] / ts['TotalLeft'] * 100).fillna(0)
-            ts = ts.sort_values('R', ascending=False).reset_index(drop=True)
-            for i, r in ts.iterrows(): g_team_ranks[(st, lt, str(r['team']))] = f"{i+1}/{len(ts)}"
-
-        df_l = df_team[pd.to_numeric(df_team['TimePoint'], errors='coerce') == max_tp].copy()
-        ist_now = datetime.now(IST_TZ).strftime("%Y%m%d %H:%M")
-        
-        safe_team_name = html.escape(team_name)
-        common_header = f"<b>{safe_team_name} Hourly Collection Ranking - {ist_now} (IST)</b>\n"
-        common_header += "❌️ 绩效低于实时均值 / Lagging\n"
-        common_header += f"❌️🛑({self.stagnation_hours}h无催回) 绩效差且停滞/ Lagging&Stagnation\n"
-        common_header += "⬆️ 代表本点催回上升 / Increased\n"
-        common_header += "🚫 3d Re% lower 3d Avg | ⛔ 3d bottom 20%\n"
-        common_header += "-"*45 + "\n"
-
-        results = {}
-        # For K- groups, combine all stages into a single report. For others, keep them separate.
-        if target_id.startswith('K-'):
-            stage_prefixes_list = [['RM1', 'RM0', 'M1-1']]
-        else:
-            stage_prefixes_list = [['RM1'], ['RM0'], ['M1-1']]
-
-        for prefixes in stage_prefixes_list:
-            stage_name_key = prefixes[0] if len(prefixes) == 1 else 'All Stages'
-            stage_text, stage_plot_data = common_header, []
+            resp = requests.get(self.conf['base_url'], params=params, headers=self.headers, timeout=60, verify=False)
+            print(f"📡 [DEBUG] API 响应状态码: {resp.status_code}", flush=True)
             
-            sub_groups = []
-            grouped_list = list(df_l.groupby(['Stage', 'LoanType']))
-            for pfx in prefixes:
-                sub_groups.extend([g for g in grouped_list if pfx in g[0][0]])
-                
-            if not sub_groups: continue
-
-            for (st, lt), group in sub_groups:
-                target_val = TARGET_VALS.get((st, lt), 1.0)
-                target_pct = target_val * 100
-                cat_avg = g_avgs.get((st, lt), 0)
-                
-                t_repay, t_left = group['TotalRepayAmount'].sum(), group['TotalLeft'].sum()
-                t_rate = (t_repay / t_left * 100) if t_left > 0 else 0
-                t_rank = g_team_ranks.get((st, lt, target_id), "-")
-                t_achv = (t_rate / target_pct * 100) if target_pct > 0 else 0
-                
-                snap_k = f"{team_id}_{st}_{lt}_GRP"
-                last_g = self.get_last_run_data(snap_k)
-                g_diff = t_rate - (last_g.get('rate', 0) if last_g else 0)
-                trend_icon = f"(⬆️ {abs(g_diff):.1f}%)" if g_diff >= 0.01 else (f"(⬇️ {abs(g_diff):.1f}%)" if g_diff <= -0.01 else f"(- {abs(g_diff):.1f}%)")
-                self.current_snapshot[snap_k] = {'rate': float(t_rate), 'repay': float(t_repay)}
-
-                stage_plot_data.append({
-                    "Stage": st, "Type": lt, "Name": team_name, "Re%": f"{t_rate:.1f}%",
-                    "Target": f"{target_pct:.1f}%", "Achv%": f"{t_achv:.0f}%",
-                    "Diff.Avg": "-", "Rank": t_rank, "Tickets": int(group['LoadNum'].sum()),
-                    "IsBold": True, "RateNum": t_rate
-                })
-
-                stage_text += f"                           <b>{st} {lt}</b>\n"
-                stage_text += f"Team Rate: <b>{t_rate:.1f}%</b> {trend_icon} (Rank: <b>{t_rank}</b>)\n"
-                stage_text += f"Target: <b>{target_pct:.1f}%</b> | Achv: <b>{t_achv:.0f}%</b>\n\n"
-                
-                stagnant_l, lagging_l, normal_l = [], [], []
-                for _, row in group.groupby('AssignTo')[['TotalLeft', 'TotalRepayAmount', 'LoadNum']].sum().reset_index().iterrows():
-                    name, p_repay, p_left = str(row['AssignTo']).strip(), row['TotalRepayAmount'], row['TotalLeft']
-                    p_rate = (p_repay / p_left * 100) if p_left > 0 else 0
-                    p_key = f"{team_id}_{st}_{lt}_{name}"
-                    
-                    last_p = self.get_last_run_data(p_key)
-                    p_diff = p_rate - (last_p.get('rate', 0) if last_p else 0)
-                    self.current_snapshot[p_key] = {'rate': float(p_rate), 'repay': float(p_repay)}
-                    
-                    hist = self.historical_stats.get((st, lt, name), {})
-                    h_flags = ("⛔" if hist.get('is_bottom_20') else "") + ("🚫" if hist.get('is_lower_avg') else "")
-                    
-                    p_rank = g_p_ranks.get((st, lt, name), "-")
-                    is_lag = (p_rate < cat_avg * self.lagging_threshold) or (p_rate == 0 and p_left > 0)
-                    
-                    # 1. 计算增长文本 (显示在行尾)
-                    trend_text = f" ⬆️ {p_diff:.1f}%" if p_diff >= 0.01 else ""
-                    
-                    status_icon = ""
-                    list_type = "normal"
-
-                    if is_lag:
-                        d2h = self.get_2h_ago(p_key)
-                        if d2h and abs(p_repay - d2h.get('repay', 0)) < 1:
-                            list_type = "stagnant"
-                            status_icon = "❌️🛑"
-                        else:
-                            list_type = "lagging"
-                            status_icon = "❌️"
-                    
-                    # 2. 构建信息对象，后缀包含所有状态和趋势
-                    full_suffix = f"{h_flags}{status_icon}{trend_text}"
-                    
-                    info = {
-                        'name': html.escape(name),
-                        'rate': p_rate,
-                        'rank': p_rank,
-                        'suffix': full_suffix
-                    }
-                    
-                    if list_type == "stagnant": stagnant_l.append(info)
-                    elif list_type == "lagging": lagging_l.append(info)
-                    else: normal_l.append(info)
-
-                    # 3. 表格数据 (Trends 列显示简化图标)
-                    df_trend_icon = f"{h_flags}{status_icon}"
-                    if p_diff >= 0.01: df_trend_icon += "⬆️"
-                    elif not df_trend_icon: df_trend_icon = "-"
-
-                    stage_plot_data.append({
-                        "Stage": st, "Type": lt, "Name": name, "Re%": f"{p_rate:.1f}%",
-                        "Target": f"{target_pct:.1f}%", "Achv%": f"{((p_rate/target_pct*100)):.0f}%",
-                        "Diff.Avg": f"{(p_rate-cat_avg):+.1f}%", "Rank": p_rank, "Tickets": int(row['LoadNum']),
-                        "IsBold": False, "RateNum": p_rate
-                    })
-
-                if stagnant_l:
-                    stage_text += "<b>绩效差且无进展 (2h无催回)</b>\n"
-                    # 格式: Name : Rate (Rank) Flags
-                    stage_text += "\n".join([f"{i['name']} : {i['rate']:.1f}% ({i['rank']}){i['suffix']}" for i in sorted(stagnant_l, key=lambda x: x['rate'])]) + "\n\n"
-                if lagging_l:
-                    stage_text += "<b>绩效差员工 (Lagging)</b>\n"
-                    # 格式: Name : Rate (Rank) Flags
-                    stage_text += "\n".join([f"{i['name']} : {i['rate']:.1f}% ({i['rank']}){i['suffix']}" for i in sorted(lagging_l, key=lambda x: x['rate'])]) + "\n\n"
-                if normal_l:
-                    stage_text += "<b>绩效正常员工 (Normal)</b>\n"
-                    # 统一使用 • 前缀
-                    stage_text += "\n".join([f"• {i['name']} : <b>{i['rate']:.1f}%</b> ({i['rank']}){i['suffix']}" for i in sorted(normal_l, key=lambda x: x['rate'], reverse=True)]) + "\n"
-                stage_text += "-"*45 + "\n\n"
-
-            if admin_contact and admin_contact != '@admin':
-                stage_text += f"{html.escape(admin_contact)}\n\n"
-
-            results[stage_name_key] = {'text': stage_text, 'df': pd.DataFrame(stage_plot_data)}
-        return results
-
-# ==================== 4. 绘图模块 ====================
-
-def generate_image(df, team_id, stage_suffix, team_name):
-    if df.empty: return None
-    fn = f"/tmp/report_{team_id}_{stage_suffix}.png" # 使用 /tmp 目录
-    ist_now_str = datetime.now(IST_TZ).strftime("%Y%m%d %H:%M")
-    title_text = f"{team_name} {stage_suffix} Hourly Report - {ist_now_str} (IST)"
-
-    def style_row(row):
-        st, lt, is_bold = str(row['Stage']), str(row['Type']), row['IsBold']
-        if st == 'RM0': bg = '#e6f7ff' if 'First' in lt else '#f9f0ff'
-        else: bg = '#fffbe6' if 'First' in lt else '#f6ffed'
-        styles = [f'background-color: {bg}'] * len(row)
-        if is_bold: styles = [f'background-color: {bg}; font-weight: bold; color: #c0392b'] * len(row)
-        return styles
-
-    try:
-        styler = df.style.set_caption(title_text) \
-            .apply(style_row, axis=1) \
-            .background_gradient(subset=['RateNum'], cmap='RdYlGn', vmin=0, vmax=60) \
-            .hide(axis='index') \
-            .hide(subset=['IsBold', 'RateNum'], axis='columns') \
-            .set_properties(**{'border': '1px solid gray', 'text-align': 'center', 'font-size': '11pt', 'padding': '2px 5px'}) \
-            .set_table_styles([
-                {'selector': 'th', 'props': [('background-color', '#2c3e50'), ('color', 'white'), ('font-weight', 'bold')]},
-                {'selector': 'caption', 'props': [('caption-side', 'top'), ('font-size', '14pt'), ('font-weight', 'bold'), ('padding', '10px'), ('color', '#2c3e50')]}
-            ])
-        # 显式指定 playwright 转换
-        dfi.export(styler, fn, max_rows=150, table_conversion='playwright')
-        return fn
-    except Exception as e:
-        logger.error(f"绘图失败: {e}"); return None
-
-# ==================== 6. Nudge 模块 ====================
-def generate_nudge_msg(team_name, admin_contact, bad_staff_df):
-    """
-    使用 Gemini 生成催促文案
-    """
-    # 获取配置中的 Prompt 设定，如果没有则使用默认
-    prompt_config = CONFIG.get('nudge', {})
-    model_name = prompt_config.get('gemini_model', 'gemini-1.5-flash')
-    tone = prompt_config.get('tone', 'strict')
-    
-    # 优先从 config 读取 Key，其次从环境变量读取
-    api_key = prompt_config.get('gemini_api_key') or os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
-    if not api_key or "YOUR_GEMINI_API_KEY" in api_key:
-        logger.error("未配置 GEMINI_API_KEY，无法生成 Nudge 文案")
-        return None
-        
-    genai.configure(api_key=api_key)
-    
-    staff_list_str = ""
-    if bad_staff_df is not None and not bad_staff_df.empty:
-        for _, row in bad_staff_df.iterrows():
-            staff_list_str += f"- {row['name']} : 进度 {row['rate']:.1f}% (排名: {row['rank']})\n"
-    
-    if tone == 'casual':
-        system_prompt = f"""
-        你是一个催收团队的严厉督导。
-        你现在要对 {team_name} 组进行突击检查。
-        管理员是 {admin_contact}。
-        以下员工表现严重落后（低于平均值太多或产出为0）：
-        {staff_list_str}
-        
-        请生成一条发到 Telegram 群的消息：
-        1. 第一行必须 @管理员 ({admin_contact})。
-        2. 列出上述差生名单 (格式: 名字 进度 排名)。
-        3. 语气要紧迫、严厉、口语化、江湖气（例如："哥们尽快催"、"别掉链子"、"数据太难看了"、"再不跑起来要凉了"）。
-        4. 只有100字左右，不要废话。
-        5. 结尾加几个警示的 emoji (🛑, ⚠️, 😤 等)。
-        """
-    elif tone == 'normal':
-        system_prompt = f"""
-        你是一个催收团队的严厉督导。
-        你现在要对 {team_name} 组进行突击检查。
-        管理员是 {admin_contact}。
-        以下员工表现严重落后（低于平均值太多或产出为0）：
-        {staff_list_str}
-        
-        请生成一条发到 Telegram 群的消息：
-        1. 第一行必须 @管理员 ({admin_contact})。
-        2. 列出上述差生名单 (格式: 名字 进度 排名)。
-        3. 语气要客观、职业、就事论事。不要像"strict"那样压迫，也不要像"casual"那样江湖气。
-        4. 重点强调数据落后，要求管理员关注并督促改进。
-        5. 只有100字左右，不要废话。
-        6. 结尾加几个警示的 emoji (⚠️, 📉 等)。
-        """
-    else: # strict
-        system_prompt = f"""
-        你是一个催收团队的严厉督导。
-        你现在要对 {team_name} 组进行突击检查。
-        管理员是 {admin_contact}。
-        以下员工表现严重落后（低于平均值太多或产出为0）：
-        {staff_list_str}
-        
-        请生成一条发到 Telegram 群的消息：
-        1. 第一行必须 @管理员 ({admin_contact})。
-        2. 列出上述差生名单 (格式: 名字 进度 排名)。
-        3. 语气要紧迫、严厉、专业但带有强烈的压迫感。直接指出问题，要求立即改进。
-        4. 只有100字左右，不要废话。
-        5. 结尾加几个警示的 emoji (🛑, ⚠️, 😤 等)。
-        """
-    
-    try:
-        model = genai.GenerativeModel(model_name)
-        response = model.generate_content(system_prompt)
-        return response.text
-    except Exception as e:
-        logger.error(f"Gemini 调用失败: {e}")
-        return None
-
-# ==================== 5. 核心运行逻辑 (被 main.py 调用) ====================
-
-async def run_cycle(run_mode='regular'):
-    logger.info(f">>> 启动报表生成流程 (Mode: {run_mode})")
-    
-    # 获取历史 3 天统计
-    h_analyzer = HistoricalAnalyzer(CONFIG['api'])
-    h_stats = await asyncio.to_thread(h_analyzer.load_and_calculate)
-    
-    # 获取今日 API 数据 (使用默认的小时数据配置)
-    now_ist = datetime.now(IST_TZ)
-    time_range = f"{now_ist.strftime('%Y-%m-%d 06:00:00')} - {now_ist.strftime('%Y-%m-%d 23:59:59')}"
-    df = await asyncio.to_thread(fetch_raw_api_data, CONFIG['api'], time_range)
-    
-    if df is None or df.empty:
-        logger.warning("API 未返回有效数据，流程中止")
-        return "No Data from API"
-
-    analyzer = DataAnalyzer(CONFIG['system']['history_file'], historical_stats=h_stats)
-    
-    nudge_triggered_teams = []
-    
-    # 逐个团队处理
-    for team_conf in CONFIG['teams']:
-        bot = Bot(token=team_conf['bot_token'], request=HTTPXRequest())
-        
-        admin_contact = team_conf.get('admin', '@admin')
-        
-        # 注意: process_team_data 返回的是一个为了画图准备的数据结构
-        # 为了 Nudge 模式，我们需要更直接的访问数据，或者复用 process_team_data 的结果
-        report_data = analyzer.process_team_data(df, team_conf['id'], team_conf['name'], admin_contact)
-        
-        if not report_data: continue
-        
-        # === Nudge Mode ===
-        if run_mode == 'nudge':
-            # 只检查，不画图，不发完整报表
-            # 我们需要遍历 report_data 里的数据来找到差生
-            bad_staff_list = []
-            
-            for stage_name, data in report_data.items():
-                # data['df'] 是绘图用的 DataFrame
-                df_p = data['df']
-                if df_p.empty: continue
-                
-                threshold = CONFIG.get('nudge', {}).get('threshold_ratio', 0.6)
-                
-                # df_p 可能包含多个 Type (如 First loan 和 Reloan)，必须按 Stage 和 Type 分组分别计算均值
-                for (st, lt), group_df in df_p.groupby(['Stage', 'Type']):
-                    team_row = group_df[group_df['IsBold'] == True]
-                    if team_row.empty: continue
-                    
-                    team_rate = team_row.iloc[0]['RateNum']
-                    staff_rows = group_df[group_df['IsBold'] == False]
-                    
-                    for _, row in staff_rows.iterrows():
-                         rate = row['RateNum']
-                         # 排除掉 rate 为 0 且 Tickets 为 0 的 (也就是没活干的人，不怪他)
-                         if rate == 0 and row['Tickets'] == 0:
-                             continue
-    
-                         if (rate < team_rate * threshold) or (rate == 0):
-                             bad_staff_list.append({
-                                 'name': f"{row['Name']} ({row['Stage']} {row['Type']})",
-                                 'rate': rate,
-                                 'rank': row['Rank']
-                             })
-            
-            if bad_staff_list:
-                bad_staff_df = pd.DataFrame(bad_staff_list)
-                admin_contact = team_conf.get('admin', '@admin')
-                
-                nudge_msg = await asyncio.to_thread(generate_nudge_msg, team_conf['name'], admin_contact, bad_staff_df)
-                
-                if nudge_msg:
-                    # 修复: LLM 经常会对用户名中的下划线进行 Markdown 转义，导致 Telegram 无法识别 @
-                    nudge_msg = nudge_msg.replace(r"\_", "_").replace(r"\@", "@")
-                    
-                    try:
-                        await bot.send_message(chat_id=team_conf['chat_id'], text=nudge_msg)
-                        logger.info(f"Nudge 推送成功: {team_conf['name']}")
-                        nudge_triggered_teams.append(team_conf['name'])
-                    except Exception as e:
-                        logger.error(f"Nudge 推送失败 ({team_conf['name']}): {e}")
-            continue # Nudge 模式下，处理完一个队就继续下一个，跳过后面的常规逻辑
-
-        # === Regular Mode ===
-        for stage_name, data in report_data.items():
-            txt, df_p = data['text'], data['df']
-            img_path = await asyncio.to_thread(generate_image, df_p, team_conf['id'], stage_name, team_conf['name'])
+            if 'html' in resp.headers.get('Content-Type', '').lower():
+                print("❌ [DEBUG] API 返回了 HTML，可能是 Cookie 过期！", flush=True)
+                return None
             
             try:
-                if img_path and os.path.exists(img_path):
-                    with open(img_path, 'rb') as f:
-                        await bot.send_photo(chat_id=team_conf['chat_id'], photo=f, caption=f"📊 {team_conf['name']} {stage_name} 实时报表")
-                    os.remove(img_path)
-                
-                await bot.send_message(chat_id=team_conf['chat_id'], text=txt, parse_mode='HTML')
-                logger.info(f"推送成功: {team_conf['name']} {stage_name}")
-            except Exception as e:
-                logger.error(f"推送失败 ({team_conf['name']} {stage_name}): {e}")
-                
-    if run_mode == 'regular':
-        analyzer.save_history() # 只有常规模式才保存历史
+                df = pd.read_excel(BytesIO(resp.content))
+            except:
+                df = pd.read_csv(BytesIO(resp.content), sep=None, engine='python')
+            
+            if df is None or df.empty:
+                print("⚠️ [DEBUG] API 返回的 DataFrame 为空", flush=True)
+                return pd.DataFrame()
+
+            print(f"✅ [DEBUG] API 数据获取成功，行数: {len(df)}", flush=True)
+            
+            # 逻辑同步：更健壮的列名处理（防止API变动）
+            df.columns = [str(c).strip() for c in df.columns]
+            if 'APP' in df.columns: df = df.rename(columns={'APP': 'App'})
+            
+            col_map = {
+                'Date': 'TimePoint', 'Ticket Category': 'Stage', 'Is Reloan': 'LoanType',
+                'Assign To': 'AssignTo', 'Total Left Unpaid Principal': 'TotalLeft',
+                'Total Repay Amount': 'TotalRepayAmount',
+                'Load Num': 'LoadNum'
+            }
+            
+            # 兜底逻辑：如果找不到关键列，尝试按索引重命名
+            if 'AssignTo' not in df.columns and 'Assign To' not in df.columns:
+                 if df.shape[1] >= 20:
+                    # 尝试保留前20列并重命名
+                    df = df.iloc[:, :20]
+                    expected = ['id','EmployeeID','TimePoint','Stage','LoanType','role','Ranking','AssignTo',
+                                'TotalLeft','RepayPrincipal','RepayInterest','RepayServiceFee',
+                                'TotalRepayAmount','RepayRate','TargetRepayRate','NewAssignNum',
+                                'HandleNum','CompleteNum','LoadNum','App']
+                    if len(df.columns) == len(expected):
+                        df.columns = expected
+
+            df = df.rename(columns=col_map)
+            df_final = self.process_team_assignment(df)
+            return df_final
+        except Exception as e:
+            print(f"❌ [DEBUG] 数据获取异常: {e}", flush=True)
+            return None
+
+    def get_op_logs(self):
+        # 计算 2 小时窗口 (IST)
+        now_ist = datetime.now(IST_TZ)
+        end_ist = now_ist.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
+        start_ist = end_ist - timedelta(hours=2)
+        time_range_str = f"{start_ist.strftime('%Y-%m-%d %H:00')} - {end_ist.strftime('%Y-%m-%d %H:00')}"
         
-    logger.info("<<< 流程执行完毕")
-    
-    if run_mode == 'nudge':
-        if nudge_triggered_teams:
-            return f"Nudge sent to: {', '.join(nudge_triggered_teams)}"
+        target_url = 'https://dc.tidbi-it.cc/admin/uri_access/list'
+        params = {
+            'uid': '',
+            'nickname': '',
+            'path': '',
+            'time_range': time_range_str,
+            'download': '1'
+        }
+        
+        print(f"📡 [DEBUG] 正在获取操作记录: {time_range_str}", flush=True)
+        try:
+            # 尝试第一个数据源 (URI Access Logs)
+            resp = requests.get(target_url, params=params, headers=self.headers, timeout=60, verify=False)
+            
+            # 如果第一个数据源没拿到数据，尝试用户提供的第二个数据源 (Ticket List)
+            if resp.status_code != 200 or len(resp.content) < 500:
+                print(f"⚠️ [DEBUG] uri_access/list 获取失败或数据过少，尝试 ticket/list...", flush=True)
+                ticket_url = "https://dc.tidbi-it.cc/ticket/list"
+                ticket_params = {
+                    "ctime_range": time_range_str,
+                    "export": "1",
+                    "submit": "true"
+                }
+                resp = requests.get(ticket_url, params=ticket_params, headers=self.headers, timeout=60, verify=False)
+
+            if resp.status_code != 200:
+                print(f"⚠️ [DEBUG] 所有操作记录数据源均获取失败，状态码: {resp.status_code}", flush=True)
+                return {}
+            
+            content_str = resp.text
+            if content_str.strip().startswith('<') or '<html' in content_str.lower():
+                from io import StringIO
+                dfs = pd.read_html(StringIO(content_str))
+                if not dfs: return {}
+                df = dfs[0]
+            else:
+                try:
+                    df = pd.read_excel(BytesIO(resp.content))
+                except:
+                    df = pd.read_csv(BytesIO(resp.content), sep=None, engine='python')
+            
+            if df is None or df.empty:
+                print("⚠️ [DEBUG] 操作记录 DataFrame 为空", flush=True)
+                return {}
+            
+            # 统一列名为字符串，移除 BOM 字节序标记，并去除首尾空格
+            df.columns = [str(c).replace('\ufeff', '').strip() for c in df.columns]
+            
+            # 寻找 Nickname 和 Time 列 (不区分大小写，增加常用别名)
+            nick_col = next((c for c in df.columns if c.lower() in ['nickname', 'assignto', 'assign to', 'worker', 'employee']), None)
+            time_col = next((c for c in df.columns if c.lower() in ['time', 'createdtime', 'updatedtime', 'date', 'timepoint', 'created time']), None)
+            
+            if not nick_col or not time_col:
+                print(f"⚠️ [DEBUG] 操作记录缺少必要列。现有列: {list(df.columns)}", flush=True)
+                return {}
+            
+            # 获取小时信息 (格式化为两位数)
+            df['Hour'] = pd.to_datetime(df[time_col], errors='coerce').dt.strftime('%H')
+            
+            # 统计每个人的每小时操作次数
+            pt = pd.pivot_table(df, index=nick_col, columns='Hour', aggfunc='size', fill_value=0)
+            pt['TotalOpTimes'] = pt.sum(axis=1)
+            
+            # 转换为字典
+            op_data = pt.to_dict('index')
+            
+            # 获取小时标签
+            hours = [str(h) for h in pt.columns if h != 'TotalOpTimes']
+            hours.sort()
+            
+            print(f"✅ [DEBUG] 成功解析操作记录，覆盖 {len(op_data)} 人，小时标签: {hours}", flush=True)
+            return {"data": op_data, "hours": hours}
+        except Exception as e:
+            print(f"❌ [DEBUG] 操作记录处理异常: {e}", flush=True)
+            import traceback
+            traceback.print_exc()
+            return {}
+
+class DataAnalyzer:
+    def __init__(self, history_filename):
+        self.bucket_name = CONFIG['system'].get('history_bucket')
+        self.blob_name = history_filename
+        self.history_list = []
+        self.current_snapshot = {}
+        self.storage_client = None
+        self.bucket = None
+        
+        print(f"📦 [DEBUG] 正在初始化 GCS，Bucket: {self.bucket_name}", flush=True)
+        if self.bucket_name:
+            try:
+                self.storage_client = storage.Client()
+                self.bucket = self.storage_client.bucket(self.bucket_name)
+                self.history_list = self._load_history()
+            except Exception as e:
+                print(f"❌ [DEBUG] GCS 初始化失败: {e}", flush=True)
         else:
-            return "Everyone is doing okay."
-    return "Regular Report Cycle Completed"
+            print("⚠️ [DEBUG] 未配置 history_bucket", flush=True)
+
+        self.lagging_threshold_ratio = CONFIG['system'].get('lagging_threshold', 0.9)
+        self.stagnation_hours = CONFIG['system'].get('stagnation_hours', 2)
+
+    def _load_history(self):
+        if not self.bucket: return []
+        try:
+            blob = self.bucket.blob(self.blob_name)
+            if not blob.exists():
+                print(f"ℹ️ [DEBUG] GCS 文件 {self.blob_name} 不存在，将新建", flush=True)
+                return []
+            content = blob.download_as_text(encoding='utf-8')
+            data = json.loads(content)
+            
+            # 逻辑同步：只保留当天的历史数据
+            if isinstance(data, list):
+                today_str = datetime.now(IST_TZ).strftime('%Y-%m-%d')
+                filtered_data = [
+                    h for h in data 
+                    if datetime.fromtimestamp(h["timestamp"], IST_TZ).strftime('%Y-%m-%d') == today_str
+                ]
+                print(f"✅ [DEBUG] 成功加载今日历史记录，条数: {len(filtered_data)}", flush=True)
+                return filtered_data
+            return []
+        except Exception as e: 
+            print(f"❌ [DEBUG] 加载历史记录失败: {e}", flush=True)
+            return []
+
+    def save_history(self):
+        if not self.current_snapshot: return
+        now_ist = datetime.now(IST_TZ)
+        current_ts = time.time()
+        
+        self.history_list.append({"timestamp": current_ts, "data": self.current_snapshot})
+        
+        # 只保留当天
+        today_str = datetime.now(IST_TZ).strftime('%Y-%m-%d')
+        self.history_list = [
+            h for h in self.history_list 
+            if datetime.fromtimestamp(h["timestamp"], IST_TZ).strftime('%Y-%m-%d') == today_str
+        ]
+
+        if not self.bucket: return
+        try:
+            blob = self.bucket.blob(self.blob_name)
+            blob.upload_from_string(json.dumps(self.history_list, ensure_ascii=False, indent=2), content_type='application/json')
+            print(f"✅ [DEBUG] 历史记录已保存到 GCS", flush=True)
+        except Exception as e:
+            print(f"❌ [DEBUG] 保存历史记录失败: {e}", flush=True)
+
+    def get_last_run_data(self, key):
+        if len(self.history_list) < 1: return None
+        last_record = self.history_list[-1]
+        return last_record["data"].get(key)
+
+    def get_data_2h_ago(self, key):
+        if not self.history_list: return None
+        target_time = time.time() - (self.stagnation_hours * 3600)
+        best_record = None
+        min_diff = 3600 * 1.5
+        for record in self.history_list:
+            diff = abs(record["timestamp"] - target_time)
+            if diff < min_diff:
+                min_diff = diff
+                best_record = record
+        if best_record: return best_record["data"].get(key)
+        return None
+
+    def record_snapshot(self, key, rate, repay_amount):
+        self.current_snapshot[key] = {'rate': float(rate), 'repay': float(repay_amount)}
+
+    def calculate_global_averages(self, df):
+        df_calc = df.copy()
+        for c in ['TotalLeft', 'TotalRepayAmount', 'TimePoint']:
+            if c in df_calc.columns: df_calc[c] = pd.to_numeric(df_calc[c], errors='coerce').fillna(0)
+        if 'TimePoint' in df_calc.columns and not df_calc.empty:
+            max_time = df_calc['TimePoint'].max()
+            df_calc = df_calc[df_calc['TimePoint'] == max_time]
+        df_calc['Stage'] = df_calc['Stage'].astype(str).str.strip()
+        df_calc['LoanType'] = df_calc['LoanType'].astype(str).str.strip()
+        global_stats = df_calc.groupby(['Stage', 'LoanType'])[['TotalLeft', 'TotalRepayAmount']].sum().reset_index()
+        global_avg_map = {}
+        for _, row in global_stats.iterrows():
+            rate = (row['TotalRepayAmount'] / row['TotalLeft'] * 100) if row['TotalLeft'] > 0 else 0
+            global_avg_map[(row['Stage'], row['LoanType'])] = rate
+        return global_avg_map
+    
+    def calculate_global_team_ranks(self, df):
+        df_calc = df.copy()
+        for c in ['TotalLeft', 'TotalRepayAmount', 'TimePoint']:
+            if c in df_calc.columns: df_calc[c] = pd.to_numeric(df_calc[c], errors='coerce').fillna(0)
+        if 'TimePoint' in df_calc.columns and not df_calc.empty:
+            max_time = df_calc['TimePoint'].max()
+            df_calc = df_calc[df_calc['TimePoint'] == max_time]
+        df_calc['Stage'] = df_calc['Stage'].astype(str).str.strip()
+        df_calc['LoanType'] = df_calc['LoanType'].astype(str).str.strip()
+        team_stats = df_calc.groupby(['Stage', 'LoanType', 'team'])[['TotalLeft', 'TotalRepayAmount']].sum().reset_index()
+        team_stats['Rate'] = (team_stats['TotalRepayAmount'] / team_stats['TotalLeft'] * 100).fillna(0)
+        rank_lookup = {}
+        for (stage, ltype), group in team_stats.groupby(['Stage', 'LoanType']):
+            group = group.sort_values(by='Rate', ascending=False).reset_index(drop=True)
+            total_teams = len(group)
+            for rank, row in group.iterrows():
+                rank_str = f"{rank + 1}/{total_teams}"
+                rank_lookup[(stage, ltype, str(row['team']).strip())] = rank_str
+        return rank_lookup
+    
+    def calculate_global_person_ranks(self, df):
+        df_calc = df.copy()
+        for c in ['TotalLeft', 'TotalRepayAmount', 'TimePoint']:
+            if c in df_calc.columns: df_calc[c] = pd.to_numeric(df_calc[c], errors='coerce').fillna(0)
+        if 'TimePoint' in df_calc.columns and not df_calc.empty:
+            max_time = df_calc['TimePoint'].max()
+            df_calc = df_calc[df_calc['TimePoint'] == max_time]
+        df_calc['Stage'] = df_calc['Stage'].astype(str).str.strip()
+        df_calc['LoanType'] = df_calc['LoanType'].astype(str).str.strip()
+        person_stats_global = df_calc.groupby(['Stage', 'LoanType', 'AssignTo'])[['TotalLeft', 'TotalRepayAmount']].sum().reset_index()
+        person_stats_global['Rate'] = (person_stats_global['TotalRepayAmount'] / person_stats_global['TotalLeft'] * 100).fillna(0)
+        rank_lookup = {}
+        for (stage, ltype), group in person_stats_global.groupby(['Stage', 'LoanType']):
+            group = group.sort_values(by='Rate', ascending=False).reset_index(drop=True)
+            total_persons = len(group)
+            for rank, row in group.iterrows():
+                rank_str = f"{rank + 1}/{total_persons}"
+                rank_lookup[(stage, ltype, str(row['AssignTo']).strip())] = rank_str
+        return rank_lookup
+
+    # 逻辑同步：引入 _get_stats_block 辅助函数
+    def _get_stats_block(self, df_sub, row_name, stage, type_, snapshot_key, current_hour, global_ranks_dict=None, team_rank_id=None):
+        t_left = df_sub['TotalLeft'].sum()
+        t_repay = df_sub['TotalRepayAmount'].sum()
+        rate = (t_repay / t_left * 100) if t_left > 0 else 0.0
+        
+        self.record_snapshot(snapshot_key, rate, t_repay)
+        last_d = self.get_last_run_data(snapshot_key)
+        last_r = last_d.get('rate', 0.0) if last_d else 0.0
+        
+        diff = rate - last_r
+        if abs(diff) >= 0.01:
+            symbol = "⬆️" if diff > 0 else "⬇️"
+            trend_str = f"{symbol} {abs(diff):.1f}%"
+        else:
+            trend_str = "-"
+        
+        target_str = "-"
+        achv_str = "-"
+        if current_hour is not None:
+            tr_raw = TARGET_RATES.get((stage, type_), {}).get(current_hour)
+            if tr_raw is not None:
+                tr_pct = tr_raw * 100
+                target_str = f"{tr_pct:.1f}%"
+                if tr_pct > 0:
+                    achv_str = f"{(rate / tr_pct * 100):.0f}%"
+        
+        rank_str = "-"
+        if global_ranks_dict and team_rank_id:
+            rank_key = (stage, type_, str(team_rank_id))
+            rank_str = global_ranks_dict.get(rank_key, "-")
+        
+        app_str = ""
+        if 'App' in df_sub.columns:
+            app_str = ",".join([str(a) for a in df_sub['App'].dropna().unique()])
+            
+        sub_name = "-"
+        if str(row_name).startswith('App: '):
+            sub_name = "Team"
+        elif 'team' in df_sub.columns:
+            teams = df_sub['team'].dropna().unique()
+            if len(teams) == 1:
+                sub_name = str(teams[0])
+            
+        return {
+            "Stage": stage, "Type": type_, "Name": row_name, "SubName": sub_name, "App": app_str,
+            "Re%": f"{rate:.1f}%", "Target": target_str, "Achv%": achv_str,
+            "Diff.Avg.Re%": "-", 
+            "GlobalRank": rank_str, 
+            "Trend": trend_str,
+            "Tickets": int(df_sub['LoadNum'].sum()), 
+            "Left": int(t_left), "RateNum": rate
+        }
+
+    # 逻辑同步：重写 process_team_data 以匹配 auto_report.py
+    def process_team_data(self, df, team_id, team_name, global_ranks, global_averages, global_person_ranks, op_logs=None):
+        # 兼容性修复：如果配置的ID是None，视为ALL
+        if team_id is None or str(team_id).lower() == 'none':
+            target_id = 'ALL'
+        else:
+            target_id = str(team_id).strip()
+            
+        is_all_report = (target_id.upper() == 'ALL')
+        if is_all_report:
+            df_team = df.copy()
+        elif target_id.upper() == 'K':
+            df_team = df[df['team'].astype(str).str.strip().str.startswith('K')].copy()
+        else:
+            df_team = df[df['team'].astype(str).str.strip() == target_id].copy()
+            
+        if df_team.empty: return None, None
+
+        current_hour = None
+        if 'TimePoint' in df_team.columns:
+            df_team['TimePoint'] = pd.to_numeric(df_team['TimePoint'], errors='coerce')
+            max_time = df_team['TimePoint'].max()
+            df_latest = df_team[df_team['TimePoint'] == max_time].copy()
+            if pd.notna(max_time):
+                try:
+                    current_hour = int(str(int(max_time))[-2:])
+                except: pass
+        else:
+            df_latest = df_team.copy()
+            
+        for c in ['TotalLeft', 'TotalRepayAmount', 'LoadNum']:
+            if c in df_latest.columns: df_latest[c] = pd.to_numeric(df_latest[c], errors='coerce').fillna(0)
+        df_latest['Stage'] = df_latest['Stage'].astype(str).str.strip()
+        df_latest['LoanType'] = df_latest['LoanType'].astype(str).str.strip()
+        df_latest = df_latest[~df_latest['Stage'].str.upper().str.startswith('M1')]
+
+        plot_data_rm1 = []
+        plot_data_rm0 = []
+        grouped = df_latest.groupby(['Stage', 'LoanType'])
+        groups_list = list(grouped)
+        
+        def custom_sort_key(item):
+            stage, ltype = item[0]
+            s_score = 0 if stage.upper() == 'RM1' else (1 if stage.upper() == 'RM0' else 2)
+            t_score = 0 if 'FIRST' in ltype.upper() else (1 if 'RELOAN' in ltype.upper() else 2)
+            return (s_score, t_score)
+        groups_list.sort(key=custom_sort_key)
+        
+        for idx, ((stage, type_), group) in enumerate(groups_list):
+            target_list = plot_data_rm1 if 'RM1' in stage.upper() else plot_data_rm0
+            
+            def get_grouped_blocks(df_target, prefix):
+                blocks = []
+                unique_teams = df_target['team'].dropna().unique()
+                k_teams = [t for t in unique_teams if str(t).startswith('K-')]
+                other_teams = [t for t in unique_teams if not str(t).startswith('K-') and str(t) != 'Unknown']
+                
+                name_k = f"Team K" if prefix == "Team" else f"{prefix} - K"
+                
+                for t in other_teams:
+                    sub_df = df_target[df_target['team'] == t]
+                    name = f"Team {t}" if prefix == "Team" else f"{prefix} - {t}"
+                    key = f"ALL_{prefix}_{stage}_{type_}_{t}"
+                    blocks.append(self._get_stats_block(sub_df, name, stage, type_, key, current_hour, global_ranks, t))
+                
+                if k_teams:
+                    df_k = df_target[df_target['team'].isin(k_teams)]
+                    key_k = f"ALL_{prefix}_{stage}_{type_}_K_TOTAL"
+                    block_k = self._get_stats_block(df_k, name_k, stage, type_, key_k, current_hour, global_ranks, "K")
+                    block_k['SubName'] = "K"
+                    blocks.append(block_k)
+                    
+                blocks.sort(key=lambda x: x['RateNum'], reverse=True)
+                
+                total_major = len(blocks)
+                for i, b in enumerate(blocks):
+                    b['GlobalRank'] = f"{i+1}/{total_major}"
+                
+                if k_teams:
+                    k_sub_blocks = []
+                    for t in k_teams:
+                        sub_df = df_target[df_target['team'] == t]
+                        name = f"Team {t}" if prefix == "Team" else f"{prefix} - {t}"
+                        key = f"ALL_{prefix}_{stage}_{type_}_{t}"
+                        k_sub_blocks.append(self._get_stats_block(sub_df, name, stage, type_, key, current_hour, global_ranks, t))
+                    
+                    k_sub_blocks.sort(key=lambda x: x['RateNum'], reverse=True)
+                    
+                    total_sub = len(k_sub_blocks)
+                    for i, b in enumerate(k_sub_blocks):
+                        b['GlobalRank'] = f"{i+1}/{total_sub}"
+                        
+                    k_idx = next((i for i, b in enumerate(blocks) if b['Name'] == name_k), -1)
+                    if k_idx != -1:
+                        blocks = blocks[:k_idx+1] + k_sub_blocks + blocks[k_idx+1:]
+                
+                return blocks
+
+            if is_all_report:
+                if stage.upper() != 'RM1':
+                    # 1. Overall Total
+                    target_list.append(self._get_stats_block(group, "TOTAL", stage, type_, f"ALL_{stage}_{type_}_TOTAL", current_hour))
+                    
+                    # 2. Per Team Breakdown
+                    team_blocks = get_grouped_blocks(group, "Team")
+                    target_list.extend(team_blocks)
+                
+                # 3. Per App Breakdown
+                unique_apps = sorted(group['App'].dropna().unique())
+                for app_name in unique_apps:
+                    app_str = str(app_name).strip()
+                    if not app_str: continue
+                    app_df = group[group['App'] == app_name]
+                    if app_df.empty: continue
+                    
+                    target_list.append(self._get_stats_block(app_df, f"App: {app_str}", stage, type_, f"ALL_{app_str}_{stage}_{type_}_TOTAL", current_hour))
+                    
+                    app_team_blocks = get_grouped_blocks(app_df, app_str)
+                    target_list.extend(app_team_blocks)
+
+            else:
+                # Team 汇总
+                target_list.append(self._get_stats_block(group, f"Team {team_id}", stage, type_, f"{team_id}_{stage}_{type_}_GROUP", current_hour, global_ranks, team_id))
+                
+                # 员工详情 (逻辑同步)
+                global_avg = global_averages.get((stage, type_), 0.0)
+                target_pct = 0.0
+                target_str = "-"
+                if current_hour is not None:
+                    tr = TARGET_RATES.get((stage, type_), {}).get(current_hour)
+                    if tr: 
+                        target_pct = tr * 100
+                        target_str = f"{target_pct:.1f}%"
+
+                if 'App' in group.columns:
+                    person_stats = group.groupby('AssignTo').agg({
+                        'TotalLeft': 'sum',
+                        'TotalRepayAmount': 'sum',
+                        'LoadNum': 'sum',
+                        'App': lambda x: ','.join(x.dropna().astype(str).unique()),
+                        'team': 'first'
+                    }).reset_index()
+                else:
+                    person_stats = group.groupby('AssignTo').agg({
+                        'TotalLeft': 'sum',
+                        'TotalRepayAmount': 'sum',
+                        'LoadNum': 'sum',
+                        'team': 'first'
+                    }).reset_index()
+                    person_stats['App'] = ""
+                    
+                person_stats['Rate'] = (person_stats['TotalRepayAmount'] / person_stats['TotalLeft'] * 100).fillna(0)
+                
+                person_blocks = []
+                for _, row in person_stats.iterrows():
+                    name = str(row['AssignTo']).strip()
+                    p_rate = row['Rate']
+                    
+                    p_key = f"{team_id}_{stage}_{type_}_{name}"
+                    self.record_snapshot(p_key, p_rate, row['TotalRepayAmount'])
+                    last_pd = self.get_last_run_data(p_key)
+                    last_pr = last_pd.get('rate', 0.0) if last_pd else 0.0
+                    
+                    diff = p_rate - last_pr
+                    if abs(diff) >= 0.01:
+                        sym = "⬆️" if diff > 0 else "⬇️"
+                        p_trend = f"{sym} {abs(diff):.1f}%"
+                    else: p_trend = "-"
+                    
+                    # Lagging / Stagnant 判定逻辑
+                    is_lagging = False
+                    if global_avg > 0 and p_rate < global_avg * self.lagging_threshold_ratio: is_lagging = True
+                    elif p_rate == 0 and row['TotalLeft'] > 0: is_lagging = True
+                    
+                    is_stagnant = False
+                    if is_lagging:
+                        data_2h = self.get_data_2h_ago(p_key)
+                        if data_2h and abs(row['TotalRepayAmount'] - data_2h.get('repay', 0.0)) < 1.0:
+                            is_stagnant = True
+                    
+                    p_rank_key = (stage, type_, name)
+                    p_rank = global_person_ranks.get(p_rank_key, "N/A")
+                    
+                    img_icon = "❌🛑 " if is_stagnant else ("❌ " if is_lagging else "")
+                    final_trend_str = f"{img_icon}{p_trend}"
+                    
+                    p_stats_row = {
+                        "Stage": stage, "Type": type_, "Name": name, "SubName": str(row.get('team', '-')), "App": str(row.get('App', '')),
+                        "Re%": f"{p_rate:.1f}%", "Target": target_str,
+                        "GlobalRank": p_rank,
+                        "Trend": final_trend_str,
+                        "Tickets": int(row['LoadNum']), "Left": int(row['TotalLeft']), "RateNum": p_rate
+                    }
+
+                    # 处理操作次数详情
+                    if op_logs and 'data' in op_logs:
+                        person_op = op_logs['data'].get(name, {})
+                        p_stats_row["OpTimes"] = person_op.get('TotalOpTimes', 0)
+                        for h_label in op_logs.get('hours', []):
+                            p_stats_row[f"H_{h_label}"] = person_op.get(h_label, 0)
+                    else:
+                        p_stats_row["OpTimes"] = "-"
+
+                    person_blocks.append(p_stats_row)
+                    
+                person_blocks.sort(key=lambda x: x['RateNum'], reverse=True)
+                target_list.extend(person_blocks)
+
+        return {
+            "RM1": pd.DataFrame(plot_data_rm1),
+            "RM0": pd.DataFrame(plot_data_rm0)
+        }, current_hour
+
+async def generate_image(df_plot, team_id, suffix="", title=""):
+    if df_plot is None or df_plot.empty: return None
+    filename = f"report_{team_id}_{suffix}.png"
+    
+    if not df_plot.empty:
+        if 'GlobalRank' in df_plot.columns: df_plot = df_plot.rename(columns={'GlobalRank': 'Rank'})
+        display_cols = ['Stage', 'Type', 'Name', 'Re%', 'Target', 'Achv%', 'Diff.Avg.Re%', 'Trend', 'Rank', 'Tickets', 'RateNum', 'Left']
+        df_plot = df_plot[[c for c in display_cols if c in df_plot.columns]]
+        
+    def highlight_stages(row):
+        stage = str(row['Stage']).strip()
+        type_ = str(row['Type']).strip()
+        name = str(row['Name']).strip()
+        color = '#ffffff'
+        
+        # 逻辑同步：精确匹配 auto_report.py 的颜色逻辑
+        if stage == 'RM0' and type_ == 'First loan': color = '#e6f7ff'
+        elif stage == 'RM0' and type_ == 'Reloan': color = '#f9f0ff'
+        elif stage == 'RM1' and type_ == 'First loan': color = '#fffbe6'
+        elif stage == 'RM1' and type_ == 'Reloan': color = '#f6ffed'
+        
+        if 'CashDaily' in name: color = '#ffe6e6'
+        
+        font_weight = 'normal'
+        if name == 'TOTAL' or name.startswith('App:'):
+            color = '#dcdcdc'
+            font_weight = 'bold'
+        elif name.startswith('Team '):
+            font_weight = 'bold'
+            
+        return [f'background-color: {color}; font-weight: {font_weight}' for _ in row]
+
+    def _sync_export():
+        try:
+            styler = df_plot.style\
+                .apply(highlight_stages, axis=1)\
+                .background_gradient(subset=['RateNum'], cmap='RdYlGn', vmin=0, vmax=60)\
+                .hide(axis='index')\
+                .hide(subset=['RateNum', 'Left'], axis='columns') \
+                .set_properties(**{'border': '1px solid gray', 'text-align': 'center', 'font-size': '12pt'})\
+                .set_caption(title)\
+                .set_table_styles([
+                    {'selector': 'th', 'props': [('background-color', '#2c3e50'), ('color', 'white'), ('font-weight', 'bold')]},
+                    {'selector': 'caption', 'props': [('caption-side', 'top'), ('font-size', '16px'), ('font-weight', 'bold'), ('color', 'black'), ('text-align', 'left'), ('margin-bottom', '10px')]}
+                ])
+            dfi.export(styler, filename, max_rows=1000)
+            return filename
+        except Exception as e:
+            print(f"❌ [DEBUG] 图片生成失败: {e}", flush=True)
+            return None
+
+    try:
+        loop = asyncio.get_running_loop()
+        result = await loop.run_in_executor(None, _sync_export)
+        return result
+    except Exception as e:
+        print(f"❌ [DEBUG] 线程池调度失败: {e}", flush=True)
+        return None
+
+async def send_to_telegram(bot_token, chat_id, text, img_path):
+    bot = Bot(token=bot_token, request=HTTPXRequest())
+    try:
+        if img_path and os.path.exists(img_path):
+            with open(img_path, 'rb') as f:
+                if text: await bot.send_photo(chat_id=chat_id, photo=f, caption=text, parse_mode='HTML')
+                else: await bot.send_photo(chat_id=chat_id, photo=f)
+            os.remove(img_path)
+        print(f"✅ [DEBUG] 消息已推送至 {chat_id}", flush=True)
+    except Exception as e:
+        print(f"❌ [DEBUG] 推送失败: {e}", flush=True)
+
+async def run_cycle():
+    print("🔥 [DEBUG] 开始执行报表任务...", flush=True)
+
+    now_ist = datetime.now(IST_TZ)
+    termination_hour = CONFIG['system'].get('termination_hour', 22)
+    
+    print(f"⏰ [DEBUG] 当前时间(IST): {now_ist.strftime('%H:%M')}, 终止时间: {termination_hour}:00", flush=True)
+    
+    if now_ist.hour >= termination_hour:
+        print(f"🛑 [DEBUG] 已过终止时间，停止执行。", flush=True)
+        return
+    
+    if 'api' not in CONFIG:
+        print("❌ [DEBUG] 配置文件缺少 'api' 字段", flush=True)
+        return
+
+    api = APIClient(CONFIG['api'])
+    history_file = CONFIG['system'].get('history_file', 'history.json')
+    analyzer = DataAnalyzer(history_file)
+    
+    df = api.get_data()
+    if df is None or df.empty:
+        print("⚠️ [DEBUG] API 未返回数据，停止本次任务。", flush=True)
+        return
+
+    global_avgs = analyzer.calculate_global_averages(df)
+    global_team_ranks = analyzer.calculate_global_team_ranks(df)
+    global_person_ranks = analyzer.calculate_global_person_ranks(df)
+
+    # 兼容性处理：无论 config 用的是 teams 还是 tasks
+    teams = CONFIG.get('teams', CONFIG.get('tasks', []))
+    if not teams:
+        print("⚠️ [DEBUG] 未定义 teams/tasks 列表", flush=True)
+
+    for team_conf in teams:
+        # 兼容 key 名
+        team_id = team_conf.get('id', team_conf.get('team_id'))
+        name = team_conf.get('name')
+        bot_token = team_conf.get('bot_token')
+        chat_id = team_conf.get('chat_id')
+
+        print(f"🔍 [DEBUG] 正在处理团队: {name} (ID: {team_id})", flush=True)
+
+        dfs, current_hour = analyzer.process_team_data(
+            df, team_id, name, global_team_ranks, global_avgs, global_person_ranks
+        )
+
+        if not dfs:
+            print(f"⚠️ [DEBUG] 团队 {name} 无有效数据", flush=True)
+            continue
+
+        img_paths = []
+        for stage_key in ['RM1', 'RM0']:
+            sub_df = dfs.get(stage_key)
+            if sub_df is not None and not sub_df.empty:
+                ist_time_str = datetime.now(IST_TZ).strftime("%Y%m%d %H:%M")
+                target_time_str = f"{current_hour}:00" if current_hour is not None else "N/A"
+                
+                # 兼容显示：如果是ALL模式，显示"总绩效"
+                is_all = (str(team_id).upper() == 'ALL') or (team_id is None) or (str(team_id).lower() == 'none')
+                display_name = "总绩效" if is_all else f"Team {name}"
+                
+                title_text = f"{display_name} Hourly Collection Ranking - {ist_time_str} (IST)\nTime: {target_time_str} Target Comparison"
+
+                path = await generate_image(
+                    sub_df, 
+                    str(team_id), # 确保是字符串
+                    suffix=stage_key, 
+                    title=title_text
+                )
+                if path:
+                    img_paths.append(path)
+
+        try:
+            if not img_paths:
+                print(f"⚠️ [DEBUG] 团队 {name} 没有生成任何图片", flush=True)
+            for img in img_paths:
+                # auto_report 逻辑：不发送文字 caption，只发图片
+                if bot_token and chat_id:
+                    await send_to_telegram(bot_token, chat_id, "", img)
+                else:
+                    print(f"ℹ️ [DEBUG] 团队 {name} 未配置 bot_token/chat_id，跳过推送到 Telegram", flush=True)
+        except Exception as e:
+            print(f"❌ [DEBUG] 推送异常: {e}", flush=True)
+
+    analyzer.save_history()
+    print("✅ [DEBUG] 所有团队报表任务执行完毕", flush=True)
+
+async def get_dashboard_data(team_id="ALL"):
+    print(f"🔥 [DEBUG] 开始执行实时数据抓取(Dashboard), Team: {team_id}...", flush=True)
+    if 'api' not in CONFIG: return {"status": "error", "message": "Missing API config"}
+
+    api = APIClient(CONFIG['api'])
+    history_file = CONFIG['system'].get('history_file', 'history.json')
+    analyzer = DataAnalyzer(history_file)
+    
+    df = api.get_data()
+    if df is None or df.empty:
+        return {"status": "error", "message": "API 返回数据为空，可能是 Cookie 过期"}
+
+    global_avgs = analyzer.calculate_global_averages(df)
+    global_team_ranks = analyzer.calculate_global_team_ranks(df)
+    global_person_ranks = analyzer.calculate_global_person_ranks(df)
+
+    # 实时抓取操作记录
+    op_logs = api.get_op_logs()
+
+    dfs, current_hour = analyzer.process_team_data(
+        df, team_id, f"Dashboard", global_team_ranks, global_avgs, global_person_ranks, op_logs=op_logs
+    )
+
+    if not dfs:
+        return {"status": "error", "message": "无有效数据处理结果"}
+
+    rm1_df = dfs.get("RM1")
+    rm0_df = dfs.get("RM0")
+    
+    if rm1_df is not None: rm1_df = rm1_df.fillna("-")
+    if rm0_df is not None: rm0_df = rm0_df.fillna("-")
+    
+    rm1_data = rm1_df.to_dict('records') if rm1_df is not None and not rm1_df.empty else []
+    rm0_data = rm0_df.to_dict('records') if rm0_df is not None and not rm0_df.empty else []
+
+    analyzer.save_history()
+
+    now_ist = datetime.now(IST_TZ)
+    return {
+        "status": "success",
+        "update_time": now_ist.strftime("%Y-%m-%d %H:%M:%S (IST)"),
+        "current_hour_target": f"{current_hour}:00" if current_hour is not None else "-",
+        "op_hours": op_logs.get('hours', []) if op_logs else [],
+        "rm1": rm1_data,
+        "rm0": rm0_data
+    }
+
+
+def main():
+    print(">>> [DEBUG] 系统启动 (Single Run Mode)", flush=True)
+    try:
+        asyncio.run(run_cycle())
+    except Exception as e:
+        print(f"❌ [DEBUG] 全局异常: {e}", flush=True)
+        raise e
+
+if __name__ == "__main__":
+    main()

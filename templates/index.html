@@ -3,458 +3,410 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Report General Control Panel</title>
-    <!-- Use Inter font for a clean, modern look -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <!-- Include FontAwesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Ticket Data Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.7);
-            --primary-accent: #3b82f6;
-            --primary-hover: #2563eb;
-            --secondary-accent: #ec4899;
-            --secondary-hover: #db2777;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --success-color: #10b981;
-            --error-color: #ef4444;
-            --border-radius: 16px;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+            --bg-color: #f4f6f8;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-muted: #666666;
+            --border-color: #e0e0e0;
+            --primary: #2c3e50;
+            
+            /* Stage Colors matching python script */
+            --rm0-first: #e6f7ff;
+            --rm0-reloan: #f9f0ff;
+            --rm1-first: #fffbe6;
+            --rm1-reloan: #f6ffed;
+            --cashdaily: #ffe6e6;
+            --total-bg: #dcdcdc;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, var(--bg-color), #1e1b4b);
+            background-color: var(--bg-color);
             color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
-            position: relative;
-            overflow-x: hidden;
+            margin: 0;
+            padding: 20px;
         }
 
-        /* Abstract Background Elements */
-        .bg-circle {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.5;
-            z-index: 0;
-        }
-        .bg-circle-1 {
-            top: -100px;
-            left: -100px;
-            width: 400px;
-            height: 400px;
-            background: rgba(59, 130, 246, 0.4);
-        }
-        .bg-circle-2 {
-            bottom: -150px;
-            right: -50px;
-            width: 500px;
-            height: 500px;
-            background: rgba(236, 72, 153, 0.3);
-        }
-
-        .dashboard-container {
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            max-width: 800px;
-            background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--border-radius);
-            padding: 3rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         .header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(to right, #60a5fa, #f472b6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
-        }
-
-        .header p {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-        }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--success-color);
-            padding: 0.5rem 1rem;
-            border-radius: 9999px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            margin-top: 1rem;
-            border: 1px solid rgba(16, 185, 129, 0.2);
-        }
-
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            background-color: var(--success-color);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--success-color);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-        }
-
-        .action-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .action-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 24px;
+            background: var(--card-bg);
+            padding: 20px 30px;
             border-radius: 12px;
-            padding: 2rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
 
-        .action-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.05);
+        h1 {
+            margin: 0;
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 15px;
         }
 
-        .action-card .main-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--primary-accent);
-        }
-
-        .action-card.nudge .main-icon {
-            color: var(--secondary-accent);
-        }
-
-        .action-card h3 {
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-            color: var(--text-main);
-        }
-
-        .action-card p {
+        .meta-info {
+            text-align: right;
+            font-size: 14px;
             color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
-            line-height: 1.5;
+            white-space: nowrap;
+            margin-left: 20px;
         }
 
-        .btn {
-            display: inline-flex;
+        .controls {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
             align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            width: 100%;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
+        }
+
+        select, input, button {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
             outline: none;
         }
 
-        .btn-primary {
-            background-color: var(--primary-accent);
+        input {
+            width: 150px;
+        }
+
+        button {
+            background-color: var(--primary);
             color: white;
-            box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+            cursor: pointer;
+            border: none;
+            transition: background 0.2s;
+            font-weight: 500;
         }
 
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
-            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.23);
-            transform: translateY(-2px);
+        button:hover {
+            background-color: #1a252f;
         }
 
-        .btn-secondary {
-            background-color: var(--secondary-accent);
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 24px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            font-size: 18px;
+            color: var(--primary);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        th {
+            background-color: var(--primary);
             color: white;
-            box-shadow: 0 4px 14px 0 rgba(236, 72, 153, 0.39);
+            font-weight: 600;
         }
 
-        .btn-secondary:hover {
-            background-color: var(--secondary-hover);
-            box-shadow: 0 6px 20px rgba(236, 72, 153, 0.23);
-            transform: translateY(-2px);
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 18px;
+            color: var(--text-muted);
         }
 
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none !important;
-            box-shadow: none !important;
-        }
-
-        .btn .spinner {
-            display: none;
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(255,255,255,0.3);
+        .spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(0,0,0,0.1);
             border-radius: 50%;
-            border-top-color: white;
+            border-top-color: var(--primary);
             animation: spin 1s ease-in-out infinite;
+            margin-bottom: 15px;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
-        .console-container {
-            background: #000;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            overflow: hidden;
-            margin-top: 2rem;
-        }
-
-        .console-header {
-            background: #1e293b;
-            padding: 0.8rem 1rem;
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .mac-btns {
-            display: flex;
-            gap: 6px;
-            margin-right: 1rem;
-        }
-
-        .mac-btn {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-        .mac-btn.close { background-color: #ff5f56; }
-        .mac-btn.min { background-color: #ffbd2e; }
-        .mac-btn.max { background-color: #27c93f; }
-
-        .console-title {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            font-family: monospace;
-        }
-
-        .console-body {
-            padding: 1.5rem;
-            height: 200px;
-            overflow-y: auto;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            color: #a3be8c;
-            scrollbar-width: thin;
-            scrollbar-color: #4b5563 #111827;
-        }
-
-        .console-body::-webkit-scrollbar {
-            width: 8px;
-        }
-        .console-body::-webkit-scrollbar-track {
-            background: #111827;
-        }
-        .console-body::-webkit-scrollbar-thumb {
-            background-color: #4b5563;
-            border-radius: 4px;
-        }
-
-        .log-entry { margin-bottom: 0.5rem; }
-        .log-info { color: #81a1c1; }
-        .log-success { color: #a3be8c; }
-        .log-error { color: #bf616a; }
-        .log-time { color: #4c566a; margin-right: 10px; }
-
-        @media (max-width: 600px) {
-            .dashboard-container { padding: 2rem 1.5rem; }
-            .header h1 { font-size: 2rem; }
-            .action-cards { grid-template-columns: 1fr; }
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div class="bg-circle bg-circle-1"></div>
-    <div class="bg-circle bg-circle-2"></div>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>Data Analytics Dashboard</h1>
+                <div class="controls">
+                    <select id="teamSelect" onchange="fetchData()">
+                        <option value="ALL">Team: ALL</option>
+                        <option value="A">Team: A</option>
+                        <option value="B">Team: B</option>
+                        <option value="C">Team: C</option>
+                        <option value="D">Team: D</option>
+                        <option value="F">Team: F</option>
+                        <option value="G">Team: G</option>
+                        <option value="J">Team: J</option>
+                        <option value="K">Team: K</option>
+                        <option value="S">Team: S</option>
+                        <option value="X">Team: X</option>
+                        <option value="Y">Team: Y</option>
+                    </select>
 
-    <div class="dashboard-container">
-        <header class="header">
-            <h1>Report General</h1>
-            <p>Automated Performance Reporting System</p>
-            <div class="status-badge" id="service-status">
-                <div class="status-dot"></div>
-                <span id="status-text">Checking Status...</span>
+                    <select id="filterStage" onchange="applyFilters()">
+                        <option value="">Stage: All</option>
+                        <option value="RM0">RM0</option>
+                        <option value="RM1">RM1</option>
+                    </select>
+
+                    <select id="filterType" onchange="applyFilters()">
+                        <option value="">Type: All</option>
+                        <option value="First loan">First loan</option>
+                        <option value="Reloan">Reloan</option>
+                    </select>
+
+                    <select id="filterApp" onchange="applyFilters()">
+                        <option value="">APP: All</option>
+                        <option value="CashDaily">CashDaily</option>
+                        <option value="QuickRupee">QuickRupee</option>
+                        <option value="SpendBook">SpendBook</option>
+                    </select>
+
+                    <input type="text" id="filterName" placeholder="Search Name..." oninput="applyFilters()">
+
+                    <button onclick="fetchData()">Refresh Data</button>
+                </div>
             </div>
-        </header>
-
-        <div class="action-cards">
-            <!-- Regular Report Card -->
-            <div class="action-card">
-                <i class="fas fa-file-invoice main-icon"></i>
-                <h3>Regular Report</h3>
-                <p>Generate full performance reports, charts, and rankings for all teams.</p>
-                <button class="btn btn-primary" id="btn-regular" onclick="triggerReport('regular')">
-                    <i class="fas fa-play"></i> 
-                    <span>Run Regular Cycle</span>
-                    <div class="spinner"></div>
-                </button>
-            </div>
-
-            <!-- Nudge Report Card -->
-            <div class="action-card nudge">
-                <i class="fas fa-bell main-icon"></i>
-                <h3>Nudge Mode</h3>
-                <p>AI-powered fast scan to identify underperformers and send Telegram alerts.</p>
-                <button class="btn btn-secondary" id="btn-nudge" onclick="triggerReport('nudge')">
-                    <i class="fas fa-paper-plane"></i> 
-                    <span>Run AI Nudge</span>
-                    <div class="spinner"></div>
-                </button>
+            <div class="meta-info">
+                <div>Live automated data fetch from API</div>
+                <div id="updateTime">Last Update: -</div>
+                <div id="targetHour">Target Hour: -</div>
             </div>
         </div>
 
-        <div class="console-container">
-            <div class="console-header">
-                <div class="mac-btns">
-                    <div class="mac-btn close"></div>
-                    <div class="mac-btn min"></div>
-                    <div class="mac-btn max"></div>
-                </div>
-                <div class="console-title">bash — execute_report.sh</div>
+        <div id="errorBox" class="error-message"></div>
+
+        <div id="loadingBox" class="loading">
+            <div class="spinner"></div>
+            <div>Fetching data from server...</div>
+        </div>
+
+        <div id="contentBox" style="display: none;">
+            <div class="card">
+                <h2>RM1 Collection Ranking</h2>
+                <table id="rm1Table">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
             </div>
-            <div class="console-body" id="console-output">
-                <div class="log-entry"><span class="log-info">System ready. Waiting for manual trigger...</span></div>
+
+            <div class="card">
+                <h2>RM0 Collection Ranking</h2>
+                <table id="rm0Table">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
             </div>
         </div>
     </div>
 
     <script>
-        // Check Status on Load
-        async function checkStatus() {
-            const statusText = document.getElementById('status-text');
-            const dot = document.querySelector('.status-dot');
-            try {
-                const response = await fetch('/api/status');
-                const data = await response.json();
-                if (data.status === 'OK') {
-                    statusText.textContent = 'Service Online - ' + data.service;
-                    dot.style.backgroundColor = 'var(--success-color)';
-                    dot.style.boxShadow = '0 0 10px var(--success-color)';
-                } else {
-                    statusText.textContent = 'Service Degraded';
-                    dot.style.backgroundColor = 'var(--error-color)';
-                    dot.style.boxShadow = '0 0 10px var(--error-color)';
-                }
-            } catch (error) {
-                statusText.textContent = 'Service Offline';
-                dot.style.backgroundColor = 'var(--error-color)';
-                dot.style.boxShadow = '0 0 10px var(--error-color)';
-                dot.style.animation = 'none';
+        let currentData = { rm1: [], rm0: [], op_hours: [] };
+
+        function updateHeaders(opHours) {
+            const hRM1 = document.querySelector('#rm1Table thead');
+            const hRM0 = document.querySelector('#rm0Table thead');
+            
+            let headHtml = `
+                <tr>
+                    <th>Stage</th>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Sub Name</th>
+                    <th>Re%</th>
+            `;
+            
+            opHours.forEach(h => {
+                headHtml += `<th>${h}</th>`;
+            });
+            
+            headHtml += `
+                    <th>OpTimes</th>
+                    <th>Rank</th>
+                    <th>Trend</th>
+                    <th>Target</th>
+                    <th>Tickets</th>
+                </tr>
+            `;
+            hRM1.innerHTML = headHtml;
+            hRM0.innerHTML = headHtml;
+        }
+
+        function getRowStyle(row) {
+            let bgColor = '#ffffff';
+            let fontWeight = 'normal';
+            let fontSize = '14px';
+            
+            const stage = row.Stage;
+            const type = row.Type;
+            const name = row.Name || '';
+            const subName = row.SubName || '';
+
+            if (stage === 'RM0' && type === 'First loan') bgColor = 'var(--rm0-first)';
+            else if (stage === 'RM0' && type === 'Reloan') bgColor = 'var(--rm0-reloan)';
+            else if (stage === 'RM1' && type === 'First loan') bgColor = 'var(--rm1-first)';
+            else if (stage === 'RM1' && type === 'Reloan') bgColor = 'var(--rm1-reloan)';
+
+            if (name.includes('CashDaily')) bgColor = 'var(--cashdaily)';
+
+            if (name === 'TOTAL' || name.startsWith('App:')) {
+                bgColor = 'var(--total-bg)';
+                fontWeight = 'bold';
+            } else if (subName.length === 1 && subName !== '-') {
+                fontWeight = 'bold';
+            } else if (subName.startsWith('K-')) {
+                fontWeight = 'normal';
+                fontSize = '12.5px';
+            } else if (name.startsWith('Team ')) {
+                fontWeight = 'bold';
             }
+
+            return `background-color: ${bgColor}; font-weight: ${fontWeight}; font-size: ${fontSize};`;
         }
 
-        // Format Time
-        function getTimeString() {
-            const now = new Date();
-            return now.toTimeString().split(' ')[0];
-        }
-
-        // Add Log
-        function addLog(message, type = 'info') {
-            const consoleOutput = document.getElementById('console-output');
-            const entry = document.createElement('div');
-            entry.className = 'log-entry';
+        function renderTable(tableId, data) {
+            const tbody = document.querySelector(`#${tableId} tbody`);
+            tbody.innerHTML = '';
             
-            let typeClass = 'log-info';
-            if (type === 'success') typeClass = 'log-success';
-            if (type === 'error') typeClass = 'log-error';
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10">No data available</td></tr>';
+                return;
+            }
 
-            entry.innerHTML = `<span class="log-time">[${getTimeString()}]</span><span class="${typeClass}">${message}</span>`;
-            consoleOutput.appendChild(entry);
-            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.style = getRowStyle(row);
+                
+                let rowHtml = `
+                    <td>${row.Stage || '-'}</td>
+                    <td>${row.Type || '-'}</td>
+                    <td>${row.Name || '-'}</td>
+                    <td>${row.SubName || '-'}</td>
+                    <td>${row['Re%'] || '-'}</td>
+                `;
+                
+                (currentData.op_hours || []).forEach(h => {
+                    rowHtml += `<td>${row['H_' + h] || '0'}</td>`;
+                });
+
+                rowHtml += `
+                    <td>${row.OpTimes || '-'}</td>
+                    <td>${row.Rank || row.GlobalRank || '-'}</td>
+                    <td>${row.Trend || '-'}</td>
+                    <td>${row.Target || '-'}</td>
+                    <td>${row.Tickets || '0'}</td>
+                `;
+                tr.innerHTML = rowHtml;
+                tbody.appendChild(tr);
+            });
         }
 
-        // Trigger Report
-        async function triggerReport(mode) {
-            const btnRegular = document.getElementById('btn-regular');
-            const btnNudge = document.getElementById('btn-nudge');
-            const targetBtn = mode === 'regular' ? btnRegular : btnNudge;
-            
-            // Disable buttons and show spinner
-            btnRegular.disabled = true;
-            btnNudge.disabled = true;
-            targetBtn.querySelector('i').style.display = 'none';
-            targetBtn.querySelector('.spinner').style.display = 'inline-block';
+        function applyFilters() {
+            if (!currentData || !currentData.rm1) return;
 
-            addLog(`Initiating <strong>${mode.toUpperCase()}</strong> report cycle...`, 'info');
+            const fStage = document.getElementById('filterStage').value;
+            const fType = document.getElementById('filterType').value;
+            const fApp = document.getElementById('filterApp').value;
+            const fName = document.getElementById('filterName').value.toLowerCase();
+
+            function matchRow(row) {
+                if (fStage && row.Stage !== fStage) return false;
+                if (fType && row.Type !== fType) return false;
+                if (fApp) {
+                    const rowApp = row.App || '';
+                    const rowName = row.Name || '';
+                    if (!rowApp.includes(fApp) && !rowName.includes(fApp)) return false;
+                }
+                if (fName && !(row.Name || '').toLowerCase().includes(fName)) return false;
+                return true;
+            }
+
+            const filteredRm1 = currentData.rm1.filter(matchRow);
+            const filteredRm0 = currentData.rm0.filter(matchRow);
+
+            renderTable('rm1Table', filteredRm1);
+            renderTable('rm0Table', filteredRm0);
+        }
+
+        async function fetchData() {
+            const team = document.getElementById('teamSelect').value;
+            const loadingBox = document.getElementById('loadingBox');
+            const contentBox = document.getElementById('contentBox');
+            const errorBox = document.getElementById('errorBox');
+            
+            loadingBox.style.display = 'block';
+            contentBox.style.display = 'none';
+            errorBox.style.display = 'none';
 
             try {
-                const response = await fetch(`/trigger?mode=${mode}`, { method: 'POST' });
+                const response = await fetch(`/api/data?team=${team}`);
                 const data = await response.json();
 
-                if (response.ok) {
-                    addLog(`Success: ${data.message}`, 'success');
-                } else {
-                    addLog(`Error: ${data.message}`, 'error');
+                if (data.status === 'error') {
+                    throw new Error(data.message);
                 }
-            } catch (error) {
-                addLog(`Network Error: Failed to reach the server.`, 'error');
-                console.error('Trigger error:', error);
+
+                currentData = data;
+                updateHeaders(data.op_hours || []);
+
+                document.getElementById('updateTime').innerText = `Last Update: ${data.update_time}`;
+                document.getElementById('targetHour').innerText = `Target Hour: ${data.current_hour_target}`;
+
+                applyFilters();
+
+                contentBox.style.display = 'block';
+            } catch (err) {
+                errorBox.innerText = `Error: ${err.message}`;
+                errorBox.style.display = 'block';
             } finally {
-                // Restore buttons
-                btnRegular.disabled = false;
-                btnNudge.disabled = false;
-                targetBtn.querySelector('i').style.display = 'inline-block';
-                targetBtn.querySelector('.spinner').style.display = 'none';
-                addLog('Cycle complete. Ready for next task.', 'info');
+                loadingBox.style.display = 'none';
             }
         }
 
         // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            checkStatus();
-        });
+        fetchData();
     </script>
 </body>
 </html>

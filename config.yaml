@@ -1,135 +1,23 @@
-# ==================== 系统配置 ====================
 system:
-  loop_interval_minutes: 40
-  termination_hour: 22
+  # 注意：loop_interval_minutes 已废弃，由 Cloud Scheduler 控制
+  termination_hour: 23
   timezone_offset: 5.5
   history_file: "history.json"
-  
-  # ⚠️ 重要：配置你的 GCS 存储桶名称
-  history_bucket: "report_general"  # 修改为你的实际存储桶名称
-  
+  history_bucket: "report_general" # 存储桶名称，用来存放 trend 对比信息
   enable_screenshot: true
-  lagging_threshold: 0.95
+  lagging_threshold: 0.9
   stagnation_hours: 2
+  # 全局平均值 (Benchmark) 计算策略
+  # 选项: 'overall' (所有App总和), 'max_app' (取最高App), 或指定App名称如 'CashDaily'
   benchmark_strategy: 'CashDaily'
-
-# ==================== API 配置 ====================
 api:
   base_url: "https://dc.tidbi-it.cc/api/performance/worker/hour_export"
-  login_url: "https://dc.tidbi-it.cc/api/login"
   key: "asdghdfghxfghgj!gsfhj"
   cookie: "lang=en-US; SWIFTLOANDCSID=81594366f40001e5bc89b13c9f9765c3"
-  auto_login:
-    enabled: false
-    username: "YOUR_USERNAME"
-    password: "YOUR_PASSWORD"
 
-# ==================== 团队与任务配置 ====================
 teams:
-  - name: "A组"
-    id: "A"
-    bot_token: "8486145547:AAEyog5sx5p1DX2ANFRw1pE9me9s5WSWOcA"
-    chat_id: "-4999951421"
-    admin: "@MiksaYo"
-  - name: "J组"
-    id: "J"
-    bot_token: "8486145547:AAEyog5sx5p1DX2ANFRw1pE9me9s5WSWOcA"
-    chat_id: "-4999951421"
-    admin: "@MiksaYo"
-  - name: "B组"
-    id: "B"
-    bot_token: "8386246477:AAF_zBoLBSWmr_kemqdlwK6nVZG4c_r0Gck"
-    chat_id: "-5078814307"
-    admin: "@memogogogo"
-  - name: "C组"
-    id: "C"
-    bot_token: "8522643875:AAHVEpfjceXql-S-K9017zEjs67oYVyucu0"
-    chat_id: "-1003318688146"
-    admin: "@admin"
-  - name: "O组"
-    id: "O"
-    bot_token: "8522643875:AAHVEpfjceXql-S-K9017zEjs67oYVyucu0"
-    chat_id: "-1003318688146"
-    admin: "@admin"
-  - name: "D组"
-    id: "D"
-    bot_token: "8246834228:AAHyAF5NHKu3PvoQSgJgiNIxiZQ3S-iSBKg"
-    chat_id: "-1003848511207"
-    admin: "@Xyrox_014"
-  - name: "F组"
-    id: "F"
-    bot_token: "8548014802:AAGIj9nZjrnmOq_rFb38dIln5RWC38_QECo"
-    chat_id: "-4971872891"
-    admin: "@admin"
-  - name: "G组"
-    id: "G"
-    bot_token: "8075278022:AAE6AqTUkK3mtpySesapPfbuiONYKpE5HhI"
-    chat_id: "-1003464610064"
-    admin: "@admin"
-  - name: "I组"
-    id: "I"
-    bot_token: "8221776706:AAEQwJwDKlGNsbphDtS4soLA2LQGZ6M1Azc"
-    chat_id: "-1003518207288"
-    admin: "@Pakistan23"
-  - name: "K-A组"
-    id: "K-A"
-    bot_token: "8564910026:AAH4-4GaRZTrG_alPDxAPH4Rtet9h-NFAxc"
-    chat_id: "-1003684081528"
-    admin: "@Niazi4962"
-  - name: "K-R组"
-    id: "K-R"
-    bot_token: "8564910026:AAH4-4GaRZTrG_alPDxAPH4Rtet9h-NFAxc"
-    chat_id: "-1003684081528"
-    admin: "@S1NGA_1"
-  - name: "K-U组"
-    id: "K-U"
-    bot_token: "8564910026:AAH4-4GaRZTrG_alPDxAPH4Rtet9h-NFAxc"
-    chat_id: "-1003684081528"
-    admin: "@S_Umair"
-  - name: "K-H组"
-    id: "K-H"
-    bot_token: "8564910026:AAH4-4GaRZTrG_alPDxAPH4Rtet9h-NFAxc"
-    chat_id: "-1003684081528"
-    admin: "@Mizzy333"
-  - name: "K-组"
-    id: "K-"
-    bot_token: "8564910026:AAH4-4GaRZTrG_alPDxAPH4Rtet9h-NFAxc"
-    chat_id: "-1003684081528"
-    admin: "@admin"
-  - name: "K-B组"
-    id: "K-B"
-    bot_token: "8564910026:AAH4-4GaRZTrG_alPDxAPH4Rtet9h-NFAxc"
-    chat_id: "-1003684081528"
-    admin: "@Zee_980"
-  - name: "K-P组"
-    id: "K-P"
-    bot_token: "8564910026:AAH4-4GaRZTrG_alPDxAPH4Rtet9h-NFAxc"
-    chat_id: "-1003684081528"
-    admin: "@zeexhann"
-  - name: "K-Z组"
-    id: "K-Z"
-    bot_token: "8564910026:AAH4-4GaRZTrG_alPDxAPH4Rtet9h-NFAxc"
-    chat_id: "-1003684081528"
-    admin: "@DevilTL"
-  - name: "K-S组"
-    id: "K-S"
-    bot_token: "8564910026:AAH4-4GaRZTrG_alPDxAPH4Rtet9h-NFAxc"
-    chat_id: "-1003684081528"
-    admin: "@Sy_BaQiR"
-  - name: "K-M组"
-    id: "K-M"
-    bot_token: "8564910026:AAH4-4GaRZTrG_alPDxAPH4Rtet9h-NFAxc"
-    chat_id: "-1003684081528"
-    admin: "@Musashah007"
-  - name: "组"
-    id: ""
-    bot_token: "8790537091:AAEfGDT4-UwJxYwV9t82rXaud4FkzoDEpNo"
-    chat_id: "-1003730306949"
-    admin: "@Gyung1122"
-
-# ==================== Nudge 配置 ====================
-nudge:
-  threshold_ratio: 0.8  # 低于均值 60% 触发
-  gemini_model: "gemini-2.0-flash"
-  tone: "normal" # 选项: "strict" (严厉), "casual" (江湖气), "normal" (正常/职业)
-  gemini_api_key: "AIzaSyAQ2qLCq0jyWHVwWIQkE_DEe8id2k_OcYU" # ⚠️ 在此填入你的 API Key
+  - name: "总绩效"
+    team_id: "ALL"
+    bot_token: ""
+    chat_id: ""
+    targets: {}
