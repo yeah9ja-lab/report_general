@@ -21,6 +21,13 @@
             --rm1-reloan: #f6ffed;
             --cashdaily: #ffe6e6;
             --total-bg: #dcdcdc;
+
+            /* Header colors (slightly darker) */
+            --rm0-first-h: #bae7ff;
+            --rm0-reloan-h: #efdbff;
+            --rm1-first-h: #fff1b8;
+            --rm1-reloan-h: #d9f7be;
+            --cashdaily-h: #ffcccc;
         }
 
         body {
@@ -338,13 +345,20 @@
             if (name === 'TOTAL' || name.startsWith('App:')) {
                 bgColor = 'var(--total-bg)';
                 fontWeight = 'bold';
+            } else if (name.startsWith('Team ')) {
+                fontWeight = 'bold';
+                // Use header specific colors
+                if (stage === 'RM0' && type === 'First loan') bgColor = 'var(--rm0-first-h)';
+                else if (stage === 'RM0' && type === 'Reloan') bgColor = 'var(--rm0-reloan-h)';
+                else if (stage === 'RM1' && type === 'First loan') bgColor = 'var(--rm1-first-h)';
+                else if (stage === 'RM1' && type === 'Reloan') bgColor = 'var(--rm1-reloan-h)';
+                
+                if (name.includes('CashDaily')) bgColor = 'var(--cashdaily-h)';
             } else if (subName.length === 1 && subName !== '-') {
                 fontWeight = 'bold';
             } else if (subName.startsWith('K-')) {
                 fontWeight = 'normal';
                 fontSize = '12.5px';
-            } else if (name.startsWith('Team ')) {
-                fontWeight = 'bold';
             }
 
             return `background-color: ${bgColor}; font-weight: ${fontWeight}; font-size: ${fontSize};`;
@@ -446,6 +460,20 @@
 
                 // Sort Groups based on Parent's value
                 groups.sort((a, b) => {
+                    const pA = a.parent || a.children[0];
+                    const pB = b.parent || b.children[0];
+
+                    // Priority 1: Stage
+                    let sA = getStagePriority(pA.Stage);
+                    let sB = getStagePriority(pB.Stage);
+                    if (sA !== sB) return sA - sB;
+
+                    // Priority 2: Type
+                    let tA = getTypePriority(pA.Type);
+                    let tB = getTypePriority(pB.Type);
+                    if (tA !== tB) return tA - tB;
+
+                    // Priority 3: User Sort Key
                     let valA = a.parent ? parseSortValue(a.parent[sortConfig.key]) : -1000000;
                     let valB = b.parent ? parseSortValue(b.parent[sortConfig.key]) : -1000000;
                     if (valA < valB) return sortConfig.direction === 'asc' ? -1 : 1;
@@ -469,8 +497,36 @@
             return result;
         }
 
+        function getStagePriority(stage) {
+            if (stage === 'RM1') return 1;
+            if (stage === 'RM0') return 2;
+            return 3;
+        }
+
+        function getTypePriority(type) {
+            if (type === 'First loan') return 1;
+            if (type === 'Reloan') return 2;
+            return 3;
+        }
+
         function sortBlock(items) {
             items.sort((a, b) => {
+                // 1. Stage Priority
+                let sA = getStagePriority(a.Stage);
+                let sB = getStagePriority(b.Stage);
+                if (sA !== sB) return sA - sB;
+
+                // 2. Type Priority
+                let tA = getTypePriority(a.Type);
+                let tB = getTypePriority(b.Type);
+                if (tA !== tB) return tA - tB;
+
+                // 3. Header Priority (Team rows always stay at the top of their Stage/Type)
+                let isHeadA = (a.Name && a.Name.startsWith('Team ')) ? 0 : 1;
+                let isHeadB = (b.Name && b.Name.startsWith('Team ')) ? 0 : 1;
+                if (isHeadA !== isHeadB) return isHeadA - isHeadB;
+
+                // 4. User Selected Sort Key
                 let valA = parseSortValue(a[sortConfig.key]);
                 let valB = parseSortValue(b[sortConfig.key]);
                 
