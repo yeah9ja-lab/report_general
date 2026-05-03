@@ -425,14 +425,20 @@
             const sub = row.SubName || '';
             const team = getTeamName(row);
             
-            // It's a header if Name matches exactly "Team X"
-            if (name === `Team ${team}`) return true;
-            // It's a header if SubName matches Team exactly (and it's not a K-sub team)
-            if (sub === team && !sub.includes('-')) return true;
-            // Special case for K in ALL view
-            if (team === 'K' && (sub === 'K' || sub === '-' || sub === 'Team' || sub === '')) {
-                if (name.includes(' - K') || name.startsWith('Team ')) return true;
+            // 1. Explicit Team Headers
+            if (name.startsWith('Team ')) {
+                // Must match the family team (e.g., "Team A" for family A, or "Team K-B" for family K)
+                if (name === `Team ${team}` || name.startsWith(`Team ${team}-`)) return true;
+                // Special case for K-total
+                if (team === 'K' && (sub === 'K' || sub === '-' || sub === 'Team')) return true;
             }
+
+            // 2. App-level Team Headers (in ALL view)
+            if (name.startsWith('App:') && (name.includes(` - ${team}`) || name.includes(` : ${team}`))) return true;
+            
+            // 3. Special case for K total in ALL view if name is different
+            if (team === 'K' && (sub === 'K' || sub === '-' || sub === 'Team') && name.includes(' - K')) return true;
+
             return false;
         }
 
