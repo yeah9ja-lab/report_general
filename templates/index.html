@@ -440,21 +440,32 @@
                 // K-total row (SubName === 'K') is a parent.
                 // K-sub teams (SubName starts with 'K-') are children of K.
                 let groups = [];
-                let kGroup = null;
+                let parentLookup = {}; // Map of Stage|Type -> K-group
+                let kChildren = [];
 
                 items.forEach(row => {
                     const subName = row.SubName || '';
-                    if (subName.startsWith('K-')) {
-                        if (!kGroup) {
-                            kGroup = { parent: null, children: [] };
-                            groups.push(kGroup);
-                        }
-                        kGroup.children.push(row);
-                    } else if (subName === 'K') {
-                        kGroup = { parent: row, children: [] };
-                        groups.push(kGroup);
+                    const stageType = `${row.Stage}|${row.Type}`;
+                    
+                    if (subName === 'K') {
+                        const g = { parent: row, children: [] };
+                        parentLookup[stageType] = g;
+                        groups.push(g);
+                    } else if (subName.startsWith('K-')) {
+                        kChildren.push(row);
                     } else {
                         groups.push({ parent: row, children: [] });
+                    }
+                });
+
+                // Assign K-sub teams to their specific Stage|Type K-parent
+                kChildren.forEach(child => {
+                    const stageType = `${child.Stage}|${child.Type}`;
+                    if (parentLookup[stageType]) {
+                        parentLookup[stageType].children.push(child);
+                    } else {
+                        // Fallback if no matching parent: treat as major team
+                        groups.push({ parent: child, children: [] });
                     }
                 });
 
