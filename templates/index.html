@@ -157,18 +157,14 @@
             background: rgba(255, 255, 255, 0.05);
         }
 
-        .action-card i {
+        .action-card .main-icon {
             font-size: 2.5rem;
             margin-bottom: 1rem;
-            background: linear-gradient(135deg, #60a5fa, #3b82f6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--primary-accent);
         }
 
-        .action-card.nudge i {
-            background: linear-gradient(135deg, #f472b6, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .action-card.nudge .main-icon {
+            color: var(--secondary-accent);
         }
 
         .action-card h3 {
@@ -335,7 +331,7 @@
         <div class="action-cards">
             <!-- Regular Report Card -->
             <div class="action-card">
-                <i class="fas fa-chart-line"></i>
+                <i class="fas fa-file-invoice main-icon"></i>
                 <h3>Regular Report</h3>
                 <p>Generate full performance reports, charts, and rankings for all teams.</p>
                 <button class="btn btn-primary" id="btn-regular" onclick="triggerReport('regular')">
@@ -347,7 +343,7 @@
 
             <!-- Nudge Report Card -->
             <div class="action-card nudge">
-                <i class="fas fa-bolt"></i>
+                <i class="fas fa-bell main-icon"></i>
                 <h3>Nudge Mode</h3>
                 <p>AI-powered fast scan to identify underperformers and send Telegram alerts.</p>
                 <button class="btn btn-secondary" id="btn-nudge" onclick="triggerReport('nudge')">
