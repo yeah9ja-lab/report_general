@@ -244,6 +244,23 @@
 
     <script>
         let currentData = { rm1: [], rm0: [], op_hours: [] };
+        let sortKey = 'RateNum';
+        let sortDir = 'desc';
+
+        function toggleSort(key) {
+            if (sortKey === key) {
+                sortDir = sortDir === 'desc' ? 'asc' : 'desc';
+            } else {
+                sortKey = key;
+                sortDir = 'desc';
+            }
+            applyFilters();
+        }
+
+        function getSortIndicator(key) {
+            if (sortKey !== key) return '';
+            return sortDir === 'desc' ? ' ▼' : ' ▲';
+        }
 
         function updateHeaders(opHours) {
             const hRM1 = document.querySelector('#rm1Table thead');
@@ -255,17 +272,16 @@
                     <th>Type</th>
                     <th>Name</th>
                     <th>Sub Name</th>
-                    <th>Re%</th>
+                    <th style="cursor:pointer" onclick="toggleSort('RateNum')">Re%${getSortIndicator('RateNum')}</th>
             `;
             
             opHours.forEach(h => {
-                headHtml += `<th>${h}</th>`;
+                headHtml += `<th style="cursor:pointer" onclick="toggleSort('H_${h}')">${h}${getSortIndicator('H_' + h)}</th>`;
             });
             
             headHtml += `
-                    <th>OpTimes</th>
+                    <th style="cursor:pointer" onclick="toggleSort('OpTimes')">OpTimes${getSortIndicator('OpTimes')}</th>
                     <th>Rank</th>
-                    <th>Trend</th>
                     <th>Target</th>
                     <th>Tickets</th>
                 </tr>
@@ -334,7 +350,6 @@
                 rowHtml += `
                     <td>${row.OpTimes || '-'}</td>
                     <td>${row.Rank || row.GlobalRank || '-'}</td>
-                    <td>${row.Trend || '-'}</td>
                     <td>${row.Target || '-'}</td>
                     <td>${row.Tickets || '0'}</td>
                 `;
@@ -366,6 +381,32 @@
             const filteredRm1 = currentData.rm1.filter(matchRow);
             const filteredRm0 = currentData.rm0.filter(matchRow);
 
+            const sortFn = (a, b) => {
+                // Keep TOTAL and App: rows at the top
+                const isTotalA = a.Name === 'TOTAL' || (a.Name || '').startsWith('App:');
+                const isTotalB = b.Name === 'TOTAL' || (b.Name || '').startsWith('App:');
+                if (isTotalA && !isTotalB) return -1;
+                if (!isTotalA && isTotalB) return 1;
+                if (isTotalA && isTotalB) return 0;
+
+                let valA = a[sortKey];
+                let valB = b[sortKey];
+                
+                if (valA === '-' || valA === undefined || valA === null) valA = -1;
+                if (valB === '-' || valB === undefined || valB === null) valB = -1;
+                
+                if (typeof valA === 'string' && !isNaN(parseFloat(valA))) valA = parseFloat(valA);
+                if (typeof valB === 'string' && !isNaN(parseFloat(valB))) valB = parseFloat(valB);
+
+                if (valA < valB) return sortDir === 'desc' ? 1 : -1;
+                if (valA > valB) return sortDir === 'desc' ? -1 : 1;
+                return 0;
+            };
+
+            filteredRm1.sort(sortFn);
+            filteredRm0.sort(sortFn);
+
+            updateHeaders(currentData.op_hours || []);
             renderTable('rm1Table', filteredRm1);
             renderTable('rm0Table', filteredRm0);
         }
