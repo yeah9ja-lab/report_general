@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Data Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f4f6f8;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-muted: #666666;
+            --border-color: #e0e0e0;
+            --primary: #2c3e50;
+            
+            /* Stage Colors matching python script */
+            --rm0-first: #e6f7ff;
+            --rm0-reloan: #f9f0ff;
+            --rm1-first: #fffbe6;
+            --rm1-reloan: #f6ffed;
+            --cashdaily: #ffe6e6;
+            --total-bg: #dcdcdc;
+
+            /* Header colors (slightly darker) */
+            --rm0-first-h: #bae7ff;
+            --rm0-reloan-h: #efdbff;
+            --rm1-first-h: #fff1b8;
+            --rm1-reloan-h: #d9f7be;
+            --cashdaily-h: #ffcccc;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 24px;
+            background: var(--card-bg);
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .meta-info {
+            text-align: right;
+            font-size: 14px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            margin-left: 20px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        select, input, button {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input {
+            width: 150px;
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            cursor: pointer;
+            border: none;
+            transition: background 0.2s;
+            font-weight: 500;
+        }
+
+        button:hover {
+            background-color: #1a252f;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 24px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            font-size: 18px;
+            color: var(--primary);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 18px;
+            color: var(--text-muted);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(0,0,0,0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        /* Sorting Styles */
+        th.sortable {
+            cursor: pointer;
+            position: relative;
+            padding-right: 25px !important;
+            transition: background 0.2s;
+        }
+        th.sortable:hover {
+            background-color: #34495e;
+        }
+        th.active-sort {
+            background-color: #1a252f;
+        }
+        .sort-icon {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 10px;
+            opacity: 0.5;
+        }
+        th.active-sort .sort-icon {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>Data Analytics Dashboard</h1>
+                <div class="controls">
+                    <select id="teamSelect" onchange="fetchData()">
+                        <option value="ALL">Team: ALL</option>
+                        <option value="A">Team: A</option>
+                        <option value="B">Team: B</option>
+                        <option value="C">Team: C</option>
+                        <option value="D">Team: D</option>
+                        <option value="F">Team: F</option>
+                        <option value="G">Team: G</option>
+                        <option value="J">Team: J</option>
+                        <option value="K">Team: K</option>
+                        <option value="S">Team: S</option>
+                        <option value="X">Team: X</option>
+                        <option value="Y">Team: Y</option>
+                    </select>
+
+                    <select id="filterStage" onchange="applyFilters()">
+                        <option value="">Stage: All</option>
+                        <option value="RM0">RM0</option>
+                        <option value="RM1">RM1</option>
+                    </select>
+
+                    <select id="filterType" onchange="applyFilters()">
+                        <option value="">Type: All</option>
+                        <option value="First loan">First loan</option>
+                        <option value="Reloan">Reloan</option>
+                    </select>
+
+                    <select id="filterApp" onchange="applyFilters()">
+                        <option value="">APP: All</option>
+                        <option value="CashDaily">CashDaily</option>
+                        <option value="QuickRupee">QuickRupee</option>
+                        <option value="SpendBook">SpendBook</option>
+                    </select>
+
+                    <input type="text" id="filterName" placeholder="Search Name..." oninput="applyFilters()">
+
+                    <button onclick="fetchData()">Refresh Data</button>
+                </div>
+            </div>
+            <div class="meta-info">
+                <div>Live automated data fetch from API</div>
+                <div id="updateTime">Last Update: -</div>
+                <div id="targetHour">Target Hour: -</div>
+            </div>
+        </div>
+
+        <div id="errorBox" class="error-message"></div>
+
+        <div id="loadingBox" class="loading">
+            <div class="spinner"></div>
+            <div>Fetching data from server...</div>
+        </div>
+
+        <div id="contentBox" style="display: none;">
+            <div class="card">
+                <h2>RM1 Collection Ranking</h2>
+                <table id="rm1Table">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h2>RM0 Collection Ranking</h2>
+                <table id="rm0Table">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentData = { rm1: [], rm0: [], op_hours: [] };
+        let sortConfig = { key: null, direction: 'desc' };
+
+        function requestSort(key) {
+            if (sortConfig.key === key) {
+                sortConfig.direction = sortConfig.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortConfig.key = key;
+                sortConfig.direction = 'desc';
+            }
+            applyFilters();
+        }
+
+        function getSortIcon(key) {
+            if (sortConfig.key !== key) return '<span class="sort-icon">↕️</span>';
+            return sortConfig.direction === 'asc' ? '<span class="sort-icon">🔼</span>' : '<span class="sort-icon">🔽</span>';
+        }
+
+        function updateHeaders(opHours) {
+            const hRM1 = document.querySelector('#rm1Table thead');
+            const hRM0 = document.querySelector('#rm0Table thead');
+            
+            const getThClass = (key) => sortConfig.key === key ? 'sortable active-sort' : 'sortable';
+
+            let headHtml = `
+                <tr>
+                    <th>Stage</th>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Sub Name</th>
+                    <th class="${getThClass('Re%')}" onclick="requestSort('Re%')">Re% ${getSortIcon('Re%')}</th>
+            `;
+            
+            opHours.forEach(h => {
+                const key = 'H_' + h;
+                headHtml += `<th class="${getThClass(key)}" onclick="requestSort('${key}')">${h} ${getSortIcon(key)}</th>`;
+            });
+            
+            headHtml += `
+                    <th class="${getThClass('OpTimes')}" onclick="requestSort('OpTimes')">OpTimes ${getSortIcon('OpTimes')}</th>
+                    <th>Rank</th>
+                    <th>Trend</th>
+                    <th>Target</th>
+                    <th>Tickets</th>
+                </tr>
+            `;
+            hRM1.innerHTML = headHtml;
+            hRM0.innerHTML = headHtml;
+        }
+
+        function getRowStyle(row) {
+            let bgColor = '#ffffff';
+            let fontWeight = 'normal';
+            let fontSize = '14px';
+            
+            const stage = row.Stage;
+            const type = row.Type;
+            const name = row.Name || '';
+            const subName = row.SubName || '';
+
+            if (stage === 'RM0' && type === 'First loan') bgColor = 'var(--rm0-first)';
+            else if (stage === 'RM0' && type === 'Reloan') bgColor = 'var(--rm0-reloan)';
+            else if (stage === 'RM1' && type === 'First loan') bgColor = 'var(--rm1-first)';
+            else if (stage === 'RM1' && type === 'Reloan') bgColor = 'var(--rm1-reloan)';
+
+            if (name.includes('CashDaily')) bgColor = 'var(--cashdaily)';
+
+            if (name === 'TOTAL' || name.startsWith('App:')) {
+                bgColor = 'var(--total-bg)';
+                fontWeight = 'bold';
+            } else if (name.startsWith('Team ')) {
+                fontWeight = 'bold';
+                // Use header specific colors
+                if (stage === 'RM0' && type === 'First loan') bgColor = 'var(--rm0-first-h)';
+                else if (stage === 'RM0' && type === 'Reloan') bgColor = 'var(--rm0-reloan-h)';
+                else if (stage === 'RM1' && type === 'First loan') bgColor = 'var(--rm1-first-h)';
+                else if (stage === 'RM1' && type === 'Reloan') bgColor = 'var(--rm1-reloan-h)';
+                
+                if (name.includes('CashDaily')) bgColor = 'var(--cashdaily-h)';
+            } else if (subName.length === 1 && subName !== '-') {
+                fontWeight = 'bold';
+            } else if (subName.startsWith('K-')) {
+                fontWeight = 'normal';
+                fontSize = '12.5px';
+            }
+
+            return `background-color: ${bgColor}; font-weight: ${fontWeight}; font-size: ${fontSize};`;
+        }
+
+        function renderTable(tableId, data) {
+            const tbody = document.querySelector(`#${tableId} tbody`);
+            tbody.innerHTML = '';
+            
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10">No data available</td></tr>';
+                return;
+            }
+
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.style = getRowStyle(row);
+                
+                let rowHtml = `
+                    <td>${row.Stage || '-'}</td>
+                    <td>${row.Type || '-'}</td>
+                    <td>${row.Name || '-'}</td>
+                    <td>${row.SubName || '-'}</td>
+                    <td>${row['Re%'] || '-'}</td>
+                `;
+                
+                (currentData.op_hours || []).forEach(h => {
+                    rowHtml += `<td>${row['H_' + h] || '0'}</td>`;
+                });
+
+                rowHtml += `
+                    <td>${row.OpTimes || '-'}</td>
+                    <td>${row.Rank || row.GlobalRank || '-'}</td>
+                    <td>${row.Trend || '-'}</td>
+                    <td>${row.Target || '-'}</td>
+                    <td>${row.Tickets || '0'}</td>
+                `;
+                tr.innerHTML = rowHtml;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function parseSortValue(val) {
+            if (val === '-' || val === undefined || val === null || val === '') return -999999;
+            if (typeof val === 'string') {
+                if (val.endsWith('%')) return parseFloat(val.replace('%', ''));
+                let num = parseFloat(val);
+                return isNaN(num) ? val.toLowerCase() : num;
+            }
+            return val;
+        }
+
+        function sortData(data) {
+            if (!sortConfig.key) return data;
+
+            let result = [];
+            let appBlocks = [];
+            let currentAppBlock = [];
+
+            // 1. Divide into Major App Blocks (delimited by "App:" or "TOTAL")
+            data.forEach(row => {
+                const isMajorHeader = row.Name === 'TOTAL' || (row.Name && row.Name.startsWith('App:'));
+                if (isMajorHeader) {
+                    if (currentAppBlock.length > 0) appBlocks.push(currentAppBlock);
+                    currentAppBlock = [row];
+                } else {
+                    currentAppBlock.push(row);
+                }
+            });
+            if (currentAppBlock.length > 0) appBlocks.push(currentAppBlock);
+
+            // 2. Process each App Block
+            appBlocks.forEach(block => {
+                const header = block[0]; // App: or TOTAL
+                const items = block.slice(1);
+                
+                // Group items by Parent relationship
+                // Major teams (J, Y, A) are parents. 
+                // K-total row (SubName === 'K') is a parent.
+                // K-sub teams (SubName starts with 'K-') are children of K.
+                let groups = [];
+                let parentLookup = {}; // Map of Stage|Type -> K-group
+                let kChildren = [];
+
+                items.forEach(row => {
+                    const subName = row.SubName || '';
+                    const stageType = `${row.Stage}|${row.Type}`;
+                    
+                    if (subName === 'K') {
+                        const g = { parent: row, children: [] };
+                        parentLookup[stageType] = g;
+                        groups.push(g);
+                    } else if (subName.startsWith('K-')) {
+                        kChildren.push(row);
+                    } else {
+                        groups.push({ parent: row, children: [] });
+                    }
+                });
+
+                // Assign K-sub teams to their specific Stage|Type K-parent
+                kChildren.forEach(child => {
+                    const stageType = `${child.Stage}|${child.Type}`;
+                    if (parentLookup[stageType]) {
+                        parentLookup[stageType].children.push(child);
+                    } else {
+                        // Fallback if no matching parent: treat as major team
+                        groups.push({ parent: child, children: [] });
+                    }
+                });
+
+                // Sort Groups based on Parent's value
+                groups.sort((a, b) => {
+                    const pA = a.parent || a.children[0];
+                    const pB = b.parent || b.children[0];
+
+                    // Priority 1: Stage
+                    let sA = getStagePriority(pA.Stage);
+                    let sB = getStagePriority(pB.Stage);
+                    if (sA !== sB) return sA - sB;
+
+                    // Priority 2: Type
+                    let tA = getTypePriority(pA.Type);
+                    let tB = getTypePriority(pB.Type);
+                    if (tA !== tB) return tA - tB;
+
+                    // Priority 3: User Sort Key
+                    let valA = a.parent ? parseSortValue(a.parent[sortConfig.key]) : -1000000;
+                    let valB = b.parent ? parseSortValue(b.parent[sortConfig.key]) : -1000000;
+                    if (valA < valB) return sortConfig.direction === 'asc' ? -1 : 1;
+                    if (valA > valB) return sortConfig.direction === 'asc' ? 1 : -1;
+                    return 0;
+                });
+
+                // Add major header back
+                result.push(header);
+
+                // Reassemble sorted groups
+                groups.forEach(g => {
+                    if (g.parent) result.push(g.parent);
+                    if (g.children.length > 0) {
+                        sortBlock(g.children); // Sort sub-teams internally
+                        result.push(...g.children);
+                    }
+                });
+            });
+
+            return result;
+        }
+
+        function getStagePriority(stage) {
+            if (stage === 'RM1') return 1;
+            if (stage === 'RM0') return 2;
+            return 3;
+        }
+
+        function getTypePriority(type) {
+            if (type === 'First loan') return 1;
+            if (type === 'Reloan') return 2;
+            return 3;
+        }
+
+        function sortBlock(items) {
+            items.sort((a, b) => {
+                // 1. Stage Priority
+                let sA = getStagePriority(a.Stage);
+                let sB = getStagePriority(b.Stage);
+                if (sA !== sB) return sA - sB;
+
+                // 2. Type Priority
+                let tA = getTypePriority(a.Type);
+                let tB = getTypePriority(b.Type);
+                if (tA !== tB) return tA - tB;
+
+                // 3. Header Priority (Team rows always stay at the top of their Stage/Type)
+                let isHeadA = (a.Name && a.Name.startsWith('Team ')) ? 0 : 1;
+                let isHeadB = (b.Name && b.Name.startsWith('Team ')) ? 0 : 1;
+                if (isHeadA !== isHeadB) return isHeadA - isHeadB;
+
+                // 4. User Selected Sort Key
+                let valA = parseSortValue(a[sortConfig.key]);
+                let valB = parseSortValue(b[sortConfig.key]);
+                
+                if (valA < valB) return sortConfig.direction === 'asc' ? -1 : 1;
+                if (valA > valB) return sortConfig.direction === 'asc' ? 1 : -1;
+                return 0;
+            });
+        }
+
+        function applyFilters() {
+            if (!currentData || !currentData.rm1) return;
+
+            const fStage = document.getElementById('filterStage').value;
+            const fType = document.getElementById('filterType').value;
+            const fApp = document.getElementById('filterApp').value;
+            const fName = document.getElementById('filterName').value.toLowerCase();
+
+            function matchRow(row) {
+                if (fStage && row.Stage !== fStage) return false;
+                if (fType && row.Type !== fType) return false;
+                if (fApp) {
+                    const rowApp = row.App || '';
+                    const rowName = row.Name || '';
+                    if (!rowApp.includes(fApp) && !rowName.includes(fApp)) return false;
+                }
+                if (fName && !(row.Name || '').toLowerCase().includes(fName)) return false;
+                return true;
+            }
+
+            let filteredRm1 = currentData.rm1.filter(matchRow);
+            let filteredRm0 = currentData.rm0.filter(matchRow);
+
+            // Apply Sorting within blocks
+            filteredRm1 = sortData(filteredRm1);
+            filteredRm0 = sortData(filteredRm0);
+
+            renderTable('rm1Table', filteredRm1);
+            renderTable('rm0Table', filteredRm0);
+        }
+
+        async function fetchData() {
+            const team = document.getElementById('teamSelect').value;
+            const loadingBox = document.getElementById('loadingBox');
+            const contentBox = document.getElementById('contentBox');
+            const errorBox = document.getElementById('errorBox');
+            
+            loadingBox.style.display = 'block';
+            contentBox.style.display = 'none';
+            errorBox.style.display = 'none';
+
+            try {
+                const response = await fetch(`/api/data?team=${team}`);
+                const data = await response.json();
+
+                if (data.status === 'error') {
+                    throw new Error(data.message);
+                }
+
+                currentData = data;
+                updateHeaders(data.op_hours || []);
+
+                document.getElementById('updateTime').innerText = `Last Update: ${data.update_time}`;
+                document.getElementById('targetHour').innerText = `Target Hour: ${data.current_hour_target}`;
+
+                applyFilters();
+
+                contentBox.style.display = 'block';
+            } catch (err) {
+                errorBox.innerText = `Error: ${err.message}`;
+                errorBox.style.display = 'block';
+            } finally {
+                loadingBox.style.display = 'none';
+            }
+        }
+
+        // Initialize
+        fetchData();
+    </script>
+</body>
+</html>
