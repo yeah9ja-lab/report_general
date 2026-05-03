@@ -466,6 +466,21 @@
         }
 
         function sortBlock(items) {
+            // Pre-calculate parent values for the current sort key to keep families together
+            const parentValues = {};
+            items.forEach(row => {
+                const team = getTeamName(row);
+                const sub = row.SubName || '';
+                const name = row.Name || '';
+                // A row is the "Main Parent" if its name matches the team or it's the K total row
+                const isMainParent = (name === `Team ${team}`) || 
+                                   (team === 'K' && (sub === 'K' || sub === '-' || sub === 'Team'));
+                
+                if (isMainParent && parentValues[team] === undefined) {
+                    parentValues[team] = parseSortValue(row[sortConfig.key]);
+                }
+            });
+
             items.sort((a, b) => {
                 // 1. Stage Priority
                 let sA = getStagePriority(a.Stage);
@@ -477,17 +492,28 @@
                 let tB = getTypePriority(b.Type);
                 if (tA !== tB) return tA - tB;
 
-                // 3. Team Grouping (Ensure members stay with their Team header)
-                let teamA = getTeamName(a);
-                let teamB = getTeamName(b);
-                if (teamA !== teamB) return teamA.localeCompare(teamB);
+                // 3. Family Sorting (Sort major teams relative to each other)
+                const teamA = getTeamName(a);
+                const teamB = getTeamName(b);
+                
+                if (teamA !== teamB) {
+                    let pValA = parentValues[teamA] !== undefined ? parentValues[teamA] : parseSortValue(a[sortConfig.key]);
+                    let pValB = parentValues[teamB] !== undefined ? parentValues[teamB] : parseSortValue(b[sortConfig.key]);
+                    
+                    if (pValA !== pValB) {
+                        if (pValA < pValB) return sortConfig.direction === 'asc' ? -1 : 1;
+                        if (pValA > pValB) return sortConfig.direction === 'asc' ? 1 : -1;
+                    }
+                    // Tie-break by team name
+                    return teamA.localeCompare(teamB);
+                }
 
-                // 4. Header Priority (Team rows always stay at the top of their Stage/Type/Team group)
-                let isHeadA = (a.Name && a.Name.startsWith('Team ')) ? 0 : 1;
-                let isHeadB = (b.Name && b.Name.startsWith('Team ')) ? 0 : 1;
+                // 4. Within the same Family: Parent (Team row) first
+                let isHeadA = (a.Name && a.Name.startsWith('Team ') && !a.SubName.includes('-')) ? 0 : 1;
+                let isHeadB = (b.Name && b.Name.startsWith('Team ') && !b.SubName.includes('-')) ? 0 : 1;
                 if (isHeadA !== isHeadB) return isHeadA - isHeadB;
 
-                // 5. User Selected Sort Key
+                // 5. Internal Sort (for children/members within the team)
                 let valA = parseSortValue(a[sortConfig.key]);
                 let valB = parseSortValue(b[sortConfig.key]);
                 
