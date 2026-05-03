@@ -368,7 +368,7 @@ class DataAnalyzer:
                 stage_plot_data.append({
                     "Stage": st, "Type": lt, "Name": team_name, "Re%": f"{t_rate:.1f}%",
                     "Target": f"{target_pct:.1f}%", "Achv%": f"{t_achv:.0f}%",
-                    "Diff.Avg": "-", "Rank": t_rank, "Tickets": int(group['LoadNum'].sum()),
+                    "Diff.Avg": "-", "Trend": "⬆️" if g_diff >= 0.01 else "-", "Rank": t_rank, "Tickets": int(group['LoadNum'].sum()),
                     "IsBold": True, "RateNum": t_rate
                 })
 
@@ -429,7 +429,7 @@ class DataAnalyzer:
                     stage_plot_data.append({
                         "Stage": st, "Type": lt, "Name": name, "Re%": f"{p_rate:.1f}%",
                         "Target": f"{target_pct:.1f}%", "Achv%": f"{((p_rate/target_pct*100)):.0f}%",
-                        "Diff.Avg": f"{(p_rate-cat_avg):+.1f}%", "Rank": p_rank, "Tickets": int(row['LoadNum']),
+                        "Diff.Avg": f"{(p_rate-cat_avg):+.1f}%", "Trend": df_trend_icon, "Rank": p_rank, "Tickets": int(row['LoadNum']),
                         "IsBold": False, "RateNum": p_rate
                     })
 
@@ -475,7 +475,7 @@ def generate_image(df, team_id, stage_suffix, team_name):
             .background_gradient(subset=['RateNum'], cmap='RdYlGn', vmin=0, vmax=60) \
             .hide(axis='index') \
             .hide(subset=['IsBold', 'RateNum'], axis='columns') \
-            .set_properties(**{'border': '1px solid gray', 'text-align': 'center', 'font-size': '11pt', 'padding': '2px 5px'}) \
+            .set_properties(**{'border': '1px solid gray', 'text-align': 'center', 'font-size': '11pt', 'padding': '5px'}) \
             .set_table_styles([
                 {'selector': 'th', 'props': [('background-color', '#2c3e50'), ('color', 'white'), ('font-weight', 'bold')]},
                 {'selector': 'caption', 'props': [('caption-side', 'top'), ('font-size', '14pt'), ('font-weight', 'bold'), ('padding', '10px'), ('color', '#2c3e50')]}
