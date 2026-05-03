@@ -642,7 +642,7 @@ async def generate_image(df_plot, team_id, suffix="", title=""):
     
     if not df_plot.empty:
         if 'GlobalRank' in df_plot.columns: df_plot = df_plot.rename(columns={'GlobalRank': 'Rank'})
-        display_cols = ['Stage', 'Type', 'Name', 'Re%', 'Target', 'Achv%', 'Diff.Avg.Re%', 'Trend', 'Rank', 'Tickets', 'RateNum', 'Left']
+        display_cols = ['Stage', 'Type', 'Name', 'Re%', 'Target', 'Achv%', 'Diff.Avg.Re%', 'Rank', 'Tickets', 'RateNum', 'Left']
         df_plot = df_plot[[c for c in display_cols if c in df_plot.columns]]
         
     def highlight_stages(row):
