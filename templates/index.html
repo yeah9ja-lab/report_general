@@ -416,8 +416,24 @@
             const sub = row.SubName || '';
             if (name.startsWith('Team ')) return name.substring(5).trim();
             if (sub.startsWith('K-')) return 'K';
-            if (name.endsWith(' - K') || name.includes(' - K ')) return 'K';
+            if (name.endsWith(' - K') || name.includes(' - K ') || name.includes(' : K')) return 'K';
             return sub;
+        }
+
+        function isFamilyHeader(row) {
+            const name = row.Name || '';
+            const sub = row.SubName || '';
+            const team = getTeamName(row);
+            
+            // It's a header if Name matches exactly "Team X"
+            if (name === `Team ${team}`) return true;
+            // It's a header if SubName matches Team exactly (and it's not a K-sub team)
+            if (sub === team && !sub.includes('-')) return true;
+            // Special case for K in ALL view
+            if (team === 'K' && (sub === 'K' || sub === '-' || sub === 'Team' || sub === '')) {
+                if (name.includes(' - K') || name.startsWith('Team ')) return true;
+            }
+            return false;
         }
 
         function sortData(data) {
@@ -509,8 +525,8 @@
                 }
 
                 // 4. Within the same Family: Parent (Team row) first
-                let isHeadA = (a.Name && a.Name.startsWith('Team ') && !a.SubName.includes('-')) ? 0 : 1;
-                let isHeadB = (b.Name && b.Name.startsWith('Team ') && !b.SubName.includes('-')) ? 0 : 1;
+                let isHeadA = isFamilyHeader(a) ? 0 : 1;
+                let isHeadB = isFamilyHeader(b) ? 0 : 1;
                 if (isHeadA !== isHeadB) return isHeadA - isHeadB;
 
                 // 5. Internal Sort (for children/members within the team)
