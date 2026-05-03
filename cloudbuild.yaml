@@ -1,5 +1,14 @@
 steps:
-  # 1. 构建 Docker 镜像 (使用 Artifact Registry)
+  # 0. 确保 Artifact Registry 仓库存在 (如果不存在则创建)
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud artifacts repositories describe report-general --location=asia-south1 || \
+        gcloud artifacts repositories create report-general --repository-format=docker --location=asia-south1 --description="Docker repository for report-general"
+
+  # 1. 构建 Docker 镜像
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'asia-south1-docker.pkg.dev/$PROJECT_ID/report-general/auto-report-service:$SHORT_SHA', '.']
 
