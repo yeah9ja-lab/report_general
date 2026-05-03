@@ -1,11 +1,11 @@
 steps:
   # 1. 构建 Docker 镜像
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'asia-south1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/auto-report-service:$SHORT_SHA', '.']
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/auto-report-service:$BUILD_ID', '.']
 
-  # 2. 推送镜像到 Google Container Registry (现在使用 Artifact Registry)
+  # 2. 推送镜像到 Google Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'asia-south1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/auto-report-service:$SHORT_SHA']
+    args: ['push', 'gcr.io/$PROJECT_ID/auto-report-service:$BUILD_ID']
 
   # 3. 部署到 Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -15,7 +15,7 @@ steps:
       - 'deploy'
       - 'reportgeneral'  # 服务名称 (对齐控制台显示的名称)
       - '--image'
-      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/auto-report-service:$SHORT_SHA'
+      - 'gcr.io/$PROJECT_ID/auto-report-service:$BUILD_ID'
       - '--region'
       - 'asia-south1'          # 你的区域
       - '--platform'

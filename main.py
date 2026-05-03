@@ -1,14 +1,19 @@
 # main.py
 import os
 import asyncio
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from report_logic import run_cycle, logger
 
 app = Flask(__name__)
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
+def index():
+    """渲染控制台显示页面"""
+    return render_template('index.html')
+
+@app.route('/api/status', methods=['GET', 'POST'])
 def health_check():
-    """健康检查接口，兼作根路径响应"""
+    """健康检查接口"""
     return jsonify({"status": "OK", "service": "AutoReport Bot"}), 200
 
 @app.route('/trigger', methods=['POST', 'GET'])

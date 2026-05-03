@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report General Control Panel</title>
+    <!-- Use Inter font for a clean, modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Include FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --primary-accent: #3b82f6;
+            --primary-hover: #2563eb;
+            --secondary-accent: #ec4899;
+            --secondary-hover: #db2777;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --border-radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-color), #1e1b4b);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Abstract Background Elements */
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            z-index: 0;
+        }
+        .bg-circle-1 {
+            top: -100px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            background: rgba(59, 130, 246, 0.4);
+        }
+        .bg-circle-2 {
+            bottom: -150px;
+            right: -50px;
+            width: 500px;
+            height: 500px;
+            background: rgba(236, 72, 153, 0.3);
+        }
+
+        .dashboard-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            padding: 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #60a5fa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--success-color);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--success-color);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .action-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .action-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .action-card i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #60a5fa, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .action-card.nudge i {
+            background: linear-gradient(135deg, #f472b6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .action-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .action-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            outline: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-accent);
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.23);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-accent);
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(236, 72, 153, 0.39);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-hover);
+            box-shadow: 0 6px 20px rgba(236, 72, 153, 0.23);
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .btn .spinner {
+            display: none;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .console-container {
+            background: #000;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            margin-top: 2rem;
+        }
+
+        .console-header {
+            background: #1e293b;
+            padding: 0.8rem 1rem;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .mac-btns {
+            display: flex;
+            gap: 6px;
+            margin-right: 1rem;
+        }
+
+        .mac-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .mac-btn.close { background-color: #ff5f56; }
+        .mac-btn.min { background-color: #ffbd2e; }
+        .mac-btn.max { background-color: #27c93f; }
+
+        .console-title {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-family: monospace;
+        }
+
+        .console-body {
+            padding: 1.5rem;
+            height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #a3be8c;
+            scrollbar-width: thin;
+            scrollbar-color: #4b5563 #111827;
+        }
+
+        .console-body::-webkit-scrollbar {
+            width: 8px;
+        }
+        .console-body::-webkit-scrollbar-track {
+            background: #111827;
+        }
+        .console-body::-webkit-scrollbar-thumb {
+            background-color: #4b5563;
+            border-radius: 4px;
+        }
+
+        .log-entry { margin-bottom: 0.5rem; }
+        .log-info { color: #81a1c1; }
+        .log-success { color: #a3be8c; }
+        .log-error { color: #bf616a; }
+        .log-time { color: #4c566a; margin-right: 10px; }
+
+        @media (max-width: 600px) {
+            .dashboard-container { padding: 2rem 1.5rem; }
+            .header h1 { font-size: 2rem; }
+            .action-cards { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-circle bg-circle-1"></div>
+    <div class="bg-circle bg-circle-2"></div>
+
+    <div class="dashboard-container">
+        <header class="header">
+            <h1>Report General</h1>
+            <p>Automated Performance Reporting System</p>
+            <div class="status-badge" id="service-status">
+                <div class="status-dot"></div>
+                <span id="status-text">Checking Status...</span>
+            </div>
+        </header>
+
+        <div class="action-cards">
+            <!-- Regular Report Card -->
+            <div class="action-card">
+                <i class="fas fa-chart-line"></i>
+                <h3>Regular Report</h3>
+                <p>Generate full performance reports, charts, and rankings for all teams.</p>
+                <button class="btn btn-primary" id="btn-regular" onclick="triggerReport('regular')">
+                    <i class="fas fa-play"></i> 
+                    <span>Run Regular Cycle</span>
+                    <div class="spinner"></div>
+                </button>
+            </div>
+
+            <!-- Nudge Report Card -->
+            <div class="action-card nudge">
+                <i class="fas fa-bolt"></i>
+                <h3>Nudge Mode</h3>
+                <p>AI-powered fast scan to identify underperformers and send Telegram alerts.</p>
+                <button class="btn btn-secondary" id="btn-nudge" onclick="triggerReport('nudge')">
+                    <i class="fas fa-paper-plane"></i> 
+                    <span>Run AI Nudge</span>
+                    <div class="spinner"></div>
+                </button>
+            </div>
+        </div>
+
+        <div class="console-container">
+            <div class="console-header">
+                <div class="mac-btns">
+                    <div class="mac-btn close"></div>
+                    <div class="mac-btn min"></div>
+                    <div class="mac-btn max"></div>
+                </div>
+                <div class="console-title">bash — execute_report.sh</div>
+            </div>
+            <div class="console-body" id="console-output">
+                <div class="log-entry"><span class="log-info">System ready. Waiting for manual trigger...</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check Status on Load
+        async function checkStatus() {
+            const statusText = document.getElementById('status-text');
+            const dot = document.querySelector('.status-dot');
+            try {
+                const response = await fetch('/api/status');
+                const data = await response.json();
+                if (data.status === 'OK') {
+                    statusText.textContent = 'Service Online - ' + data.service;
+                    dot.style.backgroundColor = 'var(--success-color)';
+                    dot.style.boxShadow = '0 0 10px var(--success-color)';
+                } else {
+                    statusText.textContent = 'Service Degraded';
+                    dot.style.backgroundColor = 'var(--error-color)';
+                    dot.style.boxShadow = '0 0 10px var(--error-color)';
+                }
+            } catch (error) {
+                statusText.textContent = 'Service Offline';
+                dot.style.backgroundColor = 'var(--error-color)';
+                dot.style.boxShadow = '0 0 10px var(--error-color)';
+                dot.style.animation = 'none';
+            }
+        }
+
+        // Format Time
+        function getTimeString() {
+            const now = new Date();
+            return now.toTimeString().split(' ')[0];
+        }
+
+        // Add Log
+        function addLog(message, type = 'info') {
+            const consoleOutput = document.getElementById('console-output');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            
+            let typeClass = 'log-info';
+            if (type === 'success') typeClass = 'log-success';
+            if (type === 'error') typeClass = 'log-error';
+
+            entry.innerHTML = `<span class="log-time">[${getTimeString()}]</span><span class="${typeClass}">${message}</span>`;
+            consoleOutput.appendChild(entry);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+
+        // Trigger Report
+        async function triggerReport(mode) {
+            const btnRegular = document.getElementById('btn-regular');
+            const btnNudge = document.getElementById('btn-nudge');
+            const targetBtn = mode === 'regular' ? btnRegular : btnNudge;
+            
+            // Disable buttons and show spinner
+            btnRegular.disabled = true;
+            btnNudge.disabled = true;
+            targetBtn.querySelector('i').style.display = 'none';
+            targetBtn.querySelector('.spinner').style.display = 'inline-block';
+
+            addLog(`Initiating <strong>${mode.toUpperCase()}</strong> report cycle...`, 'info');
+
+            try {
+                const response = await fetch(`/trigger?mode=${mode}`, { method: 'POST' });
+                const data = await response.json();
+
+                if (response.ok) {
+                    addLog(`Success: ${data.message}`, 'success');
+                } else {
+                    addLog(`Error: ${data.message}`, 'error');
+                }
+            } catch (error) {
+                addLog(`Network Error: Failed to reach the server.`, 'error');
+                console.error('Trigger error:', error);
+            } finally {
+                // Restore buttons
+                btnRegular.disabled = false;
+                btnNudge.disabled = false;
+                targetBtn.querySelector('i').style.display = 'inline-block';
+                targetBtn.querySelector('.spinner').style.display = 'none';
+                addLog('Cycle complete. Ready for next task.', 'info');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            checkStatus();
+        });
+    </script>
+</body>
+</html>
