@@ -411,6 +411,15 @@
             return val;
         }
 
+        function getTeamName(row) {
+            const name = row.Name || '';
+            const sub = row.SubName || '';
+            if (name.startsWith('Team ')) return name.substring(5).trim();
+            if (sub.startsWith('K-')) return 'K';
+            if (name.endsWith(' - K') || name.includes(' - K ')) return 'K';
+            return sub;
+        }
+
         function sortData(data) {
             if (!sortConfig.key) return data;
 
@@ -430,79 +439,15 @@
             });
             if (currentAppBlock.length > 0) appBlocks.push(currentAppBlock);
 
-            // 2. Process each App Block
+            // 2. Process each App Block with hierarchical sorting
             appBlocks.forEach(block => {
                 const header = block[0]; // App: or TOTAL
                 const items = block.slice(1);
                 
-                // Group items by Parent relationship
-                // Major teams (J, Y, A) are parents. 
-                // K-total row (SubName === 'K') is a parent.
-                // K-sub teams (SubName starts with 'K-') are children of K.
-                let groups = [];
-                let parentLookup = {}; // Map of Stage|Type -> K-group
-                let kChildren = [];
+                sortBlock(items);
 
-                items.forEach(row => {
-                    const subName = row.SubName || '';
-                    const stageType = `${row.Stage}|${row.Type}`;
-                    
-                    if (subName === 'K') {
-                        const g = { parent: row, children: [] };
-                        parentLookup[stageType] = g;
-                        groups.push(g);
-                    } else if (subName.startsWith('K-')) {
-                        kChildren.push(row);
-                    } else {
-                        groups.push({ parent: row, children: [] });
-                    }
-                });
-
-                // Assign K-sub teams to their specific Stage|Type K-parent
-                kChildren.forEach(child => {
-                    const stageType = `${child.Stage}|${child.Type}`;
-                    if (parentLookup[stageType]) {
-                        parentLookup[stageType].children.push(child);
-                    } else {
-                        // Fallback if no matching parent: treat as major team
-                        groups.push({ parent: child, children: [] });
-                    }
-                });
-
-                // Sort Groups based on Parent's value
-                groups.sort((a, b) => {
-                    const pA = a.parent || a.children[0];
-                    const pB = b.parent || b.children[0];
-
-                    // Priority 1: Stage
-                    let sA = getStagePriority(pA.Stage);
-                    let sB = getStagePriority(pB.Stage);
-                    if (sA !== sB) return sA - sB;
-
-                    // Priority 2: Type
-                    let tA = getTypePriority(pA.Type);
-                    let tB = getTypePriority(pB.Type);
-                    if (tA !== tB) return tA - tB;
-
-                    // Priority 3: User Sort Key
-                    let valA = a.parent ? parseSortValue(a.parent[sortConfig.key]) : -1000000;
-                    let valB = b.parent ? parseSortValue(b.parent[sortConfig.key]) : -1000000;
-                    if (valA < valB) return sortConfig.direction === 'asc' ? -1 : 1;
-                    if (valA > valB) return sortConfig.direction === 'asc' ? 1 : -1;
-                    return 0;
-                });
-
-                // Add major header back
                 result.push(header);
-
-                // Reassemble sorted groups
-                groups.forEach(g => {
-                    if (g.parent) result.push(g.parent);
-                    if (g.children.length > 0) {
-                        sortBlock(g.children); // Sort sub-teams internally
-                        result.push(...g.children);
-                    }
-                });
+                result.push(...items);
             });
 
             return result;
@@ -532,12 +477,17 @@
                 let tB = getTypePriority(b.Type);
                 if (tA !== tB) return tA - tB;
 
-                // 3. Header Priority (Team rows always stay at the top of their Stage/Type)
+                // 3. Team Grouping (Ensure members stay with their Team header)
+                let teamA = getTeamName(a);
+                let teamB = getTeamName(b);
+                if (teamA !== teamB) return teamA.localeCompare(teamB);
+
+                // 4. Header Priority (Team rows always stay at the top of their Stage/Type/Team group)
                 let isHeadA = (a.Name && a.Name.startsWith('Team ')) ? 0 : 1;
                 let isHeadB = (b.Name && b.Name.startsWith('Team ')) ? 0 : 1;
                 if (isHeadA !== isHeadB) return isHeadA - isHeadB;
 
-                // 4. User Selected Sort Key
+                // 5. User Selected Sort Key
                 let valA = parseSortValue(a[sortConfig.key]);
                 let valB = parseSortValue(b[sortConfig.key]);
                 
