@@ -162,6 +162,31 @@
             margin-bottom: 20px;
             display: none;
         }
+
+        /* Sorting Styles */
+        th.sortable {
+            cursor: pointer;
+            position: relative;
+            padding-right: 25px !important;
+            transition: background 0.2s;
+        }
+        th.sortable:hover {
+            background-color: #34495e;
+        }
+        th.active-sort {
+            background-color: #1a252f;
+        }
+        .sort-icon {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 10px;
+            opacity: 0.5;
+        }
+        th.active-sort .sort-icon {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -244,26 +269,45 @@
 
     <script>
         let currentData = { rm1: [], rm0: [], op_hours: [] };
+        let sortConfig = { key: null, direction: 'desc' };
+
+        function requestSort(key) {
+            if (sortConfig.key === key) {
+                sortConfig.direction = sortConfig.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortConfig.key = key;
+                sortConfig.direction = 'desc';
+            }
+            applyFilters();
+        }
+
+        function getSortIcon(key) {
+            if (sortConfig.key !== key) return '<span class="sort-icon">↕️</span>';
+            return sortConfig.direction === 'asc' ? '<span class="sort-icon">🔼</span>' : '<span class="sort-icon">🔽</span>';
+        }
 
         function updateHeaders(opHours) {
             const hRM1 = document.querySelector('#rm1Table thead');
             const hRM0 = document.querySelector('#rm0Table thead');
             
+            const getThClass = (key) => sortConfig.key === key ? 'sortable active-sort' : 'sortable';
+
             let headHtml = `
                 <tr>
                     <th>Stage</th>
                     <th>Type</th>
                     <th>Name</th>
                     <th>Sub Name</th>
-                    <th>Re%</th>
+                    <th class="${getThClass('Re%')}" onclick="requestSort('Re%')">Re% ${getSortIcon('Re%')}</th>
             `;
             
             opHours.forEach(h => {
-                headHtml += `<th>${h}</th>`;
+                const key = 'H_' + h;
+                headHtml += `<th class="${getThClass(key)}" onclick="requestSort('${key}')">${h} ${getSortIcon(key)}</th>`;
             });
             
             headHtml += `
-                    <th>OpTimes</th>
+                    <th class="${getThClass('OpTimes')}" onclick="requestSort('OpTimes')">OpTimes ${getSortIcon('OpTimes')}</th>
                     <th>Rank</th>
                     <th>Trend</th>
                     <th>Target</th>
@@ -343,6 +387,56 @@
             });
         }
 
+        function parseSortValue(val) {
+            if (val === '-' || val === undefined || val === null || val === '') return -999999;
+            if (typeof val === 'string') {
+                if (val.endsWith('%')) return parseFloat(val.replace('%', ''));
+                let num = parseFloat(val);
+                return isNaN(num) ? val.toLowerCase() : num;
+            }
+            return val;
+        }
+
+        function sortData(data) {
+            if (!sortConfig.key) return data;
+
+            let result = [];
+            let currentBlockItems = [];
+
+            data.forEach(row => {
+                const isHeader = row.Name === 'TOTAL' || (row.Name && row.Name.startsWith('App:'));
+                
+                if (isHeader) {
+                    if (currentBlockItems.length > 0) {
+                        sortBlock(currentBlockItems);
+                        result.push(...currentBlockItems);
+                        currentBlockItems = [];
+                    }
+                    result.push(row);
+                } else {
+                    currentBlockItems.push(row);
+                }
+            });
+
+            if (currentBlockItems.length > 0) {
+                sortBlock(currentBlockItems);
+                result.push(...currentBlockItems);
+            }
+
+            return result;
+        }
+
+        function sortBlock(items) {
+            items.sort((a, b) => {
+                let valA = parseSortValue(a[sortConfig.key]);
+                let valB = parseSortValue(b[sortConfig.key]);
+                
+                if (valA < valB) return sortConfig.direction === 'asc' ? -1 : 1;
+                if (valA > valB) return sortConfig.direction === 'asc' ? 1 : -1;
+                return 0;
+            });
+        }
+
         function applyFilters() {
             if (!currentData || !currentData.rm1) return;
 
@@ -363,8 +457,12 @@
                 return true;
             }
 
-            const filteredRm1 = currentData.rm1.filter(matchRow);
-            const filteredRm0 = currentData.rm0.filter(matchRow);
+            let filteredRm1 = currentData.rm1.filter(matchRow);
+            let filteredRm0 = currentData.rm0.filter(matchRow);
+
+            // Apply Sorting within blocks
+            filteredRm1 = sortData(filteredRm1);
+            filteredRm0 = sortData(filteredRm0);
 
             renderTable('rm1Table', filteredRm1);
             renderTable('rm0Table', filteredRm0);
