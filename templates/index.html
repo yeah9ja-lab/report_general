@@ -383,9 +383,25 @@
                 const tr = document.createElement('tr');
                 tr.style = getRowStyle(row);
                 
+                const name = row.Name || '';
+                const isEmployeeRow = !name.startsWith('Team ') && name !== 'TOTAL' && !name.startsWith('App:');
+                let typeDisplay = row.Type || '-';
+                
+                if (row.Stage === 'RM1' && isEmployeeRow) {
+                    const app = row.App || '';
+                    let abbr = '';
+                    if (app.includes('CashDaily')) abbr = 'CD';
+                    else if (app.includes('QuickRupee')) abbr = 'QR';
+                    else if (app.includes('SpendBook') || app.includes('Spendbook')) abbr = 'SB';
+                    
+                    if (abbr) {
+                        typeDisplay += ` (${abbr})`;
+                    }
+                }
+
                 let rowHtml = `
                     <td>${row.Stage || '-'}</td>
-                    <td>${row.Type || '-'}</td>
+                    <td>${typeDisplay}</td>
                     <td>${row.Name || '-'}</td>
                     <td>${row.SubName || '-'}</td>
                     <td>${row['Re%'] || '-'}</td>
