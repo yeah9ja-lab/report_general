@@ -539,19 +539,7 @@
                 let sB = getStagePriority(b.Stage);
                 if (sA !== sB) return sA - sB;
 
-                // For text-based sorting (Type, Name, SubName), bypass family grouping to ensure strict alphabetical order
-                if (['Type', 'Name', 'SubName'].includes(sortConfig.key)) {
-                    let rawValA = sortConfig.key === 'Type' ? getTypeDisplay(a) : a[sortConfig.key];
-                    let rawValB = sortConfig.key === 'Type' ? getTypeDisplay(b) : b[sortConfig.key];
-                    let valA = parseSortValue(rawValA);
-                    let valB = parseSortValue(rawValB);
-                    
-                    if (valA < valB) return sortConfig.direction === 'asc' ? -1 : 1;
-                    if (valA > valB) return sortConfig.direction === 'asc' ? 1 : -1;
-                    return 0; // If equal, fall back to Re% order natively
-                }
-
-                // 2. Type Priority (Only if not sorting by a text column)
+                // 2. Type Priority (ALWAYS keep First loan above Reloan, regardless of sort direction)
                 let tA = getTypePriority(a.Type);
                 let tB = getTypePriority(b.Type);
                 if (tA !== tB) return tA - tB;
@@ -565,7 +553,8 @@
                     let pValB = parentValues[teamB] !== undefined ? parentValues[teamB] : -999999;
                     
                     if (pValA !== pValB) {
-                        return sortConfig.direction === 'asc' ? pValA - pValB : pValB - pValA;
+                        if (pValA < pValB) return sortConfig.direction === 'asc' ? -1 : 1;
+                        if (pValA > pValB) return sortConfig.direction === 'asc' ? 1 : -1;
                     }
                     // Tie-break by team name
                     return teamA.localeCompare(teamB);
@@ -588,8 +577,10 @@
                 }
 
                 // 5. Internal Sort (for children/members within the team)
-                let valA = parseSortValue(a[sortConfig.key]);
-                let valB = parseSortValue(b[sortConfig.key]);
+                let rawValA = sortConfig.key === 'Type' ? getTypeDisplay(a) : a[sortConfig.key];
+                let rawValB = sortConfig.key === 'Type' ? getTypeDisplay(b) : b[sortConfig.key];
+                let valA = parseSortValue(rawValA);
+                let valB = parseSortValue(rawValB);
                 
                 if (valA < valB) return sortConfig.direction === 'asc' ? -1 : 1;
                 if (valA > valB) return sortConfig.direction === 'asc' ? 1 : -1;
