@@ -223,6 +223,10 @@
                         <option value="RM1">RM1</option>
                     </select>
 
+                    <select id="filterGroup" onchange="applyFilters()">
+                        <option value="">Group: All</option>
+                    </select>
+
                     <select id="filterType" onchange="applyFilters()">
                         <option value="">Type: All</option>
                         <option value="First loan">First loan</option>
@@ -299,12 +303,13 @@
             
             const getThClass = (key) => sortConfig.key === key ? 'sortable active-sort' : 'sortable';
             const selectedApp = document.getElementById('filterApp').value || 'All';
+            const selectedGroup = document.getElementById('filterGroup').value || 'All';
 
             let headHtml = `
                 <tr>
                     <th>Stage</th>
                     <th>Type (${selectedApp})</th>
-                    <th>Name</th>
+                    <th>Name (${selectedGroup})</th>
                     <th>Sub Name</th>
                     <th class="${getThClass('Re%')}" onclick="requestSort('Re%')">Re% ${getSortIcon('Re%')}</th>
             `;
@@ -374,14 +379,13 @@
                 return;
             }
 
-            const selectedApp = document.getElementById('filterApp').value || 'All';
             data.forEach(row => {
                 const tr = document.createElement('tr');
                 tr.style = getRowStyle(row);
                 
                 let rowHtml = `
                     <td>${row.Stage || '-'}</td>
-                    <td>${row.Type || '-'} (${selectedApp})</td>
+                    <td>${row.Type || '-'}</td>
                     <td>${row.Name || '-'}</td>
                     <td>${row.SubName || '-'}</td>
                     <td>${row['Re%'] || '-'}</td>
@@ -547,17 +551,55 @@
             });
         }
 
+        function updateGroupOptions() {
+            const team = document.getElementById('teamSelect').value;
+            const groupSelect = document.getElementById('filterGroup');
+            const currentVal = groupSelect.value;
+            
+            groupSelect.innerHTML = '<option value="">Group: All</option>';
+            
+            let groups = new Set();
+            const allRows = [...(currentData.rm1 || []), ...(currentData.rm0 || [])];
+            
+            allRows.forEach(row => {
+                if (row.SubName && row.SubName !== '-' && row.SubName !== 'Team') {
+                    groups.add(row.SubName);
+                }
+            });
+
+            // Special logic for K team to ensure all sub-teams are included if data is sparse
+            if (team === 'K') {
+                ['K-A', 'K-R', 'K-U', 'K-H', 'K-O', 'K-B', 'K-P', 'K-Z', 'K-S', 'K-W'].forEach(g => groups.add(g));
+            } else if (team !== 'ALL') {
+                groups.add(team);
+            }
+
+            Array.from(groups).sort().forEach(g => {
+                const option = document.createElement('option');
+                option.value = g;
+                option.textContent = g;
+                groupSelect.appendChild(option);
+            });
+
+            // Restore previous value if it still exists
+            if (Array.from(groups).includes(currentVal)) {
+                groupSelect.value = currentVal;
+            }
+        }
+
         function applyFilters() {
             if (!currentData || !currentData.rm1) return;
 
             const fStage = document.getElementById('filterStage').value;
             const fType = document.getElementById('filterType').value;
             const fApp = document.getElementById('filterApp').value;
+            const fGroup = document.getElementById('filterGroup').value;
             const fName = document.getElementById('filterName').value.toLowerCase();
 
             function matchRow(row) {
                 if (fStage && row.Stage !== fStage) return false;
                 if (fType && row.Type !== fType) return false;
+                if (fGroup && row.SubName !== fGroup) return false;
                 if (fApp) {
                     const rowApp = row.App || '';
                     const rowName = row.Name || '';
@@ -600,6 +642,7 @@
                 }
 
                 currentData = data;
+                updateGroupOptions();
                 updateHeaders(data.op_hours || []);
 
                 document.getElementById('updateTime').innerText = `Last Update: ${data.update_time}`;
