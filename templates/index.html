@@ -370,12 +370,29 @@
             return `background-color: ${bgColor}; font-weight: ${fontWeight}; font-size: ${fontSize};`;
         }
 
+        function getTypeDisplay(row) {
+            const name = row.Name || '';
+            const isEmployeeRow = !name.startsWith('Team ') && name !== 'TOTAL' && !name.startsWith('App:');
+            let typeDisplay = row.Type || '-';
+            
+            if (row.Stage === 'RM1' && isEmployeeRow) {
+                const app = row.App || '';
+                let abbr = '';
+                if (app.includes('CashDaily')) abbr = 'CD';
+                else if (app.includes('QuickRupee')) abbr = 'QR';
+                else if (app.includes('SpendBook') || app.includes('Spendbook')) abbr = 'SB';
+                
+                if (abbr) typeDisplay += ` (${abbr})`;
+            }
+            return typeDisplay;
+        }
+
         function renderTable(tableId, data) {
             const tbody = document.querySelector(`#${tableId} tbody`);
             tbody.innerHTML = '';
             
             if (!data || data.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="10">No data available</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="15" style="text-align:center;">No data available</td></tr>';
                 return;
             }
 
@@ -383,21 +400,7 @@
                 const tr = document.createElement('tr');
                 tr.style = getRowStyle(row);
                 
-                const name = row.Name || '';
-                const isEmployeeRow = !name.startsWith('Team ') && name !== 'TOTAL' && !name.startsWith('App:');
-                let typeDisplay = row.Type || '-';
-                
-                if (row.Stage === 'RM1' && isEmployeeRow) {
-                    const app = row.App || '';
-                    let abbr = '';
-                    if (app.includes('CashDaily')) abbr = 'CD';
-                    else if (app.includes('QuickRupee')) abbr = 'QR';
-                    else if (app.includes('SpendBook') || app.includes('Spendbook')) abbr = 'SB';
-                    
-                    if (abbr) {
-                        typeDisplay += ` (${abbr})`;
-                    }
-                }
+                let typeDisplay = getTypeDisplay(row);
 
                 let rowHtml = `
                     <td>${row.Stage || '-'}</td>
@@ -525,17 +528,30 @@
                                    (team === 'K' && (sub === 'K' || sub === '-' || sub === 'Team'));
                 
                 if (isMainParent && parentValues[team] === undefined) {
-                    parentValues[team] = parseSortValue(row[sortConfig.key]);
+                    let pVal = sortConfig.key === 'Type' ? getTypeDisplay(row) : row[sortConfig.key];
+                    parentValues[team] = parseSortValue(pVal);
                 }
             });
 
             items.sort((a, b) => {
-                // 1. Stage Priority
+                // 1. Stage Priority (Always keep RM1 and RM0 separated)
                 let sA = getStagePriority(a.Stage);
                 let sB = getStagePriority(b.Stage);
                 if (sA !== sB) return sA - sB;
 
-                // 2. Type Priority
+                // For text-based sorting (Type, Name, SubName), bypass family grouping to ensure strict alphabetical order
+                if (['Type', 'Name', 'SubName'].includes(sortConfig.key)) {
+                    let rawValA = sortConfig.key === 'Type' ? getTypeDisplay(a) : a[sortConfig.key];
+                    let rawValB = sortConfig.key === 'Type' ? getTypeDisplay(b) : b[sortConfig.key];
+                    let valA = parseSortValue(rawValA);
+                    let valB = parseSortValue(rawValB);
+                    
+                    if (valA < valB) return sortConfig.direction === 'asc' ? -1 : 1;
+                    if (valA > valB) return sortConfig.direction === 'asc' ? 1 : -1;
+                    return 0; // If equal, fall back to Re% order natively
+                }
+
+                // 2. Type Priority (Only if not sorting by a text column)
                 let tA = getTypePriority(a.Type);
                 let tB = getTypePriority(b.Type);
                 if (tA !== tB) return tA - tB;
@@ -545,21 +561,31 @@
                 const teamB = getTeamName(b);
                 
                 if (teamA !== teamB) {
-                    let pValA = parentValues[teamA] !== undefined ? parentValues[teamA] : parseSortValue(a[sortConfig.key]);
-                    let pValB = parentValues[teamB] !== undefined ? parentValues[teamB] : parseSortValue(b[sortConfig.key]);
+                    let pValA = parentValues[teamA] !== undefined ? parentValues[teamA] : -999999;
+                    let pValB = parentValues[teamB] !== undefined ? parentValues[teamB] : -999999;
                     
                     if (pValA !== pValB) {
-                        if (pValA < pValB) return sortConfig.direction === 'asc' ? -1 : 1;
-                        if (pValA > pValB) return sortConfig.direction === 'asc' ? 1 : -1;
+                        return sortConfig.direction === 'asc' ? pValA - pValB : pValB - pValA;
                     }
                     // Tie-break by team name
                     return teamA.localeCompare(teamB);
                 }
 
-                // 4. Within the same Family: Parent (Team row) first
+                // 4. Internal Sorting (Same Team)
+                // Priority: Header first, then by value
                 let isHeadA = isFamilyHeader(a) ? 0 : 1;
                 let isHeadB = isFamilyHeader(b) ? 0 : 1;
                 if (isHeadA !== isHeadB) return isHeadA - isHeadB;
+
+                // Tie-breaker for headers: Parent first
+                if (isHeadA === 0) {
+                    const subA = a.SubName || '';
+                    const subB = b.SubName || '';
+                    const team = teamA; // Both are same family
+                    const isParentA = (a.Name === `Team ${team}`) || (team === 'K' && (subA === 'K' || subA === '-' || subA === 'Team'));
+                    const isParentB = (b.Name === `Team ${team}`) || (team === 'K' && (subB === 'K' || subB === '-' || subB === 'Team'));
+                    if (isParentA !== isParentB) return isParentA ? -1 : 1;
+                }
 
                 // 5. Internal Sort (for children/members within the team)
                 let valA = parseSortValue(a[sortConfig.key]);
