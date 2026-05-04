@@ -298,11 +298,12 @@
             const hRM0 = document.querySelector('#rm0Table thead');
             
             const getThClass = (key) => sortConfig.key === key ? 'sortable active-sort' : 'sortable';
+            const selectedApp = document.getElementById('filterApp').value || 'All';
 
             let headHtml = `
                 <tr>
                     <th>Stage</th>
-                    <th>Type</th>
+                    <th>Type (${selectedApp})</th>
                     <th>Name</th>
                     <th>Sub Name</th>
                     <th class="${getThClass('Re%')}" onclick="requestSort('Re%')">Re% ${getSortIcon('Re%')}</th>
@@ -373,13 +374,14 @@
                 return;
             }
 
+            const selectedApp = document.getElementById('filterApp').value || 'All';
             data.forEach(row => {
                 const tr = document.createElement('tr');
                 tr.style = getRowStyle(row);
                 
                 let rowHtml = `
                     <td>${row.Stage || '-'}</td>
-                    <td>${row.Type || '-'}</td>
+                    <td>${row.Type || '-'} (${selectedApp})</td>
                     <td>${row.Name || '-'}</td>
                     <td>${row.SubName || '-'}</td>
                     <td>${row['Re%'] || '-'}</td>
@@ -571,6 +573,9 @@
             // Apply Sorting within blocks
             filteredRm1 = sortData(filteredRm1);
             filteredRm0 = sortData(filteredRm0);
+
+            // Refresh headers to reflect current APP selection
+            updateHeaders(currentData.op_hours || []);
 
             renderTable('rm1Table', filteredRm1);
             renderTable('rm0Table', filteredRm0);
