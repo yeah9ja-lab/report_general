@@ -293,8 +293,8 @@
         }
 
         function getSortIcon(key) {
-            if (sortConfig.key !== key) return '<span class="sort-icon">↕️</span>';
-            return sortConfig.direction === 'asc' ? '<span class="sort-icon">🔼</span>' : '<span class="sort-icon">🔽</span>';
+            if (sortConfig.key !== key) return '<span class="sort-icon" style="opacity: 0.5;">⇅</span>';
+            return sortConfig.direction === 'asc' ? '<span class="sort-icon">▲</span>' : '<span class="sort-icon">▼</span>';
         }
 
         function updateHeaders(opHours) {
@@ -308,9 +308,9 @@
             let headHtml = `
                 <tr>
                     <th>Stage</th>
-                    <th>Type (${selectedApp})</th>
-                    <th>Name (${selectedGroup})</th>
-                    <th>Sub Name</th>
+                    <th class="${getThClass('Type')}" onclick="requestSort('Type')">Type (${selectedApp}) ${getSortIcon('Type')}</th>
+                    <th class="${getThClass('Name')}" onclick="requestSort('Name')">Name (${selectedGroup}) ${getSortIcon('Name')}</th>
+                    <th class="${getThClass('SubName')}" onclick="requestSort('SubName')">Sub Name ${getSortIcon('SubName')}</th>
                     <th class="${getThClass('Re%')}" onclick="requestSort('Re%')">Re% ${getSortIcon('Re%')}</th>
             `;
             
