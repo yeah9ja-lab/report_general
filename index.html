@@ -127,7 +127,7 @@
         }
 
         th, td {
-            padding: 12px 16px;
+            padding: 9px 8px;
             text-align: center;
             border: 1px solid var(--border-color);
             white-space: nowrap;
@@ -217,6 +217,10 @@
                         <option value="Y">Team: Y</option>
                     </select>
 
+                    <select id="filterGroup" onchange="applyFilters()">
+                        <option value="">Group: All</option>
+                    </select>
+
                     <select id="filterStage" onchange="applyFilters()">
                         <option value="">Stage: All</option>
                         <option value="RM0">RM0</option>
@@ -298,12 +302,14 @@
             const hRM0 = document.querySelector('#rm0Table thead');
             
             const getThClass = (key) => sortConfig.key === key ? 'sortable active-sort' : 'sortable';
+            const selectedApp = document.getElementById('filterApp').value || 'All';
+            const selectedGroup = document.getElementById('filterGroup').value || 'All';
 
             let headHtml = `
                 <tr>
                     <th>Stage</th>
-                    <th>Type</th>
-                    <th>Name</th>
+                    <th class="${getThClass('Type')}" onclick="requestSort('Type')">Type (${selectedApp}) ${getSortIcon('Type')}</th>
+                    <th>Name (${selectedGroup})</th>
                     <th>Sub Name</th>
                     <th class="${getThClass('Re%')}" onclick="requestSort('Re%')">Re% ${getSortIcon('Re%')}</th>
             `;
@@ -377,9 +383,25 @@
                 const tr = document.createElement('tr');
                 tr.style = getRowStyle(row);
                 
+                const name = row.Name || '';
+                const isEmployeeRow = !name.startsWith('Team ') && name !== 'TOTAL' && !name.startsWith('App:');
+                let typeDisplay = row.Type || '-';
+                
+                if (row.Stage === 'RM1' && isEmployeeRow) {
+                    const app = row.App || '';
+                    let abbr = '';
+                    if (app.includes('CashDaily')) abbr = 'CD';
+                    else if (app.includes('QuickRupee')) abbr = 'QR';
+                    else if (app.includes('SpendBook') || app.includes('Spendbook')) abbr = 'SB';
+                    
+                    if (abbr) {
+                        typeDisplay += ` (${abbr})`;
+                    }
+                }
+
                 let rowHtml = `
                     <td>${row.Stage || '-'}</td>
-                    <td>${row.Type || '-'}</td>
+                    <td>${typeDisplay}</td>
                     <td>${row.Name || '-'}</td>
                     <td>${row.SubName || '-'}</td>
                     <td>${row['Re%'] || '-'}</td>
@@ -411,6 +433,41 @@
             return val;
         }
 
+        function getTeamName(row) {
+            const name = (row.Name || '').trim();
+            const sub = (row.SubName || '').trim();
+            
+            // If it's any K-related team, always group under family K
+            if (sub === 'K' || sub.startsWith('K-') || name === 'Team K' || name.startsWith('Team K-') || name.includes(' - K')) {
+                return 'K';
+            }
+            
+            if (name.startsWith('Team ')) return name.substring(5).trim();
+            return sub;
+        }
+
+        function isFamilyHeader(row) {
+            const name = row.Name || '';
+            const sub = row.SubName || '';
+            const team = getTeamName(row);
+            
+            // 1. Explicit Team Headers
+            if (name.startsWith('Team ')) {
+                // Must match the family team (e.g., "Team A" for family A, or "Team K-B" for family K)
+                if (name === `Team ${team}` || name.startsWith(`Team ${team}-`)) return true;
+                // Special case for K-total
+                if (team === 'K' && (sub === 'K' || sub === '-' || sub === 'Team')) return true;
+            }
+
+            // 2. App-level Team Headers (in ALL view)
+            if (name.startsWith('App:') && (name.includes(` - ${team}`) || name.includes(` : ${team}`))) return true;
+            
+            // 3. Special case for K total in ALL view if name is different
+            if (team === 'K' && (sub === 'K' || sub === '-' || sub === 'Team') && name.includes(' - K')) return true;
+
+            return false;
+        }
+
         function sortData(data) {
             if (!sortConfig.key) return data;
 
@@ -430,79 +487,15 @@
             });
             if (currentAppBlock.length > 0) appBlocks.push(currentAppBlock);
 
-            // 2. Process each App Block
+            // 2. Process each App Block with hierarchical sorting
             appBlocks.forEach(block => {
                 const header = block[0]; // App: or TOTAL
                 const items = block.slice(1);
                 
-                // Group items by Parent relationship
-                // Major teams (J, Y, A) are parents. 
-                // K-total row (SubName === 'K') is a parent.
-                // K-sub teams (SubName starts with 'K-') are children of K.
-                let groups = [];
-                let parentLookup = {}; // Map of Stage|Type -> K-group
-                let kChildren = [];
+                sortBlock(items);
 
-                items.forEach(row => {
-                    const subName = row.SubName || '';
-                    const stageType = `${row.Stage}|${row.Type}`;
-                    
-                    if (subName === 'K') {
-                        const g = { parent: row, children: [] };
-                        parentLookup[stageType] = g;
-                        groups.push(g);
-                    } else if (subName.startsWith('K-')) {
-                        kChildren.push(row);
-                    } else {
-                        groups.push({ parent: row, children: [] });
-                    }
-                });
-
-                // Assign K-sub teams to their specific Stage|Type K-parent
-                kChildren.forEach(child => {
-                    const stageType = `${child.Stage}|${child.Type}`;
-                    if (parentLookup[stageType]) {
-                        parentLookup[stageType].children.push(child);
-                    } else {
-                        // Fallback if no matching parent: treat as major team
-                        groups.push({ parent: child, children: [] });
-                    }
-                });
-
-                // Sort Groups based on Parent's value
-                groups.sort((a, b) => {
-                    const pA = a.parent || a.children[0];
-                    const pB = b.parent || b.children[0];
-
-                    // Priority 1: Stage
-                    let sA = getStagePriority(pA.Stage);
-                    let sB = getStagePriority(pB.Stage);
-                    if (sA !== sB) return sA - sB;
-
-                    // Priority 2: Type
-                    let tA = getTypePriority(pA.Type);
-                    let tB = getTypePriority(pB.Type);
-                    if (tA !== tB) return tA - tB;
-
-                    // Priority 3: User Sort Key
-                    let valA = a.parent ? parseSortValue(a.parent[sortConfig.key]) : -1000000;
-                    let valB = b.parent ? parseSortValue(b.parent[sortConfig.key]) : -1000000;
-                    if (valA < valB) return sortConfig.direction === 'asc' ? -1 : 1;
-                    if (valA > valB) return sortConfig.direction === 'asc' ? 1 : -1;
-                    return 0;
-                });
-
-                // Add major header back
                 result.push(header);
-
-                // Reassemble sorted groups
-                groups.forEach(g => {
-                    if (g.parent) result.push(g.parent);
-                    if (g.children.length > 0) {
-                        sortBlock(g.children); // Sort sub-teams internally
-                        result.push(...g.children);
-                    }
-                });
+                result.push(...items);
             });
 
             return result;
@@ -521,6 +514,21 @@
         }
 
         function sortBlock(items) {
+            // Pre-calculate parent values for the current sort key to keep families together
+            const parentValues = {};
+            items.forEach(row => {
+                const team = getTeamName(row);
+                const sub = row.SubName || '';
+                const name = row.Name || '';
+                // A row is the "Main Parent" if its name matches the team or it's the K total row
+                const isMainParent = (name === `Team ${team}`) || 
+                                   (team === 'K' && (sub === 'K' || sub === '-' || sub === 'Team'));
+                
+                if (isMainParent && parentValues[team] === undefined) {
+                    parentValues[team] = parseSortValue(row[sortConfig.key]);
+                }
+            });
+
             items.sort((a, b) => {
                 // 1. Stage Priority
                 let sA = getStagePriority(a.Stage);
@@ -532,12 +540,28 @@
                 let tB = getTypePriority(b.Type);
                 if (tA !== tB) return tA - tB;
 
-                // 3. Header Priority (Team rows always stay at the top of their Stage/Type)
-                let isHeadA = (a.Name && a.Name.startsWith('Team ')) ? 0 : 1;
-                let isHeadB = (b.Name && b.Name.startsWith('Team ')) ? 0 : 1;
+                // 3. Family Sorting (Sort major teams relative to each other)
+                const teamA = getTeamName(a);
+                const teamB = getTeamName(b);
+                
+                if (teamA !== teamB) {
+                    let pValA = parentValues[teamA] !== undefined ? parentValues[teamA] : parseSortValue(a[sortConfig.key]);
+                    let pValB = parentValues[teamB] !== undefined ? parentValues[teamB] : parseSortValue(b[sortConfig.key]);
+                    
+                    if (pValA !== pValB) {
+                        if (pValA < pValB) return sortConfig.direction === 'asc' ? -1 : 1;
+                        if (pValA > pValB) return sortConfig.direction === 'asc' ? 1 : -1;
+                    }
+                    // Tie-break by team name
+                    return teamA.localeCompare(teamB);
+                }
+
+                // 4. Within the same Family: Parent (Team row) first
+                let isHeadA = isFamilyHeader(a) ? 0 : 1;
+                let isHeadB = isFamilyHeader(b) ? 0 : 1;
                 if (isHeadA !== isHeadB) return isHeadA - isHeadB;
 
-                // 4. User Selected Sort Key
+                // 5. Internal Sort (for children/members within the team)
                 let valA = parseSortValue(a[sortConfig.key]);
                 let valB = parseSortValue(b[sortConfig.key]);
                 
@@ -547,17 +571,55 @@
             });
         }
 
+        function updateGroupOptions() {
+            const team = document.getElementById('teamSelect').value;
+            const groupSelect = document.getElementById('filterGroup');
+            const currentVal = groupSelect.value;
+            
+            groupSelect.innerHTML = '<option value="">Group: All</option>';
+            
+            let groups = new Set();
+            const allRows = [...(currentData.rm1 || []), ...(currentData.rm0 || [])];
+            
+            allRows.forEach(row => {
+                if (row.SubName && row.SubName !== '-' && row.SubName !== 'Team') {
+                    groups.add(row.SubName);
+                }
+            });
+
+            // Special logic for K team to ensure all sub-teams are included if data is sparse
+            if (team === 'K') {
+                ['K-A', 'K-R', 'K-U', 'K-H', 'K-O', 'K-B', 'K-P', 'K-Z', 'K-S', 'K-W'].forEach(g => groups.add(g));
+            } else if (team !== 'ALL') {
+                groups.add(team);
+            }
+
+            Array.from(groups).sort().forEach(g => {
+                const option = document.createElement('option');
+                option.value = g;
+                option.textContent = g;
+                groupSelect.appendChild(option);
+            });
+
+            // Restore previous value if it still exists
+            if (Array.from(groups).includes(currentVal)) {
+                groupSelect.value = currentVal;
+            }
+        }
+
         function applyFilters() {
             if (!currentData || !currentData.rm1) return;
 
             const fStage = document.getElementById('filterStage').value;
             const fType = document.getElementById('filterType').value;
             const fApp = document.getElementById('filterApp').value;
+            const fGroup = document.getElementById('filterGroup').value;
             const fName = document.getElementById('filterName').value.toLowerCase();
 
             function matchRow(row) {
                 if (fStage && row.Stage !== fStage) return false;
                 if (fType && row.Type !== fType) return false;
+                if (fGroup && row.SubName !== fGroup) return false;
                 if (fApp) {
                     const rowApp = row.App || '';
                     const rowName = row.Name || '';
@@ -573,6 +635,9 @@
             // Apply Sorting within blocks
             filteredRm1 = sortData(filteredRm1);
             filteredRm0 = sortData(filteredRm0);
+
+            // Refresh headers to reflect current APP selection
+            updateHeaders(currentData.op_hours || []);
 
             renderTable('rm1Table', filteredRm1);
             renderTable('rm0Table', filteredRm0);
@@ -597,6 +662,7 @@
                 }
 
                 currentData = data;
+                updateGroupOptions();
                 updateHeaders(data.op_hours || []);
 
                 document.getElementById('updateTime').innerText = `Last Update: ${data.update_time}`;
