@@ -382,15 +382,19 @@ class DataAnalyzer:
         df_calc['Stage'] = df_calc['Stage'].astype(str).str.strip()
         df_calc['LoanType'] = df_calc['LoanType'].astype(str).str.strip()
         
-        person_stats_global = df_calc.groupby(['Stage', 'LoanType', 'AssignTo'])[['TotalLeft', 'TotalRepayAmount']].sum().reset_index()
+        person_stats_global = df_calc.groupby(['Stage', 'LoanType', 'App', 'AssignTo'])[['TotalLeft', 'TotalRepayAmount']].sum().reset_index()
         person_stats_global['Rate'] = (person_stats_global['TotalRepayAmount'] / person_stats_global['TotalLeft'] * 100).fillna(0)
+        
         rank_lookup = {}
-        for (stage, ltype), group in person_stats_global.groupby(['Stage', 'LoanType']):
+        # 对于 RM1，按照 Stage, LoanType, App 分组排名
+        # 对于其他，目前也统一按照这三个维度（App通常在RM0也是分开的）
+        for (stage, ltype, app), group in person_stats_global.groupby(['Stage', 'LoanType', 'App']):
             group = group.sort_values(by='Rate', ascending=False).reset_index(drop=True)
             total_persons = len(group)
             for rank, row in group.iterrows():
                 rank_str = f"{rank + 1}/{total_persons}"
-                rank_lookup[(stage, ltype, str(row['AssignTo']).strip())] = rank_str
+                # key 包含 app 信息
+                rank_lookup[(stage, ltype, str(app).strip(), str(row['AssignTo']).strip())] = rank_str
         return rank_lookup
 
     # 逻辑同步：引入 _get_stats_block 辅助函数
@@ -627,7 +631,16 @@ class DataAnalyzer:
                         if data_2h and abs(row['TotalRepayAmount'] - data_2h.get('repay', 0.0)) < 1.0:
                             is_stagnant = True
                     
-                    p_rank_key = (stage, type_, name)
+                    # RM1 阶段需要根据 App 细分排名
+                    if stage == 'RM1':
+                        # 员工详情中的 App 可能包含逗号，取第一个作为排名依据
+                        primary_app = str(row.get('App', '')).split(',')[0].strip()
+                        p_rank_key = (stage, type_, primary_app, name)
+                    else:
+                        # 非 RM1 阶段目前也尝试匹配带 App 的 key，如果不匹配则退回到不带 App 的逻辑（如果需要的话）
+                        primary_app = str(row.get('App', '')).split(',')[0].strip()
+                        p_rank_key = (stage, type_, primary_app, name)
+                        
                     p_rank = global_person_ranks.get(p_rank_key, "N/A")
                     
                     img_icon = "❌🛑 " if is_stagnant else ("❌ " if is_lagging else "")
