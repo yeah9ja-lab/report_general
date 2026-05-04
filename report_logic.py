@@ -132,6 +132,23 @@ class APIClient:
                         df.columns = expected
 
             df = df.rename(columns=col_map)
+            
+            # 逻辑同步：标准化 Stage 和 LoanType
+            if 'Stage' in df.columns:
+                df['Stage'] = df['Stage'].astype(str).str.strip().str.upper()
+                df['Stage'] = df['Stage'].replace({'RM1': 'RM1', 'RM0': 'RM0', 'D0': 'D0', 'M11': 'M1-1'})
+                
+            if 'LoanType' in df.columns:
+                df['LoanType'] = df['LoanType'].astype(str).str.strip()
+                # 统一映射：New -> First loan, Old -> Reloan
+                type_map = {
+                    'New': 'First loan', '1': 'First loan', '0': 'Reloan',
+                    'Old': 'Reloan', 'FIRST LOAN': 'First loan', 'RELOAN': 'Reloan'
+                }
+                df['LoanType'] = df['LoanType'].map(lambda x: type_map.get(x.upper(), x) if isinstance(x, str) else x)
+                # 再次兜底映射以防万一
+                df['LoanType'] = df['LoanType'].replace({'New': 'First loan', 'Old': 'Reloan'})
+
             df_final = self.process_team_assignment(df)
             return df_final
         except Exception as e:
@@ -320,8 +337,11 @@ class DataAnalyzer:
         if 'TimePoint' in df_calc.columns and not df_calc.empty:
             max_time = df_calc['TimePoint'].max()
             df_calc = df_calc[df_calc['TimePoint'] == max_time]
+        
+        # 确保 Stage 和 LoanType 已经是标准格式
         df_calc['Stage'] = df_calc['Stage'].astype(str).str.strip()
         df_calc['LoanType'] = df_calc['LoanType'].astype(str).str.strip()
+        
         global_stats = df_calc.groupby(['Stage', 'LoanType'])[['TotalLeft', 'TotalRepayAmount']].sum().reset_index()
         global_avg_map = {}
         for _, row in global_stats.iterrows():
@@ -336,8 +356,10 @@ class DataAnalyzer:
         if 'TimePoint' in df_calc.columns and not df_calc.empty:
             max_time = df_calc['TimePoint'].max()
             df_calc = df_calc[df_calc['TimePoint'] == max_time]
+            
         df_calc['Stage'] = df_calc['Stage'].astype(str).str.strip()
         df_calc['LoanType'] = df_calc['LoanType'].astype(str).str.strip()
+        
         team_stats = df_calc.groupby(['Stage', 'LoanType', 'team'])[['TotalLeft', 'TotalRepayAmount']].sum().reset_index()
         team_stats['Rate'] = (team_stats['TotalRepayAmount'] / team_stats['TotalLeft'] * 100).fillna(0)
         rank_lookup = {}
@@ -356,8 +378,10 @@ class DataAnalyzer:
         if 'TimePoint' in df_calc.columns and not df_calc.empty:
             max_time = df_calc['TimePoint'].max()
             df_calc = df_calc[df_calc['TimePoint'] == max_time]
+            
         df_calc['Stage'] = df_calc['Stage'].astype(str).str.strip()
         df_calc['LoanType'] = df_calc['LoanType'].astype(str).str.strip()
+        
         person_stats_global = df_calc.groupby(['Stage', 'LoanType', 'AssignTo'])[['TotalLeft', 'TotalRepayAmount']].sum().reset_index()
         person_stats_global['Rate'] = (person_stats_global['TotalRepayAmount'] / person_stats_global['TotalLeft'] * 100).fillna(0)
         rank_lookup = {}
