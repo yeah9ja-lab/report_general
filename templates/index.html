@@ -434,11 +434,15 @@
         }
 
         function getTeamName(row) {
-            const name = row.Name || '';
-            const sub = row.SubName || '';
+            const name = (row.Name || '').trim();
+            const sub = (row.SubName || '').trim();
+            
+            // If it's any K-related team, always group under family K
+            if (sub === 'K' || sub.startsWith('K-') || name === 'Team K' || name.startsWith('Team K-') || name.includes(' - K')) {
+                return 'K';
+            }
+            
             if (name.startsWith('Team ')) return name.substring(5).trim();
-            if (sub.startsWith('K-')) return 'K';
-            if (name.endsWith(' - K') || name.includes(' - K ') || name.includes(' : K')) return 'K';
             return sub;
         }
 
