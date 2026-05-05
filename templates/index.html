@@ -319,8 +319,8 @@
                 <tr>
                     <th>Stage</th>
                     <th class="${getThClass('Type')}" onclick="requestSort('Type')">Type (${selectedApp}) ${getSortIcon('Type')}</th>
-                    <th class="${getThClass('Name')}" onclick="requestSort('Name')">Name (${selectedGroup}) ${getSortIcon('Name')}</th>
-                    <th class="${getThClass('SubName')}" onclick="requestSort('SubName')">Sub Name ${getSortIcon('SubName')}</th>
+                    <th class="${getThClass('SubName')}" onclick="requestSort('SubName')">Name (${selectedGroup}) ${getSortIcon('SubName')}</th>
+                    <th class="${getThClass('Name')}" onclick="requestSort('Name')">Sub Name ${getSortIcon('Name')}</th>
                     <th class="${getThClass('Re%')}" onclick="requestSort('Re%')">Re% ${getSortIcon('Re%')}</th>
             `;
             
@@ -428,8 +428,8 @@
                 let rowHtml = `
                     <td>${row.Stage || '-'}</td>
                     <td>${typeDisplay}</td>
-                    <td>${row.Name || '-'}</td>
                     <td>${row.SubName || '-'}</td>
+                    <td>${row.Name || '-'}</td>
                     <td>${row['Re%'] || '-'}</td>
                 `;
                 
