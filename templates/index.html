@@ -332,7 +332,7 @@
             headHtml += `
                     <th class="${getThClass('OpTimes')}" onclick="requestSort('OpTimes')">OpTimes ${getSortIcon('OpTimes')}</th>
                     <th>Rank</th>
-                    <th>Trend</th>
+                    <th class="${getThClass('T.Re%')}" onclick="requestSort('T.Re%')">T.Re% ${getSortIcon('T.Re%')}</th>
                     <th>Target</th>
                     <th>Tickets</th>
                 </tr>
@@ -440,7 +440,7 @@
                 rowHtml += `
                     <td>${row.OpTimes || '-'}</td>
                     <td>${row.Rank || row.GlobalRank || '-'}</td>
-                    <td>${row.Trend || '-'}</td>
+                    <td>${row['T.Re%'] || '-'}</td>
                     <td>${row.Target || '-'}</td>
                     <td>${row.Tickets || '0'}</td>
                 `;
