@@ -20,6 +20,11 @@
             --rm1-first: #fffbe6;
             --rm1-reloan: #f6ffed;
             --cashdaily: #ffe6e6;
+            --quickrupee: #fff3e0;
+            --spendbook: #e0f7fa;
+            --swiftrupee: #e8eaf6;
+            --taprupee: #ffffff;
+            --paisaguru: #ffffff;
             --total-bg: #dcdcdc;
 
             /* Header colors (slightly darker) */
@@ -28,6 +33,11 @@
             --rm1-first-h: #fff1b8;
             --rm1-reloan-h: #d9f7be;
             --cashdaily-h: #ffcccc;
+            --quickrupee-h: #ffe0b2;
+            --spendbook-h: #b2ebf2;
+            --swiftrupee-h: #c5cae9;
+            --taprupee-h: #f5f5f5;
+            --paisaguru-h: #f5f5f5;
         }
 
         body {
@@ -309,8 +319,8 @@
                 <tr>
                     <th>Stage</th>
                     <th class="${getThClass('Type')}" onclick="requestSort('Type')">Type (${selectedApp}) ${getSortIcon('Type')}</th>
-                    <th class="${getThClass('Name')}" onclick="requestSort('Name')">Name (${selectedGroup}) ${getSortIcon('Name')}</th>
-                    <th class="${getThClass('SubName')}" onclick="requestSort('SubName')">Sub Name ${getSortIcon('SubName')}</th>
+                    <th class="${getThClass('SubName')}" onclick="requestSort('SubName')">Name (${selectedGroup}) ${getSortIcon('SubName')}</th>
+                    <th class="${getThClass('Name')}" onclick="requestSort('Name')">Sub Name ${getSortIcon('Name')}</th>
                     <th class="${getThClass('Re%')}" onclick="requestSort('Re%')">Re% ${getSortIcon('Re%')}</th>
             `;
             
@@ -322,7 +332,7 @@
             headHtml += `
                     <th class="${getThClass('OpTimes')}" onclick="requestSort('OpTimes')">OpTimes ${getSortIcon('OpTimes')}</th>
                     <th>Rank</th>
-                    <th>Trend</th>
+                    <th class="${getThClass('T.Re%')}" onclick="requestSort('T.Re%')">T.Re% ${getSortIcon('T.Re%')}</th>
                     <th>Target</th>
                     <th>Tickets</th>
                 </tr>
@@ -346,7 +356,15 @@
             else if (stage === 'RM1' && type === 'First loan') bgColor = 'var(--rm1-first)';
             else if (stage === 'RM1' && type === 'Reloan') bgColor = 'var(--rm1-reloan)';
 
-            if (name.includes('CashDaily')) bgColor = 'var(--cashdaily)';
+            const appName = row.App || '';
+            const combinedNameApp = name + ' ' + appName;
+
+            if (combinedNameApp.includes('CashDaily')) bgColor = 'var(--cashdaily)';
+            else if (combinedNameApp.includes('QuickRupee')) bgColor = 'var(--quickrupee)';
+            else if (combinedNameApp.includes('SpendBook') || combinedNameApp.includes('Spendbook')) bgColor = 'var(--spendbook)';
+            else if (combinedNameApp.includes('SwiftRupee')) bgColor = 'var(--swiftrupee)';
+            else if (combinedNameApp.includes('TapRupee')) bgColor = 'var(--taprupee)';
+            else if (combinedNameApp.includes('PaisaGuru')) bgColor = 'var(--paisaguru)';
 
             if (name === 'TOTAL' || name.startsWith('App:')) {
                 bgColor = 'var(--total-bg)';
@@ -359,7 +377,12 @@
                 else if (stage === 'RM1' && type === 'First loan') bgColor = 'var(--rm1-first-h)';
                 else if (stage === 'RM1' && type === 'Reloan') bgColor = 'var(--rm1-reloan-h)';
                 
-                if (name.includes('CashDaily')) bgColor = 'var(--cashdaily-h)';
+                if (combinedNameApp.includes('CashDaily')) bgColor = 'var(--cashdaily-h)';
+                else if (combinedNameApp.includes('QuickRupee')) bgColor = 'var(--quickrupee-h)';
+                else if (combinedNameApp.includes('SpendBook') || combinedNameApp.includes('Spendbook')) bgColor = 'var(--spendbook-h)';
+                else if (combinedNameApp.includes('SwiftRupee')) bgColor = 'var(--swiftrupee-h)';
+                else if (combinedNameApp.includes('TapRupee')) bgColor = 'var(--taprupee-h)';
+                else if (combinedNameApp.includes('PaisaGuru')) bgColor = 'var(--paisaguru-h)';
             } else if (subName.length === 1 && subName !== '-') {
                 fontWeight = 'bold';
             } else if (subName.startsWith('K-')) {
@@ -370,12 +393,29 @@
             return `background-color: ${bgColor}; font-weight: ${fontWeight}; font-size: ${fontSize};`;
         }
 
+        function getTypeDisplay(row) {
+            const name = row.Name || '';
+            const isEmployeeRow = !name.startsWith('Team ') && name !== 'TOTAL' && !name.startsWith('App:');
+            let typeDisplay = row.Type || '-';
+            
+            if (row.Stage === 'RM1' && isEmployeeRow) {
+                const app = row.App || '';
+                let abbr = '';
+                if (app.includes('CashDaily')) abbr = 'CD';
+                else if (app.includes('QuickRupee')) abbr = 'QR';
+                else if (app.includes('SpendBook') || app.includes('Spendbook')) abbr = 'SB';
+                
+                if (abbr) typeDisplay += ` (${abbr})`;
+            }
+            return typeDisplay;
+        }
+
         function renderTable(tableId, data) {
             const tbody = document.querySelector(`#${tableId} tbody`);
             tbody.innerHTML = '';
             
             if (!data || data.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="10">No data available</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="15" style="text-align:center;">No data available</td></tr>';
                 return;
             }
 
@@ -383,27 +423,13 @@
                 const tr = document.createElement('tr');
                 tr.style = getRowStyle(row);
                 
-                const name = row.Name || '';
-                const isEmployeeRow = !name.startsWith('Team ') && name !== 'TOTAL' && !name.startsWith('App:');
-                let typeDisplay = row.Type || '-';
-                
-                if (row.Stage === 'RM1' && isEmployeeRow) {
-                    const app = row.App || '';
-                    let abbr = '';
-                    if (app.includes('CashDaily')) abbr = 'CD';
-                    else if (app.includes('QuickRupee')) abbr = 'QR';
-                    else if (app.includes('SpendBook') || app.includes('Spendbook')) abbr = 'SB';
-                    
-                    if (abbr) {
-                        typeDisplay += ` (${abbr})`;
-                    }
-                }
+                let typeDisplay = getTypeDisplay(row);
 
                 let rowHtml = `
                     <td>${row.Stage || '-'}</td>
                     <td>${typeDisplay}</td>
-                    <td>${row.Name || '-'}</td>
                     <td>${row.SubName || '-'}</td>
+                    <td>${row.Name || '-'}</td>
                     <td>${row['Re%'] || '-'}</td>
                 `;
                 
@@ -414,7 +440,7 @@
                 rowHtml += `
                     <td>${row.OpTimes || '-'}</td>
                     <td>${row.Rank || row.GlobalRank || '-'}</td>
-                    <td>${row.Trend || '-'}</td>
+                    <td>${row['T.Re%'] || '-'}</td>
                     <td>${row.Target || '-'}</td>
                     <td>${row.Tickets || '0'}</td>
                 `;
@@ -525,17 +551,18 @@
                                    (team === 'K' && (sub === 'K' || sub === '-' || sub === 'Team'));
                 
                 if (isMainParent && parentValues[team] === undefined) {
-                    parentValues[team] = parseSortValue(row[sortConfig.key]);
+                    let pVal = sortConfig.key === 'Type' ? getTypeDisplay(row) : row[sortConfig.key];
+                    parentValues[team] = parseSortValue(pVal);
                 }
             });
 
             items.sort((a, b) => {
-                // 1. Stage Priority
+                // 1. Stage Priority (Always keep RM1 and RM0 separated)
                 let sA = getStagePriority(a.Stage);
                 let sB = getStagePriority(b.Stage);
                 if (sA !== sB) return sA - sB;
 
-                // 2. Type Priority
+                // 2. Type Priority (ALWAYS keep First loan above Reloan, regardless of sort direction)
                 let tA = getTypePriority(a.Type);
                 let tB = getTypePriority(b.Type);
                 if (tA !== tB) return tA - tB;
@@ -545,8 +572,8 @@
                 const teamB = getTeamName(b);
                 
                 if (teamA !== teamB) {
-                    let pValA = parentValues[teamA] !== undefined ? parentValues[teamA] : parseSortValue(a[sortConfig.key]);
-                    let pValB = parentValues[teamB] !== undefined ? parentValues[teamB] : parseSortValue(b[sortConfig.key]);
+                    let pValA = parentValues[teamA] !== undefined ? parentValues[teamA] : -999999;
+                    let pValB = parentValues[teamB] !== undefined ? parentValues[teamB] : -999999;
                     
                     if (pValA !== pValB) {
                         if (pValA < pValB) return sortConfig.direction === 'asc' ? -1 : 1;
@@ -556,14 +583,27 @@
                     return teamA.localeCompare(teamB);
                 }
 
-                // 4. Within the same Family: Parent (Team row) first
+                // 4. Internal Sorting (Same Team)
+                // Priority: Header first, then by value
                 let isHeadA = isFamilyHeader(a) ? 0 : 1;
                 let isHeadB = isFamilyHeader(b) ? 0 : 1;
                 if (isHeadA !== isHeadB) return isHeadA - isHeadB;
 
+                // Tie-breaker for headers: Parent first
+                if (isHeadA === 0) {
+                    const subA = a.SubName || '';
+                    const subB = b.SubName || '';
+                    const team = teamA; // Both are same family
+                    const isParentA = (a.Name === `Team ${team}`) || (team === 'K' && (subA === 'K' || subA === '-' || subA === 'Team'));
+                    const isParentB = (b.Name === `Team ${team}`) || (team === 'K' && (subB === 'K' || subB === '-' || subB === 'Team'));
+                    if (isParentA !== isParentB) return isParentA ? -1 : 1;
+                }
+
                 // 5. Internal Sort (for children/members within the team)
-                let valA = parseSortValue(a[sortConfig.key]);
-                let valB = parseSortValue(b[sortConfig.key]);
+                let rawValA = sortConfig.key === 'Type' ? getTypeDisplay(a) : a[sortConfig.key];
+                let rawValB = sortConfig.key === 'Type' ? getTypeDisplay(b) : b[sortConfig.key];
+                let valA = parseSortValue(rawValA);
+                let valB = parseSortValue(rawValB);
                 
                 if (valA < valB) return sortConfig.direction === 'asc' ? -1 : 1;
                 if (valA > valB) return sortConfig.direction === 'asc' ? 1 : -1;
