@@ -131,6 +131,7 @@ class APIClient:
                     if len(df.columns) == len(expected):
                         df.columns = expected
 
+            col_map['Complete Num'] = 'CompleteNum'
             df = df.rename(columns=col_map)
             
             # 逻辑同步：标准化 Stage 和 LoanType
@@ -420,11 +421,11 @@ class DataAnalyzer:
         last_r = last_d.get('rate', 0.0) if last_d else 0.0
         
         diff = rate - last_r
-        if abs(diff) >= 0.01:
-            symbol = "⬆️" if diff > 0 else "⬇️"
-            trend_str = f"{symbol} {abs(diff):.1f}%"
-        else:
-            trend_str = "-"
+        
+        t_load = df_sub['LoadNum'].sum() if 'LoadNum' in df_sub.columns else 0
+        t_complete = df_sub['CompleteNum'].sum() if 'CompleteNum' in df_sub.columns else 0
+        t_re_pct = (t_complete / t_load * 100) if t_load > 0 else 0.0
+        t_re_pct_str = f"{t_re_pct:.1f}%"
         
         target_str = "-"
         achv_str = "-"
@@ -458,7 +459,7 @@ class DataAnalyzer:
             "Re%": f"{rate:.1f}%", "Target": target_str, "Achv%": achv_str,
             "Diff.Avg.Re%": "-", 
             "GlobalRank": rank_str, 
-            "Trend": trend_str,
+            "T.Re%": t_re_pct_str,
             "Tickets": int(df_sub['LoadNum'].sum()), 
             "Left": int(t_left), "RateNum": rate
         }
@@ -493,7 +494,7 @@ class DataAnalyzer:
         else:
             df_latest = df_team.copy()
             
-        for c in ['TotalLeft', 'TotalRepayAmount', 'LoadNum']:
+        for c in ['TotalLeft', 'TotalRepayAmount', 'LoadNum', 'CompleteNum']:
             if c in df_latest.columns: df_latest[c] = pd.to_numeric(df_latest[c], errors='coerce').fillna(0)
         df_latest['Stage'] = df_latest['Stage'].astype(str).str.strip()
         df_latest['LoanType'] = df_latest['LoanType'].astype(str).str.strip()
@@ -602,6 +603,7 @@ class DataAnalyzer:
                         'TotalLeft': 'sum',
                         'TotalRepayAmount': 'sum',
                         'LoadNum': 'sum',
+                        'CompleteNum': 'sum',
                         'App': lambda x: ','.join(x.dropna().astype(str).unique()),
                         'team': 'first'
                     }).reset_index()
@@ -610,6 +612,7 @@ class DataAnalyzer:
                         'TotalLeft': 'sum',
                         'TotalRepayAmount': 'sum',
                         'LoadNum': 'sum',
+                        'CompleteNum': 'sum',
                         'team': 'first'
                     }).reset_index()
                     person_stats['App'] = ""
@@ -654,14 +657,16 @@ class DataAnalyzer:
                         
                     p_rank = global_person_ranks.get(p_rank_key, "N/A")
                     
-                    img_icon = "❌🛑 " if is_stagnant else ("❌ " if is_lagging else "")
-                    final_trend_str = f"{img_icon}{p_trend}"
+                    p_t_load = row.get('LoadNum', 0)
+                    p_t_complete = row.get('CompleteNum', 0)
+                    p_t_re_pct = (p_t_complete / p_t_load * 100) if p_t_load > 0 else 0.0
+                    p_t_re_pct_str = f"{p_t_re_pct:.1f}%"
                     
                     p_stats_row = {
                         "Stage": stage, "Type": type_, "Name": name, "SubName": str(row.get('team', '-')), "App": str(row.get('App', '')),
                         "Re%": f"{p_rate:.1f}%", "Target": target_str,
                         "GlobalRank": p_rank,
-                        "Trend": final_trend_str,
+                        "T.Re%": p_t_re_pct_str,
                         "Tickets": int(row['LoadNum']), "Left": int(row['TotalLeft']), "RateNum": p_rate
                     }
 
@@ -690,7 +695,7 @@ async def generate_image(df_plot, team_id, suffix="", title=""):
     
     if not df_plot.empty:
         if 'GlobalRank' in df_plot.columns: df_plot = df_plot.rename(columns={'GlobalRank': 'Rank'})
-        display_cols = ['Stage', 'Type', 'Name', 'Re%', 'Target', 'Achv%', 'Diff.Avg.Re%', 'Trend', 'Rank', 'Tickets', 'RateNum', 'Left']
+        display_cols = ['Stage', 'Type', 'Name', 'Re%', 'Target', 'Achv%', 'Diff.Avg.Re%', 'T.Re%', 'Rank', 'Tickets', 'RateNum', 'Left']
         df_plot = df_plot[[c for c in display_cols if c in df_plot.columns]]
         
     def highlight_stages(row):
