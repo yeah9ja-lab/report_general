@@ -13,7 +13,7 @@ system:
 api:
   base_url: "https://dc.tidbi-it.cc/api/performance/worker/hour_export"
   key: "asdghdfghxfghgj!gsfhj"
-  cookie: "lang=en-US; SWIFTLOANDCSID=81594366f40001e5bc89b13c9f9765c3"
+  cookie: "lang=en-US; SWIFTLOANDCSID=868b71d369112c97040c21d83e0798b0"
 
 teams:
   - name: "总绩效"
