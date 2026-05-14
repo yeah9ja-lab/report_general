@@ -147,6 +147,7 @@
             background-color: var(--primary);
             color: white;
             font-weight: 600;
+            position: relative;
         }
 
         .loading {
@@ -205,19 +206,33 @@
             opacity: 1;
         }
 
-        /* Resizer Styles */
         .resizer {
             position: absolute;
             top: 0;
             right: 0;
-            width: 5px;
+            bottom: 0;
+            width: 10px;
             cursor: col-resize;
             user-select: none;
-            height: 100%;
             z-index: 10;
         }
-        .resizer:hover, .resizer.resizing {
-            background-color: rgba(255, 255, 255, 0.4);
+        /* Make a visible line in the center of the resizer */
+        .resizer::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            height: 50%;
+            width: 2px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 1px;
+            transition: all 0.2s;
+        }
+        .resizer:hover::after, .resizer.resizing::after {
+            background-color: rgba(255, 255, 255, 0.9);
+            height: 80%;
+            width: 3px;
         }
     </style>
 </head>
@@ -384,8 +399,7 @@
                 e.stopPropagation();
                 
                 x = e.clientX;
-                const styles = window.getComputedStyle(col);
-                w = parseInt(styles.width, 10);
+                w = col.offsetWidth;
 
                 document.addEventListener('mousemove', mouseMoveHandler);
                 document.addEventListener('mouseup', mouseUpHandler);
