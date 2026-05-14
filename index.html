@@ -204,6 +204,21 @@
         th.active-sort .sort-icon {
             opacity: 1;
         }
+
+        /* Resizer Styles */
+        .resizer {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 5px;
+            cursor: col-resize;
+            user-select: none;
+            height: 100%;
+            z-index: 10;
+        }
+        .resizer:hover, .resizer.resizing {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
     </style>
 </head>
 <body>
@@ -339,6 +354,61 @@
             `;
             hRM1.innerHTML = headHtml;
             hRM0.innerHTML = headHtml;
+            
+            initResizers();
+        }
+
+        function initResizers() {
+            const tables = document.querySelectorAll('table');
+            tables.forEach(table => {
+                const ths = table.querySelectorAll('th');
+                ths.forEach(th => {
+                    // Position relative is required for absolute positioned resizer
+                    if (window.getComputedStyle(th).position === 'static') {
+                        th.style.position = 'relative';
+                    }
+                    const resizer = document.createElement('div');
+                    resizer.classList.add('resizer');
+                    th.appendChild(resizer);
+                    createResizableColumn(th, resizer);
+                });
+            });
+        }
+
+        function createResizableColumn(col, resizer) {
+            let x = 0;
+            let w = 0;
+
+            const mouseDownHandler = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                x = e.clientX;
+                const styles = window.getComputedStyle(col);
+                w = parseInt(styles.width, 10);
+
+                document.addEventListener('mousemove', mouseMoveHandler);
+                document.addEventListener('mouseup', mouseUpHandler);
+                resizer.classList.add('resizing');
+            };
+
+            const mouseMoveHandler = function(e) {
+                const dx = e.clientX - x;
+                col.style.minWidth = `${w + dx}px`;
+                col.style.width = `${w + dx}px`;
+                col.style.maxWidth = `${w + dx}px`;
+            };
+
+            const mouseUpHandler = function() {
+                document.removeEventListener('mousemove', mouseMoveHandler);
+                document.removeEventListener('mouseup', mouseUpHandler);
+                resizer.classList.remove('resizing');
+            };
+
+            resizer.addEventListener('mousedown', mouseDownHandler);
+            resizer.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
         }
 
         function getRowStyle(row) {
